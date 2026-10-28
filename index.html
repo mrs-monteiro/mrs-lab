@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="pt">
 <head>
@@ -7,9 +6,8 @@
   <meta name="theme-color" content="#08121e">
   <meta name="description" content="MRS Interactive Lab — pesquisa de projetos e laboratório de algoritmos BFS e A*.">
   <title>MRS MONTEIRO | Interactive Lab</title>
-
-  <!-- CSS dentro da pasta lab -->
   <link rel="stylesheet" href="lab/css/lab.css">
+  <link rel="stylesheet" href="lab/css/mapas.css">
 </head>
 
 <body>
@@ -28,10 +26,7 @@
       </span>
 
       <div class="actions">
-        <button id="language" type="button" aria-label="Switch language">
-          EN
-        </button>
-
+        <button id="language" type="button" aria-label="Switch language">EN</button>
         <a class="back"
            href="https://mrs-monteiro.com/"
            data-pt="← Voltar ao portefólio"
@@ -43,8 +38,6 @@
   </header>
 
   <main id="main" class="container">
-
-    <!-- APRESENTAÇÃO -->
 
     <section class="hero">
       <p class="eyebrow"
@@ -64,29 +57,20 @@
       <div class="stats">
         <span>
           <strong id="total">25</strong>
-          <span
-            data-pt="projetos catalogados"
-            data-en="catalogued projects">
-            projetos catalogados
-          </span>
+          <span data-pt="projetos catalogados"
+                data-en="catalogued projects">projetos catalogados</span>
         </span>
 
         <span>
           <strong>2</strong>
-          <span
-            data-pt="algoritmos interativos"
-            data-en="interactive algorithms">
-            algoritmos interativos
-          </span>
+          <span data-pt="algoritmos interativos"
+                data-en="interactive algorithms">algoritmos interativos</span>
         </span>
 
         <span>
           <strong>0€</strong>
-          <span
-            data-pt="em APIs externas"
-            data-en="external API costs">
-            em APIs externas
-          </span>
+          <span data-pt="em APIs externas"
+                data-en="external API costs">em APIs externas</span>
         </span>
       </div>
     </section>
@@ -130,6 +114,7 @@
               data-en="Student practice">
         Treino para estudantes
       </button>
+
     </div>
 
     <!-- 01 / EXPLORADOR DE PROJETOS -->
@@ -139,10 +124,10 @@
              aria-labelledby="tab-explorer">
 
       <div class="panel">
-
         <div class="sectionhead">
           <div>
             <p class="eyebrow">01 / PROJECT EXPLORER</p>
+
             <h2
               data-pt="Encontra um projeto. Descobre a engenharia."
               data-en="Find a project. Discover the engineering.">
@@ -177,7 +162,6 @@
              aria-label="Suggested searches"></div>
 
         <div class="filters">
-
           <label for="area"
                  data-pt="Área"
                  data-en="Area">
@@ -225,7 +209,6 @@
              hidden>
 
       <div class="panel">
-
         <p class="eyebrow">02 / SEARCH LAB</p>
 
         <h2
@@ -254,9 +237,7 @@
           </label>
 
           <label>
-            <span
-              data-pt="Modo de edição"
-              data-en="Editing mode">
+            <span data-pt="Modo de edição" data-en="Editing mode">
               Modo de edição
             </span>
 
@@ -331,6 +312,7 @@
             <i class="dot wall"></i>
             <span data-pt="Obstáculo" data-en="Wall">Obstáculo</span>
           </span>
+
         </div>
 
         <div id="grid"
@@ -346,6 +328,7 @@
               data-en="Explored nodes">
               Estados explorados
             </small>
+
             <strong id="visited">—</strong>
           </div>
 
@@ -355,6 +338,7 @@
               data-en="Path cost">
               Custo do percurso
             </small>
+
             <strong id="cost">—</strong>
           </div>
 
@@ -364,8 +348,10 @@
               data-en="Status">
               Estado
             </small>
+
             <strong id="status">Pronto</strong>
           </div>
+
         </div>
       </div>
     </section>
@@ -378,7 +364,6 @@
              hidden>
 
       <div class="panel">
-
         <p class="eyebrow">03 / LEARNING PLAYGROUND</p>
 
         <h2
@@ -401,6 +386,7 @@
               data-en="Challenges completed">
               Desafios concluídos
             </small>
+
             <strong id="learn-completed">0 / 9</strong>
           </div>
 
@@ -410,6 +396,7 @@
               data-en="Current level">
               Nível atual
             </small>
+
             <strong id="learn-level">Iniciante</strong>
           </div>
 
@@ -419,8 +406,10 @@
               data-en="Progress in this browser">
               Progresso neste navegador
             </small>
+
             <strong id="learn-percent">0%</strong>
           </div>
+
         </div>
 
         <div class="learn-levels"
@@ -450,6 +439,7 @@
                   data-en="03 · Advanced">
             03 · Avançado
           </button>
+
         </div>
 
         <div id="learn-challenges"
@@ -470,6 +460,7 @@
             data-en="Progress is saved only in this browser; there is no account or answer submission.">
             O progresso fica guardado apenas neste navegador; não existe conta nem envio de respostas.
           </span>
+
         </div>
       </div>
     </section>
@@ -488,11 +479,12 @@
 
   </main>
 
-  <!-- JAVASCRIPT DENTRO DA PASTA lab -->
+  <!-- SCRIPTS DO LABORATÓRIO -->
   <script src="lab/js/catalog.js"></script>
   <script src="lab/js/lab.js"></script>
   <script src="lab/js/learning.js"></script>
+  <!-- Mapas de pesquisa: extensão independente -->
+  <script src="lab/js/mapas.js"></script>
 
 </body>
 </html>
-<!-- Rebuild MRS MONTEIRO LAB -->

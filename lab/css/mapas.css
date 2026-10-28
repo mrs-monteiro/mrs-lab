@@ -1,0 +1,11 @@
+
+/* MRS Interactive Lab — Mapas de Pesquisa v1 */
+.mrs-map-presets{border:1px solid var(--line);border-radius:14px;background:#102b3b;padding:16px 18px;margin:20px 0 4px}
+.mrs-map-presets__head{display:flex;gap:8px 18px;align-items:baseline;flex-wrap:wrap;margin-bottom:13px}
+.mrs-map-presets__head strong{color:var(--accent);font-size:15px}
+.mrs-map-presets__head span,.mrs-map-presets__help{color:var(--muted);font-size:12px}
+.mrs-map-presets__buttons{display:flex;gap:9px;flex-wrap:wrap}
+.mrs-map-preset{font-size:13px;border-radius:9px;padding:9px 13px;background:#183346}
+.mrs-map-preset.active{border-color:var(--accent);background:#19534f;color:#e8fffa}
+.mrs-map-presets__help{margin:11px 0 0;min-height:1.3em}
+@media(max-width:560px){.mrs-map-presets{padding:13px}.mrs-map-preset{flex:1}}
