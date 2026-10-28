@@ -1,0 +1,19 @@
+/* MRS Interactive Lab — modo passo a passo v1 */
+.mrs-steps{border:1px solid var(--line);border-radius:15px;background:#11283a;padding:16px 18px;margin:15px 0 20px}
+.mrs-steps__heading{display:flex;align-items:baseline;gap:8px 16px;flex-wrap:wrap;margin-bottom:13px}
+.mrs-steps__heading strong{color:var(--accent);font-size:15px}
+.mrs-steps__heading span,.mrs-steps__note{color:var(--muted);font-size:12px}
+.mrs-steps__buttons{display:flex;flex-wrap:wrap;gap:8px}
+.mrs-steps__buttons button{font-size:12px;padding:8px 12px}
+.mrs-steps__buttons button:disabled{opacity:.42;cursor:not-allowed}
+.mrs-steps__metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}
+.mrs-steps__metrics>div{background:#0b1d2d;border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.mrs-steps__metrics small{color:var(--muted);display:block;font-size:11px}
+.mrs-steps__metrics strong{color:var(--accent);font-size:17px;font-variant-numeric:tabular-nums}
+.mrs-steps__message{font-size:13px;color:#e2f4f2;margin:13px 0 5px;min-height:20px}
+.mrs-steps__note{margin:5px 0 0}
+.pathgrid .cell.mrs-step-seen{background:#305a77}
+.pathgrid .cell.mrs-step-frontier{background:#6eafd3}
+.pathgrid .cell.mrs-step-current{background:#ffd46f;outline:2px solid #fff2bf;outline-offset:-2px}
+.pathgrid .cell.mrs-step-route{background:#a2e8a5}
+@media(max-width:650px){.mrs-steps{padding:13px}.mrs-steps__metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.mrs-steps__buttons button{flex:1}}
