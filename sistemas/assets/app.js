@@ -11,7 +11,7 @@
     inicio: 'Visão geral', terminal: 'PowerShell Academy', redes: 'Redes & Conectividade',
     diretorio: 'Active Directory Lab', incidentes: 'IT Troubleshooting',
     monitorizacao: 'Saúde da Infraestrutura', comandos: 'Biblioteca de comandos',
-    ferramentas: 'Ferramentas externas', aprender: 'Percursos de estudo', visitas: 'Visitas ao portal',
+    ferramentas: 'Ferramentas externas', aprender: 'Percursos de estudo',
     fontes: 'Projetos de referência'
   };
   const safeStorage = {
@@ -29,7 +29,6 @@
     $('#menu-toggle').setAttribute('aria-expanded', 'false');
     window.scrollTo({top:0,behavior:'instant'});
     if (page === 'terminal') $('#terminal-command').focus();
-    if (page === 'visitas') loadVisits();
   }
   $$('[data-nav], [data-go]').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.nav || btn.dataset.go)));
   window.addEventListener('hashchange', () => go(location.hash.slice(1)));
@@ -195,51 +194,5 @@
   }));
   $('#source-list').innerHTML = D.sources.map(s=>`<article class="source-card"><div><h3>${html(s.name)}</h3><p>${html(s.usage)}</p><p class="small-muted">${html(s.note)}</p></div><div class="source-side"><span class="tag">${html(s.area)}</span><br><small>Licença: ${html(s.license)}</small></div></article>`).join('');
 
-  // Cloudflare: apenas pedido ao endpoint próprio, sem credenciais no front-end.
-  let visitsPending = false; let visitsLoaded = false;
-  const fmt = n => new Intl.NumberFormat('pt-PT').format(n);
-  function drawChart(days) {
-    const chart = $('#visits-chart');
-    const max = Math.max(1, ...days.map(d => d.visits));
-    const W=800,H=280, left=46,right=16,top=20,bottom=38, cw=W-left-right, ch=H-top-bottom;
-    const n=days.length;
-    const bars=days.map((d,i)=>{
-      const x=left+(i+.15)*(cw/n),w=cw/n*.7,h=Math.max(0,d.visits/max*ch),y=H-bottom-h;
-      return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="#388ef0"><title>${html(d.date)}: ${fmt(d.visits)} visitas</title></rect>`;
-    }).join('');
-    const grids=[0,.25,.5,.75,1].map(f=>`<line class="grid-line" x1="${left}" x2="${W-right}" y1="${(H-bottom-f*ch).toFixed(1)}" y2="${(H-bottom-f*ch).toFixed(1)}"/><text x="${left-7}" y="${(H-bottom-f*ch+4).toFixed(1)}" text-anchor="end">${fmt(Math.round(f*max))}</text>`).join('');
-    const labels=days.map((d,i)=>(i===0||i===n-1||i%5===0)?`<text x="${(left+(i+.5)*cw/n).toFixed(1)}" y="${H-15}" text-anchor="middle">${html(d.date.slice(5).replace('-','/'))}</text>`:'').join('');
-    chart.innerHTML=`<svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico diário de visitas do portal durante os últimos 30 dias">${grids}${bars}${labels}</svg>`;
-  }
-  async function loadVisits(force=false) {
-    if (visitsPending || (visitsLoaded && !force)) return;
-    visitsPending=true;
-    $('#visits-status').textContent = 'A consultar a integração de visitas…';
-    $('#visits-status').className='visits-status';
-    try {
-      const endpoint=window.MRS_VISITS_API || '/api/visitas';
-      const res=await fetch(endpoint, {headers:{Accept:'application/json'},cache:force?'reload':'default'});
-      if (!res.ok) throw new Error(res.status===404?'O endpoint /api/visitas ainda não foi publicado.':'O serviço de visitas não está disponível (HTTP '+res.status+').');
-      const data=await res.json();
-      if (!Array.isArray(data.days)||!data.days.length||data.days.some(d=>!/^\d{4}-\d{2}-\d{2}$/.test(d.date)||!Number.isSafeInteger(d.visits)||d.visits<0||!Number.isSafeInteger(d.pageviews)||d.pageviews<0)) throw new Error('A resposta da API não tem o formato esperado.');
-      const days=data.days.slice(-30);
-      const sum=(items,key)=>items.reduce((acc,d)=>acc+d[key],0);
-      $('#visits-today').textContent=fmt(days.at(-1)?.visits||0);
-      $('#visits-week').textContent=fmt(sum(days.slice(-7),'visits'));
-      $('#visits-month').textContent=fmt(sum(days,'visits'));
-      $('#pageviews-month').textContent=fmt(sum(days,'pageviews'));
-      drawChart(days);
-      $('#visits-status').textContent=`Integração ativa · Dados recolhidos pela Cloudflare · Atualização: ${new Date().toLocaleString('pt-PT')} · Períodos por dia UTC. Os valores podem ser estimados por amostragem.`;
-      $('#visits-status').classList.add('ready');
-      visitsLoaded=true;
-    } catch (err) {
-      $('#visits-status').textContent=`Integração por configurar: ${err.message} Consulta o guia docs/INSTALACAO.md para ativar a API segura.`;
-      $('#visits-status').classList.add('failed');
-      // Sem dados verdadeiros, nunca apresentar contadores inventados ou zero fictício.
-      ['#visits-today','#visits-week','#visits-month','#pageviews-month'].forEach(sel=>$(sel).textContent='—');
-      $('#visits-chart').innerHTML='<div class="chart-empty">Ainda não existem dados autenticados da Cloudflare disponíveis neste portal.</div>';
-    } finally {visitsPending=false;}
-  }
-  $('#visits-refresh').addEventListener('click',()=>loadVisits(true));
   go(location.hash.slice(1));
 })();
