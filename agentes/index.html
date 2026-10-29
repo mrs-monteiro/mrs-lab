@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1422">
+  <meta name="description" content="MRS Agentic AI & Governance Lab — aprende agentes de IA, MCP e governação através de simulações interativas e casos empresariais fictícios.">
+  <title>MRS MONTEIRO | Agentic AI & Governance Lab</title>
+  <link rel="stylesheet" href="css/agents.css">
+  <script src="js/agents.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#conteudo">Saltar para o conteúdo</a>
+<header class="top"><div class="wrap topinner"><a href="https://mrs-monteiro.com/" class="brand">MRS <span>MONTEIRO</span></a><a class="back" href="https://lab.mrs-monteiro.com/">← Voltar ao LAB</a></div></header>
+<main id="conteudo" class="wrap">
+  <section class="hero" aria-labelledby="page-title">
+    <div class="eyebrow">07 / INTELIGÊNCIA ARTIFICIAL · TRANSFORMAÇÃO EMPRESARIAL</div>
+    <div class="hero-grid">
+      <div>
+        <h1 id="page-title">Agentes de IA.<br><em>Entender, experimentar, governar.</em></h1>
+        <p class="lead">Começa pelos fundamentos, segue uma decisão passo a passo e descobre como desenhar agentes que apoiam operações empresariais sem perder o controlo humano.</p>
+        <div class="chips"><span>Aprendizagem prática</span><span>Casos de uso empresariais</span><span>MCP e OutSystems</span><span>Segurança e auditoria</span></div>
+        <div class="hero-actions"><a class="button primary" href="#simulador">Experimentar um agente ↘</a><a class="button" href="#aprender">Começar do zero ↘</a></div>
+      </div>
+      <div class="hero-visual" aria-label="Fluxo conceptual: pedido, orquestrador, especialistas, aprovação e resultado">
+        <div class="mini-node input">01 · PEDIDO <strong>Incidente na aplicação</strong></div>
+        <span class="connector">↓</span>
+        <div class="mini-node manager">02 · COORDENAÇÃO <strong>Agente orquestrador</strong></div>
+        <div class="two-mini"><div class="mini-node">03 · ANÁLISE <strong>Diagnóstico</strong></div><div class="mini-node">04 · DEFESA <strong>Segurança</strong></div></div>
+        <span class="connector">↓</span>
+        <div class="mini-node approval">05 · CONTROLO <strong>Aprovação humana</strong></div>
+        <span class="connector">↓</span>
+        <div class="mini-node output">06 · EVIDÊNCIA <strong>Relatório auditável</strong></div>
+      </div>
+    </div>
+    <div class="truth"><strong>Simulação transparente:</strong> esta V1 utiliza decisões pré-definidas em JavaScript. <strong>Não executa modelos de IA nem se liga a OutSystems, bases de dados ou serviços empresariais.</strong> É uma demonstração da arquitetura, não uma alegação de agente autónomo em produção.</div>
+  </section>
+  <nav class="sections" aria-label="Secções do laboratório"><a href="#aprender">01 · Aprender</a><a href="#simulador">02 · Simular</a><a href="#casos">03 · Casos de uso</a><a href="#como-fazer">04 · How To</a><a href="#duvidas">05 · Dúvidas</a><a href="#questionario">06 · Questões</a></nav>
+  <section id="aprender" class="section" aria-labelledby="learn-title">
+    <div class="section-head"><div><div class="eyebrow">01 / FUNDAMENTOS</div><h2 id="learn-title">O que é — e o que não é — um agente?</h2></div><span class="minor">Nível inicial · sem conhecimentos prévios</span></div>
+    <div class="concept-grid">
+      <article class="concept"><div class="concept-icon">💬</div><h3>Chatbot</h3><p>Responde a perguntas. Pode dar orientações sem executar ações externas.</p><small>Exemplo: explicar um erro HTTP 503.</small></article>
+      <article class="concept"><div class="concept-icon">⚙️</div><h3>Automatização clássica</h3><p>Segue regras fixas definidas antecipadamente. É previsível quando o processo está bem definido.</p><small>Exemplo: abrir um ticket quando um limiar é ultrapassado.</small></article>
+      <article class="concept featured"><div class="concept-icon">🧠</div><h3>Agente de IA</h3><p>Usa um modelo para interpretar objetivos, selecionar ferramentas e adaptar os próximos passos, dentro de limites.</p><small>Exemplo: investigar um incidente e propor ações com evidências.</small></article>
+      <article class="concept"><div class="concept-icon">🔌</div><h3>MCP</h3><p>Protocolo para disponibilizar ferramentas e contexto a sistemas de IA. <strong>Não é, por si só, um modelo nem um agente.</strong></p><small>Exemplo: consultar entidades e ações num ambiente autorizado.</small></article>
+    </div>
+    <div class="note"><strong>Ideia-chave:</strong> um fluxo com vários blocos e nomes de «agentes» não prova que exista IA. Numa solução real precisamos de um modelo, ferramentas com permissões, validação de respostas, tratamento de erros e rastreabilidade.</div>
+  </section>
+
+  <section id="simulador" class="section" aria-labelledby="sim-title">
+    <div class="section-head"><div><div class="eyebrow">02 / AGENTIC WORKFLOW PLAYGROUND</div><h2 id="sim-title">Descobre como uma decisão é tomada</h2></div><span class="minor">Simulação local · sem ações reais</span></div>
+    <p class="intro">Escolhe um cenário e o nível de autonomia. Avança etapa a etapa e observa o que o sistema pode ler, propor, bloquear ou submeter a aprovação.</p>
+    <div class="panel sim-panel">
+      <div class="filters">
+        <label>Cenário empresarial<select id="scenario"><option value="incident">Incidente numa aplicação empresarial</option><option value="security">Alerta de segurança</option><option value="change">Alteração numa aplicação OutSystems</option><option value="data">Pedido de acesso a dados</option></select></label>
+        <label>Modelo de governação<select id="policy"><option value="assisted">Assistido — só recomenda</option><option value="governed" selected>Governado — aprovação humana</option><option value="unsafe">Sem controlo — exemplo de risco</option></select></label>
+      </div>
+      <div class="sim-overview"><div class="stat"><small>Etapa</small><strong id="step-count">0 / 0</strong></div><div class="stat"><small>Estado</small><strong id="run-state">Preparado</strong></div><div class="stat"><small>Risco</small><strong id="run-risk">Controlado</strong></div><div class="stat"><small>Registos</small><strong id="run-logs">0</strong></div></div>
+      <div class="sim-layout">
+        <div>
+          <div class="flowline" id="flowline" aria-label="Etapas de execução simulada"></div>
+          <div class="sim-controls"><button id="step-next" class="primary">Próximo passo →</button><button id="sim-all">Executar até à aprovação</button><button id="sim-reset">Recomeçar</button><button id="sim-export">Exportar auditoria JSON</button></div>
+          <div class="gate" id="approval-box" hidden><div><strong>Revisão humana obrigatória</strong><p id="approval-text">Rever proposta.</p></div><div class="gate-buttons"><button id="approve" class="primary">Aprovar proposta fictícia</button><button id="reject" class="danger">Rejeitar</button></div></div>
+          <div class="detail" id="step-detail" aria-live="polite"><h3>Seleciona «Próximo passo»</h3><p>Os eventos e as decisões do cenário serão explicados aqui.</p></div>
+        </div>
+        <aside class="audit" aria-labelledby="audit-title"><div class="audit-title"><h3 id="audit-title">Rastreabilidade</h3><span>Histórico local</span></div><ol id="audit-list" aria-live="polite"><li>Nenhuma ação realizada.</li></ol><p class="minor">O histórico deste exercício é fictício. Não contém incidentes reais, identidades, logs de produção nem acesso a serviços.</p></aside>
+      </div>
+    </div>
+    <div class="panel twin-panel"><div><h3>Teste de segurança: instrução maliciosa num log</h3><p>Um evento pode conter texto que tenta dar ordens ao agente. Esse texto é <strong>dado não confiável</strong>, não uma autorização.</p><button id="injection-test" class="secondary">Simular tentativa de prompt injection</button><div id="injection-result" class="result" aria-live="polite">Executa o teste para ver a decisão recomendada.</div></div><div><h3>IA local, cloud ou híbrida?</h3><p>Seleciona uma arquitetura para compreender as principais condições de utilização.</p><label>Arquitetura<select id="deployment"><option value="local">IA local</option><option value="cloud">IA cloud</option><option value="hybrid">IA híbrida</option></select></label><div id="deployment-result" class="result" aria-live="polite"></div></div></div>
+  </section>
+
+  <section id="casos" class="section" aria-labelledby="cases-title"><div class="section-head"><div><div class="eyebrow">03 / APLICAÇÕES REAIS — DEMONSTRADAS COM DADOS FICTÍCIOS</div><h2 id="cases-title">Onde podem ajudar no teu trabalho?</h2></div></div>
+    <div class="cases-grid"><article class="case"><span>OPERAÇÕES · SUPORTE</span><h3>Triagem de incidentes</h3><p>Reunir alertas, erros, métricas e hipóteses; propor próximos despistes e gerar um resumo técnico.</p><div class="case-end">Leitura controlada → proposta → técnico valida</div><button data-scenario="incident" class="case-run">Experimentar no simulador ↗</button></article><article class="case"><span>OUTSYSTEMS · MUDANÇAS</span><h3>Análise de impacto</h3><p>Consultar a estrutura de um módulo e dependências autorizadas; produzir documentação e um plano de testes.</p><div class="case-end">MCP → análise → revisão de alterações</div><button data-scenario="change" class="case-run">Experimentar no simulador ↗</button></article><article class="case"><span>SECURITY · SOC</span><h3>Investigação de alertas</h3><p>Correlacionar sinais, verificar fontes e sugerir contenção sem executar mudanças na firewall.</p><div class="case-end">Evidência → triagem → aprovação</div><button data-scenario="security" class="case-run">Experimentar no simulador ↗</button></article><article class="case"><span>GOVERNAÇÃO · PRIVACIDADE</span><h3>Acesso a dados</h3><p>Avaliar minimização, finalidade, permissões e necessidade de revisão antes de facultar informação.</p><div class="case-end">Autorização → dados mínimos → registo</div><button data-scenario="data" class="case-run">Experimentar no simulador ↗</button></article></div>
+  </section>
+
+  <section id="como-fazer" class="section" aria-labelledby="how-title"><div class="section-head"><div><div class="eyebrow">04 / HOW TO · PRIMEIRO AGENTE</div><h2 id="how-title">Do conceito a um protótipo seguro</h2></div><span class="minor">Roteiro orientador · sem instalar software agora</span></div>
+    <div class="how-grid"><div class="panel"><h3>Plano progressivo</h3><div id="how-steps" class="how-steps"></div><div class="how-footer"><span id="how-progress">0 de 6 passos concluídos</span><button id="how-reset">Recomeçar plano</button></div></div><div class="panel"><h3>Exemplo de contrato de ferramenta</h3><p class="muted">Uma ferramenta de leitura não deve permitir, por acidente, eliminar ou alterar dados. A autorização tem de ser verificada no servidor, não apenas na prompt.</p><pre class="code" tabindex="0"><code>ferramenta: consultar_incidente
+entrada: { referencia: string }
+permissão: incidentes.ler
+saída: resumo_minimizado
+alterações: não permitidas
+registo: obrigatório</code></pre><p class="muted">Num serviço real, acrescentaríamos autenticação, limites de consulta, redacção de dados pessoais, testes e auditoria.</p></div></div>
+  </section>
+
+  <section id="duvidas" class="section" aria-labelledby="faq-title"><div class="section-head"><div><div class="eyebrow">05 / DÚVIDAS FREQUENTES</div><h2 id="faq-title">Perguntas antes de pôr agentes a trabalhar</h2></div></div><div class="faq-grid" id="faq"></div></section>
+
+  <section id="questionario" class="section" aria-labelledby="quiz-title"><div class="section-head"><div><div class="eyebrow">06 / TREINO PARA ESTUDANTES E PROFISSIONAIS</div><h2 id="quiz-title">Aprendeste os princípios essenciais?</h2></div><span class="minor">10 questões · correção explicada</span></div><div class="panel quiz-grid"><div><div class="quiz-top"><span id="quiz-num">Questão 1 de 10</span><span id="quiz-score">0 respostas certas</span></div><div class="progress"><span id="quiz-progress"></span></div><div id="quiz-content" aria-live="polite"></div><div class="quiz-buttons"><button id="quiz-next" class="primary" disabled>Confirmar resposta</button><button id="quiz-reset">Recomeçar treino</button><button id="quiz-export" hidden>Exportar correção HTML</button></div><div id="quiz-feedback" class="result" aria-live="polite" hidden></div></div><aside class="quiz-aside"><h3>O que vais praticar</h3><p>Agentes vs automatização, ferramentas, MCP, permissões, aprovação humana, segurança, logs, IA local e qualidade das decisões.</p><p><strong>As respostas erradas também contam:</strong> no final verás a tua escolha, a resposta correta e a razão.</p><div class="small-highlight">O objetivo é compreender decisões, não memorizar siglas.</div></aside></div></section>
+
+  <section class="closing"><div class="eyebrow">PRÓXIMA FASE · AGENTES REAIS</div><h2>Primeiro aprender. Depois integrar.</h2><p>A V1 é uma base educativa. Uma futura versão, separada e protegida, poderá usar Python, um SDK de agentes e conectores MCP com dados de teste ou ambientes autorizados. Nenhuma credencial deve ser guardada neste website público.</p><div class="source-links"><a href="https://openai.github.io/openai-agents-python/" target="_blank" rel="noopener noreferrer">Documentação Agents SDK ↗</a><a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">Model Context Protocol ↗</a></div></section>
+</main>
+<footer class="wrap foot"><span>© 2026 MRS MONTEIRO · Laboratório educativo e tecnológico</span><span>Exemplos fictícios · Sem processamento de dados reais · Sem ações externas</span></footer>
+</body>
+</html>

@@ -1,43 +1,51 @@
-MRS PREDICTIVE LAB — MULTIDESPORTO V2
-====================================
-Projeto final de Engenharia Informática — UABBet / Universidade Aberta.
+MRS MONTEIRO — Agentic AI & Governance Lab V1
+===========================================
 
-FICHEIROS A PUBLICAR NA BRANCH main DO mrs-monteiro/mrs-lab
-  preditivo/index.html
-  preditivo/css/predictive.css
-  preditivo/js/predictive.js       (sem alterações funcionais à V1)
-  preditivo/js/agenda.js          (NOVO)
-  preditivo/data/demo.json       (o ficheiro sintético original da V1)
-  preditivo/data/agenda.json      (NOVO: agenda com fontes verificadas)
+PUBLICAÇÃO — repositório: mrs-monteiro/mrs-lab — branch: main
 
-NÃO ALTERAR o index.html da raiz nem o LAB BFS/A*/Gráfica.
+1. Cria a pasta agentes/ na raiz do repositório, com:
+   agentes/index.html
+   agentes/css/agents.css
+   agentes/js/agents.js
+2. Substitui APENAS o index.html da RAIZ de mrs-lab pelo index.html deste pacote.
+3. Não alteres os ficheiros antigos de grafica/, preditivo/, ciberseguranca/ ou lab/.
+4. Faz Commit changes e consulta https://lab.mrs-monteiro.com/agentes/
+5. Caso a página antiga apareça, força a atualização com Ctrl+F5.
 
-O ficheiro scripts/atualizar_agenda_api.py é OPCIONAL. Não é necessário para
-publicar a V2, mas permite recolher dados através da API de The Odds API com
-uma chave privada. Requer um plano com as ligas pretendidas e DIREITOS
-EXPRESSOS para redistribuir o conteúdo no site público.
+TESTE 1 — aprovação humana
+- Seleciona Incidente numa aplicação empresarial, Governação: Governado.
+- Clica Executar até à aprovação.
+- Deve parar no passo 5/6 com uma caixa de decisão.
+- Clica Rejeitar e depois Próximo passo.
+- Deve apresentar 6/6, Concluído, com registo de decisão e sem execução real.
 
-Nota: NHL = hóquei no gelo. Hóquei em patins usa fontes distintas,
-como a Federação de Patinagem de Portugal (FPP) e World Skate Europe.
-Não foi identificada uma API pública autorizada e documentada com cobertura
-garantida de hóquei em patins. A agenda de patins contém três partidas
-confirmadas em anúncios oficiais, mas os horários podem mudar.
+TESTE 2 — diferença entre modos
+- Seleciona Assistido: não apresenta autorização para executar ações.
+- Seleciona Sem controlo: assinala claramente a exposição simulada.
+- Alterar cenário ou política reinicia a simulação.
 
-A demonstração estatística de futebol da V1 continua sintética e separada.
-O explorador novo não inventa probabilidades de modelos, acertos ou odds.
+TESTE 3 — treino
+- Conclui as 10 questões, confirma escolhas e verifica a revisão integral.
+- Experimenta Exportar correção HTML; contém apenas respostas da sessão.
 
-FONTES
-  https://the-odds-api.com/liveapi/guides/v4/
-  https://fpp.pt/jogos-do-campeonato-placard-definidos-para-a-proxima-epoca/
-  https://europe.worldskate.org/the-complete-schedule-of-the-wse-rink-hockey-european-cups/
+TESTE 4 — utilidades
+- Executa teste de prompt injection, compara IA local/cloud/híbrida.
+- Marca os seis passos do How To; reinicia o plano.
+- Exporta auditoria JSON, verifica que é um exemplo fictício.
 
-PRÓXIMA FASE
-  1. Obter licenças e chaves para APIs adequadas.
-  2. Automatizar a recolha fora do browser (servidor/CI com segredos).
-  3. Garantir direitos de redistribuição antes de publicar dados.
-  4. Treinar e comparar modelos específicos por modalidade em dados reais,
-     com divisão cronológica, calibração e log loss/Brier score.
-  5. Mostrar probabilidades apenas com data do treino, amostra de teste
-     e validação registada. Odds não são previsões independentes.
+LIMITES E PRIVACIDADE
+- Esta V1 é 100% determinística, não inclui LLM nem agentes reais.
+- Não faz qualquer pedido à API, OutSystems, bases de dados ou sistemas corporativos.
+- A exportação é local, não existem credenciais nem cookies necessários.
+- Nunca introduzir dados empresariais reais no repositório público.
+- Não confundir demonstração com solução de IA implementada em produção.
 
-NÃO PUBLIQUES .env, tokens, passwords, venv, bases de dados ou ZIPs externos.
+FONTES DE ESTUDO CONSIDERADAS
+- Trabalhos académicos do autor; exemplos com OutSystems.
+- Repositórios de referência enviados: openai-agents-python, ai-agents-for-beginners,
+  outsystems11-mcp, NomadaGUARD e agentics_ia_cibersecurity.
+- O código entregue é independente; não inclui ficheiros nem credenciais desses projetos.
+
+PRÓXIMA FASE (APENAS QUANDO AUTORIZADO)
+- SDK com modelos reais e backend protegido, contratos de ferramentas tipados,
+  autenticação, auditoria, testes, limites de acesso e revisão humana.
