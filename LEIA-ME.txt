@@ -1,0 +1,22 @@
+MRS Interactive Lab — Clareza Didática v2
+
+Objetivo: explicações por passo, separar métricas da execução automática e apresentar resumo final.
+
+1. No GitHub, repositório mrs-monteiro/mrs-lab, adicionar:
+   lab/js/clareza.js
+2. Editar SOMENTE o ficheiro da raiz mrs-lab/index.html.
+3. Imediatamente antes de </body>, depois da linha existente:
+   <script src="lab/js/passos.js"></script>
+   adicionar:
+   <script src="lab/js/clareza.js"></script>
+4. Commit changes na branch main.
+
+NÃO apagar nem modificar CNAME, lab/index.html, lab.js, passos.js, mapas.js, CSS ou catálogo.
+
+Testes:
+- Labirinto / BFS / Preparar pesquisa / Próximo / Ver resultado.
+- Verificar o resumo e o título «Resultados da execução automática» sobre os indicadores inferiores.
+- Sem solução / Ver resultado: custo «—», resultado «Sem percurso».
+- Alternar PT/EN.
+
+Para desfazer: remover a linha de script do index.html. O novo ficheiro pode ficar guardado.
