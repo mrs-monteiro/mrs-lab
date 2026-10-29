@@ -1,0 +1,71 @@
+MRS CYBERSECURITY & NETWORKS LAB — v1.0
+======================================
+
+OBJETIVO
+Criar uma experiência educativa e uma ferramenta de apoio a conversas de segurança
+operacional baseada nos temas académicos de Segurança em Redes e Computadores.
+A interface usa apenas HTML, CSS e JavaScript, não depende de APIs nem de servidores.
+
+FICHEIROS A PUBLICAR NO REPOSITÓRIO mrs-monteiro/mrs-lab (branch main):
+
+  /index.html                         SUBSTITUIR APENAS O FICHEIRO DA RAIZ
+  /ciberseguranca/index.html          CRIAR
+  /ciberseguranca/css/cyber.css       CRIAR
+  /ciberseguranca/js/cyber.js         CRIAR
+
+O resto do site fica inalterado: grafica/, preditivo/, lab/ e todos os seus CSS/JS.
+O index.html da raiz incluído neste ZIP corresponde à versão de referência da
+página principal que já contém os links gráficos e preditivos, acrescentando apenas
+o terceiro link «Explorar Cibersegurança e Redes».
+
+PUBLICAÇÃO PASSO A PASSO
+1. Descompactar o ZIP no Windows.
+2. Abrir https://github.com/mrs-monteiro/mrs-lab
+3. Carregar os três ficheiros dentro de /ciberseguranca/ nos seus caminhos exatos.
+4. Substituir o /index.html da raiz pelo ficheiro do ZIP.
+5. Fazer commit na branch main.
+6. Confirmar https://lab.mrs-monteiro.com/ciberseguranca/ e atualizar Ctrl + F5.
+
+VERIFICAÇÃO
+• Simulador: fluxo «Internet → Base de dados» deve ser bloqueado com firewall e
+  segmentação ativos; ao desligar a firewall, deve assinalar exposição perigosa.
+• SOC: selecionar L-002 e observar a evidência «TCP 5432».
+• Cyber Challenge: escolher uma decisão e observar explicação/pontuação.
+• Criptografia: em HTTPS, cifrar e decifrar mensagem; calcular SHA-256.
+• Autoavaliação: definir um controlo como Implementado e outro como Não implementado:
+  indicadores 2 / 12 e 50%; exportar HTML e JSON; imprimir em PDF.
+• Estudantes: responder à primeira pergunta e avançar.
+
+GARANTIAS E LIMITES
+- Esta implementação não executa scans, exploits, honeypots, comandos SSH ou tráfego
+  em redes reais.
+- Os logs são sintéticos e usam faixas de IP reservadas para documentação.
+- Não inclui código ou dependências copiados dos projetos terceiros anexados.
+- Respostas e textos não são transmitidos pelo JavaScript. Exportações são locais.
+- Não introduzir dados reais sensíveis, nomes de redes, credenciais ou endereços internos.
+- Criptografia com Web Crypto API do navegador; requer HTTPS ou localhost. A chave
+  AES-GCM não é exportável, permanece só na sessão e perde-se ao atualizar a página.
+  Não é um gestor de segredos, de documentos ou uma solução de produção.
+- A checklist é uma autoavaliação ilustrativa das funções do NIST CSF 2.0, não uma
+  auditoria, teste de intrusão nem certificação ISO 27001.
+- As explicações e decisões do jogo são pedagógicas e requerem adaptação a políticas
+  e procedimentos operacionais da organização.
+
+REFERÊNCIAS DE CONTEÚDO
+- Trabalhos de Engenharia Informática disponibilizados pelo autor: JavaSecurity
+  (RSA/AES), Segurança em Redes e Computadores (IPSec, DMZ, MFA, SecaaS,
+  tríade CIA, honeypots, phishing e engenharia social).
+- NIST CSF 2.0: https://www.nist.gov/cyberframework
+- OWASP Cryptographic Storage Cheat Sheet:
+  https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html
+- OWASP Logging Cheat Sheet:
+  https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html
+
+IDEIAS PARA V2 (NÃO INCLUÍDAS NESTA VERSÃO)
+- Editor visual de políticas com simulação mais rica e trilhos de decisão.
+- Testes automatizados em ambiente de integração contínua e maior acessibilidade.
+- Avaliação de risco de alterações e disponibilidade numa arquitetura empresarial
+  fictícia (sem dados reais ou conectividade externa).
+- Exercícios adicionais de análise de logs e segurança de aplicações web.
+- Futuro módulo separado de agentes de IA defensivos com aprovação humana, auditoria
+  e permissões mínimas, sem automatizar resposta a sistemas reais.

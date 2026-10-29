@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#08121e">
+  <meta name="description" content="MRS Cybersecurity & Networks Lab — experiências educativas de redes, segurança, criptografia, resposta a incidentes e autoavaliação de controlos.">
+  <title>MRS MONTEIRO | Cybersecurity & Networks Lab</title>
+  <link rel="stylesheet" href="css/cyber.css">
+  <script src="js/cyber.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Saltar para o conteúdo</a>
+  <header class="top"><div class="shell headerline">
+    <a class="brand" href="https://mrs-monteiro.com/">MRS <span>MONTEIRO</span></a>
+    <a class="back" href="https://lab.mrs-monteiro.com/">← Voltar ao LAB</a>
+  </div></header>
+  <main id="main" class="shell">
+    <section class="hero">
+      <p class="eyebrow">06 / CIBERSEGURANÇA · SEGURANÇA E REDES</p>
+      <h1>Da arquitetura à <span>resiliência.</span></h1>
+      <p class="lede">Explora uma rede empresarial fictícia, testa decisões de defesa, compreende a criptografia e transforma controlos técnicos num plano de melhoria. Uma experiência interativa inspirada em trabalhos de Engenharia Informática sobre segurança em redes e computadores.</p>
+      <div class="chips"><span>Redes & firewall</span><span>VPN · DMZ · MFA</span><span>AES-GCM · SHA-256</span><span>Incidentes & SOC</span><span>NIST CSF 2.0</span><span>100% demonstração local</span></div>
+    </section>
+    <div class="privacy"><strong>Ambiente de treino isolado.</strong> Os cenários, IPs e registos são fictícios. Este site não analisa a tua rede, não executa varrimentos e não envia os textos ou respostas para um servidor. A demonstração criptográfica usa a Web Crypto API do navegador.</div>
+    <nav class="modules" aria-label="Navegação das experiências">
+      <a href="#rede"><span>01</span> Rede & firewall</a>
+      <a href="#soc"><span>02</span> Centro de operações</a>
+      <a href="#jogo"><span>03</span> Cyber Challenge</a>
+      <a href="#cripto"><span>04</span> Criptografia</a>
+      <a href="#controlos"><span>05</span> Controlos & relatório</a>
+      <a href="#estudantes"><span>06</span> Treino académico</a>
+    </nav>
+
+    <section class="panel" id="rede" aria-labelledby="rede-title">
+      <div class="sectiontop"><div><p class="eyebrow">01 / ARQUITETURA E SEGMENTAÇÃO</p><h2 id="rede-title">Simulador de rede e firewall</h2></div><span class="pill">Simulação · sem tráfego real</span></div>
+      <p class="muted">Ativa e desativa medidas de defesa, seleciona uma tentativa de comunicação e observa uma decisão baseada em regras didáticas. Não substitui um motor de firewall nem uma revisão técnica de configuração.</p>
+      <div class="network-layout">
+        <div>
+          <div class="topology" role="group" aria-label="Topologia empresarial fictícia com Internet, perímetro, DMZ, serviços, dados e administração">
+            <div class="network-node" data-node="internet"><small>REDE EXTERNA</small><b>🌐 Internet</b><span>Origem não fiável</span></div>
+            <div class="network-node" data-node="edge"><small>PERÍMETRO</small><b>🛡️ Firewall / WAF</b><span>Filtragem de tráfego</span></div>
+            <div class="network-node" data-node="web"><small>DMZ</small><b>🖥️ Web</b><span>Serviço público · 443</span></div>
+            <div class="network-node" data-node="app"><small>REDE INTERNA</small><b>⚙️ Aplicação</b><span>API & serviços internos</span></div>
+            <div class="network-node" data-node="database"><small>DADOS</small><b>🗄️ Base de dados</b><span>Porta 5432</span></div>
+            <div class="network-node" data-node="staff"><small>UTILIZADORES</small><b>👩‍💻 Colaboradores</b><span>Identidade empresarial</span></div>
+            <div class="network-node" data-node="admin"><small>ACESSO PRIVILEGIADO</small><b>🔐 Bastion / VPN</b><span>Administração controlada</span></div>
+          </div>
+          <div class="route" id="route" aria-live="polite">Escolhe um fluxo e testa a comunicação.</div>
+        </div>
+        <div class="config panel-inner">
+          <h3>Controlos de proteção</h3>
+          <div class="toggles" id="net-controls">
+            <label><input id="net-fw" type="checkbox" checked> Firewall de perímetro</label>
+            <label><input id="net-seg" type="checkbox" checked> Segmentação da rede / DMZ</label>
+            <label><input id="net-waf" type="checkbox" checked> WAF na aplicação pública</label>
+            <label><input id="net-vpn" type="checkbox" checked> VPN para acesso administrativo</label>
+            <label><input id="net-mfa" type="checkbox" checked> MFA em acessos privilegiados</label>
+          </div>
+          <label class="field">Fluxo a avaliar
+            <select id="net-flow">
+              <option value="public">Internet → Web · HTTPS 443</option>
+              <option value="db">Internet → Base de dados · TCP 5432</option>
+              <option value="ssh">Internet → Bastion · SSH 22</option>
+              <option value="webapp">Web DMZ → Aplicação · HTTPS 443</option>
+              <option value="admin">Admin externo → Aplicação interna · SSH 22</option>
+              <option value="employee">Colaborador → Aplicação · HTTPS 443</option>
+            </select>
+          </label>
+          <button id="net-test" class="primary">Testar comunicação</button>
+          <div id="net-result" class="decision" role="status" aria-live="polite">Sem teste realizado.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="soc" aria-labelledby="soc-title">
+      <div class="sectiontop"><div><p class="eyebrow">02 / DETEÇÃO E MONITORIZAÇÃO</p><h2 id="soc-title">Centro de operações de segurança</h2></div><span class="pill">Registos sintéticos</span></div>
+      <p class="muted">Exercício de triagem: seleciona um evento e identifica evidências, gravidade e resposta inicial. Os endereços usados são reservados para documentação.</p>
+      <div class="columns">
+        <div class="panel-inner">
+          <div id="log-list" class="log-list" aria-label="Eventos sintéticos"></div>
+        </div>
+        <div class="panel-inner" id="log-detail" aria-live="polite"><p class="muted">Seleciona um evento para começar.</p></div>
+      </div>
+    </section>
+
+    <section class="panel" id="jogo" aria-labelledby="game-title">
+      <div class="sectiontop"><div><p class="eyebrow">03 / MINI-JOGO DE DECISÃO</p><h2 id="game-title">Cyber Challenge</h2></div><span class="pill">3 cenários · 9 decisões</span></div>
+      <p class="muted">És responsável pela primeira resposta a um incidente fictício. Escolhe a decisão mais defensável. Cada escolha explica a consequência e a alternativa recomendada.</p>
+      <div class="game-grid"><div class="panel-inner">
+        <div class="game-progress"><span id="game-progress">Cenário 1 / 3 · Decisão 1 / 3</span><span id="game-score">0 pontos</span></div>
+        <div class="progress-track"><div id="game-bar"></div></div>
+        <h3 id="game-name">A carregar…</h3><p id="game-question" class="game-question"></p>
+        <div id="game-choices" class="choices"></div><div id="game-feedback" class="feedback" aria-live="polite"></div>
+        <div class="actions"><button id="game-next" class="primary" disabled>Continuar →</button><button id="game-reset" class="secondary">Recomeçar</button></div>
+      </div><div class="panel-inner game-rules"><h3>O que é avaliado?</h3><p>A prioridade não é «ganhar pontos» rapidamente, mas tomar decisões seguras: conter, preservar evidências, comunicar e recuperar de forma controlada.</p><p>Os casos incluem phishing, ransomware e acessos suspeitos. Não é efetuado qualquer ataque.</p></div></div>
+    </section>
+
+    <section class="panel" id="cripto" aria-labelledby="crypto-title">
+      <div class="sectiontop"><div><p class="eyebrow">04 / CRIPTOGRAFIA APLICADA</p><h2 id="crypto-title">AES-GCM e integridade de dados</h2></div><span class="pill">Web Crypto API · HTTPS</span></div>
+      <p class="muted">Escreve uma mensagem de demonstração e cifra-a com AES-256-GCM. A chave aleatória permanece apenas na memória da página e não é exportável; se atualizares a página, não será possível recuperar a mensagem cifrada nessa sessão. Nunca introduzas palavras-passe ou dados reais sensíveis.</p>
+      <div class="columns"><div class="panel-inner">
+        <label class="field">Mensagem de teste
+          <textarea id="crypto-input" rows="4" maxlength="800">Mensagem educativa: proteger a comunicação entre serviços.</textarea>
+        </label>
+        <div class="actions"><button class="primary" id="crypto-encrypt">Cifrar AES-GCM</button><button class="secondary" id="crypto-decrypt">Decifrar (esta sessão)</button><button class="secondary" id="crypto-hash">Calcular SHA-256</button></div>
+        <p class="muted tiny">SHA-256 serve aqui para observar uma impressão digital de dados; não é um método adequado para armazenar palavras-passe.</p>
+      </div><div class="panel-inner">
+        <h3>Resultado</h3><pre class="crypto-output" id="crypto-output">Aguardamos uma operação…</pre><p class="crypto-status" id="crypto-status" role="status" aria-live="polite"></p>
+        <ul class="explain-list"><li><strong>AES-GCM:</strong> confidencialidade e integridade autenticada.</li><li><strong>Nonce:</strong> valor aleatório de 96 bits para esta mensagem.</li><li><strong>RSA:</strong> abordado no projeto Java original, mas não reproduzido como criptografia caseira.</li></ul>
+      </div></div>
+    </section>
+
+    <section class="panel" id="controlos" aria-labelledby="control-title">
+      <div class="sectiontop"><div><p class="eyebrow">05 / UTILIDADE PROFISSIONAL</p><h2 id="control-title">Autoavaliação de controlos</h2></div><span class="pill">Referência: NIST CSF 2.0</span></div>
+      <p class="muted">Avalia medidas de governação, identificação, proteção, deteção, resposta e recuperação. Os resultados são orientadores, não constituem uma auditoria, uma certificação ISO 27001 nem uma avaliação formal de conformidade.</p>
+      <div class="assessment-top"><label class="field">Contexto ilustrativo
+        <select id="assessment-template"><option value="general">Organização / equipa</option><option value="critical">Plataforma empresarial crítica</option><option value="hybrid">Ambiente híbrido (cloud e on-premises)</option></select>
+      </label><div class="stat"><small>Controlos avaliados</small><strong id="assessment-progress">0 / 12</strong></div><div class="stat"><small>Cobertura estimada*</small><strong id="assessment-score">—</strong></div></div>
+      <div class="assessment-list" id="assessment-list"></div>
+      <div class="panel-inner assessment-summary"><h3>Prioridades preliminares</h3><ol id="assessment-recommendations"><li>Seleciona o estado dos controlos para obter recomendações.</li></ol><p class="muted tiny">*Pontuação didática, calculada apenas sobre os controlos avaliados e aplicáveis. Não representa um nível de segurança certificado.</p></div>
+      <div class="actions"><button class="primary" id="assessment-print">Imprimir / Guardar PDF</button><button class="secondary" id="assessment-export">Exportar relatório HTML</button><button class="secondary" id="assessment-json">Exportar JSON</button><button class="secondary" id="assessment-reset">Limpar respostas</button></div>
+      <p class="muted tiny">Sem envio de informação para servidores. Não introduzas nomes de sistemas internos, IPs reais, topologias, segredos ou dados classificados. A impressão e os ficheiros são gerados localmente no navegador.</p>
+    </section>
+
+    <section class="panel" id="estudantes" aria-labelledby="student-title">
+      <div class="sectiontop"><div><p class="eyebrow">06 / TREINO PARA ESTUDANTES</p><h2 id="student-title">Questionário de Segurança e Redes</h2></div><span class="pill">12 perguntas · com explicação</span></div>
+      <p class="muted">Questões fundamentadas em temas de segurança em redes e computadores, criptografia, VPN/IPSec, DMZ, MFA, honeypots, engenharia social e resposta a incidentes.</p>
+      <div class="quiz-grid"><div class="panel-inner"><div class="game-progress"><span id="quiz-count">Pergunta 1 / 12</span><span id="quiz-score">0 corretas</span></div><h3 id="quiz-question"></h3><div class="choices" id="quiz-choices"></div><div id="quiz-feedback" class="feedback" aria-live="polite"></div><div class="actions"><button id="quiz-next" class="primary" disabled>Próxima pergunta →</button><button id="quiz-reset" class="secondary">Recomeçar</button></div></div><div class="panel-inner"><h3>Linhas de aprendizagem</h3><ul class="explain-list"><li>Confidencialidade, integridade e disponibilidade</li><li>AES, RSA e funções de hash</li><li>Redes empresariais, DMZ e IPSec</li><li>Deteção e resposta a incidentes</li><li>Identidade, MFA e segurança cloud</li></ul><p class="muted tiny">Questões originais, inspiradas nos temas académicos. Não reproduzem enunciados de avaliação.</p></div></div>
+    </section>
+
+    <section class="references"><h2>Referências e limites</h2><p>O simulador não representa uma infraestrutura real. Para implementação profissional, confronta cada decisão com a arquitetura, os riscos e as políticas da organização.</p><p><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener noreferrer">NIST CSF 2.0</a> · <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP Cryptographic Storage</a> · <a href="https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP Logging</a></p></section>
+  </main>
+  <footer class="shell footer"><span>© 2026 MRS MONTEIRO LAB</span><span>Simulações educativas · Sem agentes externos nem recolha de dados pessoais</span></footer>
+  <section id="print-report" aria-label="Relatório para impressão"></section>
+</body>
+</html>
