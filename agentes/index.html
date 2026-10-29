@@ -46,8 +46,8 @@
       <h3 id="studio-config-title">01 · Configurar</h3>
       <label class="studio-field">Caso de uso<select id="st-case"><option value="support">MRS ServiceDesk — incidente numa aplicação fictícia</option><option value="access">MRS Access — pedido de acesso a um relatório fictício</option><option value="change">MRS Change — proposta de alteração de uma API de demonstração</option></select></label>
       <label class="studio-field">Agentes na equipa<select id="st-count"><option value="1">1 · Generalista</option><option value="2">2 · Coordenador + Verificador</option><option value="3" selected>3 · Coordenador + Analista + Auditor</option></select></label>
-      <label class="studio-field">Execução<select id="st-mode"><option value="demo">Simulação gratuita · Sem API</option><option value="live">OpenAI API · Apenas no servidor local</option></select></label>
-      <label class="studio-field">Modelo por pedido<select id="st-model"><option value="gpt-5.4-mini">GPT-5.4 Mini · equilibrado</option><option value="gpt-5.4">GPT-5.4 · análise aprofundada</option></select></label>
+      <label class="studio-field">Execução<select id="st-mode"><option value="demo">Simulação gratuita · Sem chamadas à API</option></select></label>
+      <label class="studio-field">Modelo de referência (não é executado)<select id="st-model"><option value="gpt-5.4-mini">GPT-5.4 Mini · equilibrado</option><option value="gpt-5.4">GPT-5.4 · análise aprofundada</option></select></label>
       <div class="studio-hint" id="st-modehint">Sem consumo de tokens: as respostas são didáticas e pré-definidas.</div>
       <h4>02 · Funções e prompts editáveis</h4><div id="st-roles" class="studio-roles"></div>
       <h4>03 · Regras e permissões</h4><div class="studio-checks"><label><input type="checkbox" id="st-readonly" checked> Ferramentas apenas de leitura (simuladas)</label><label><input type="checkbox" id="st-minimize" checked> Minimizar dados apresentados</label><label><input type="checkbox" id="st-approval" checked> Aprovação humana obrigatória</label><label><input type="checkbox" id="st-audit" checked disabled> Auditoria obrigatória (registo mínimo)</label></div>
@@ -76,10 +76,21 @@
   </div>
   <section class="studio-guide" aria-label="Como ligar agentes reais à API">
     <div><span class="eyebrow">HOW TO · 01</span><h3>Aprender sem custos</h3><p>Usa o modo simulado, compara 1, 2 e 3 agentes e observa como os prompts e as políticas alteram a proposta. Tudo funciona diretamente no navegador.</p></div>
-    <div><span class="eyebrow">HOW TO · 02</span><h3>Ativar OpenAI localmente</h3><p>Quando quiseres, cria uma chave da API, configura faturação e instala o servidor Python opcional incluído no pacote. A chave só fica no teu computador.</p></div>
-    <div><span class="eyebrow">HOW TO · 03</span><h3>Medir e governar</h3><p>Compara tokens de entrada e saída, audita decisões, limita chamadas e exige aprovação antes de qualquer ação. O exemplo nunca publica alterações nem consulta dados empresariais.</p></div>
+    <div><span class="eyebrow">HOW TO · 02</span><h3>Ativar OpenAI localmente</h3><p>A API poderá ser ativada num futuro projeto privado, com faturação independente, chave protegida e limites de utilização. Nesta versão não é utilizada.</p></div>
+    <div><span class="eyebrow">HOW TO · 03</span><h3>Medir e governar</h3><p>Nesta simulação são consumidos 0 tokens. Numa integração futura, mede consumo, aplica limites e exige aprovação antes de qualquer ação. O exemplo nunca publica alterações nem consulta dados empresariais.</p></div>
   </section>
-  <p class="studio-note">API OpenAI: a subscrição ChatGPT é distinta da faturação da API. Paga-se pela utilização dos modelos e respetivos tokens; não é necessário comprar «tokens» individualmente. O pacote inclui um backend local opcional, desligado por omissão. Nunca coloques chaves no HTML ou no repositório público.</p>
+  <p class="studio-note">API OpenAI: a subscrição ChatGPT é distinta da faturação da API. Paga-se pela utilização dos modelos e respetivos tokens; não é necessário comprar «tokens» individualmente. Neste LAB todas as chamadas a modelos estão desativadas. Nunca coloques chaves no HTML ou no repositório público.</p>
+</section>
+
+  <section id="incident-copilot-link" class="section" aria-labelledby="copilot-link-title">
+  <div class="section-head"><div><div class="eyebrow">NOVO · MRS INCIDENT COPILOT</div>
+  <h2 id="copilot-link-title">Experimenta uma investigação de incidentes com agentes</h2></div>
+  <span class="minor">0 tokens · 0 custos · 0 chamadas externas</span></div>
+  <div class="panel" style="display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center">
+    <div style="flex:1 1 350px"><h3 style="margin:0 0 8px">1, 2 ou 3 agentes — evidências, prompts, aprovação e auditoria</h3>
+      <p style="margin:0;color:#b8ccda">Escolhe um incidente fictício, observa a investigação animada e toma a decisão final. Tudo é demonstrativo e funciona gratuitamente no teu navegador.</p></div>
+    <a class="button primary" href="copilot/">Abrir Incident Copilot ↗</a>
+  </div>
 </section>
 
   <section id="aprender" class="section" aria-labelledby="learn-title">
