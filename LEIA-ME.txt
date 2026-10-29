@@ -1,9 +1,19 @@
-MRS Interactive Lab — fecho didático v3
+MRS Interactive Lab — Computação Gráfica v1
 
-1) Colocar lab/js/fecho.js no repositório mrs-monteiro/mrs-lab, branch main.
-2) No index.html da raiz, SUBSTITUIR <script src="lab/js/clareza.js"></script> por <script src="lab/js/fecho.js"></script>.
-3) Manter os outros ficheiros intocados; não carregar simultaneamente clareza.js e fecho.js.
-4) Testar: Labirinto BFS (Preparar, Próximo, Anterior, Ver resultado); Sem solução; Cidade A*; mudar mapa e confirmar que explicação reinicia.
-5) Não eliminar pasta lab nem o 404/CNAME.
+Fonte: dois projetos do autor (e-Fólio A de rasterização e e-Fólio B de terreno procedural) e notas/papers fornecidos.
 
-Nota: Esta atualização não substitui a implementação dos algoritmos; corrige a interpretação e o resumo do modo passo a passo.
+1. No repositório mrs-monteiro/mrs-lab, carregar:
+  grafica/index.html
+  lab/js/questoes-cg.js
+
+2. Em mrs-lab/index.html na RAIZ, inserir ANTES de </body> e DEPOIS do carregamento de lab/js/learning.js:
+  <script src="lab/js/questoes-cg.js"></script>
+
+3. No mesmo index.html, adicionar um link para a experiência gráfica, por exemplo imediatamente após o DIV dos separadores:
+  <p><a class="back" href="grafica/">Abrir laboratório de Computação Gráfica ↗</a></p>
+
+4. Não substituir nenhum dos ficheiros já existentes. Não alterar CNAME, CSS ou a pasta lab de cópia de segurança.
+
+5. Testar: /grafica/ (preparar, próximo, inverter extremos, linhas vertical/horizontal/diagonal) e Treino para estudantes (oito novas questões).
+
+NOTA: a primeira experiência é 2D Canvas para explicar o algoritmo isoladamente. A versão 3D com Three.js e terreno procedural fica para uma atualização dedicada, depois de validarmos este módulo.
