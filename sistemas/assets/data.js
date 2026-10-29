@@ -47,14 +47,51 @@ window.MRS_DATA = {
     {name:'05. Incidentes reais, sem riscos',level:'Intermédio',duration:'60 min',tags:['Triagem','Logs','Decisão'],description:'Treinar investigação de ocorrências com feedback e pontuação.',tasks:['Resolver 3 incidentes','Examinar as explicações','Rever comandos associados','Registar lições aprendidas']},
     {name:'06. Automação responsável',level:'Avançado',duration:'75 min',tags:['Scripts','Relatórios','Validação'],description:'Executar scripts originais de leitura em ambiente autorizado.',tasks:['Ler o script PowerShell','Rever o script Python','Testar em máquina de laboratório','Documentar resultados']}
   ],
-  sources:[
-    {name:'Active-diretory',area:'Windows Server / Active Directory',usage:'Referência visual sobre gestão de contas, grupos, DHCP e DNS.',license:'Não identificada no ZIP',note:'Não reproduzimos os prints sem autorização.'},
-    {name:'LazyAdmin',area:'PowerShell',usage:'Referência sobre tarefas de administração e diagnóstico.',license:'MIT',note:'Scripts incluídos no LAB foram escritos de raiz.'},
-    {name:'Mastering Python Scripting for System Administrators',area:'Python',usage:'Exemplos de programação e automação de tarefas.',license:'MIT',note:'Material de formação de terceiros, não incorporado.'},
-    {name:'awesome-network-analysis',area:'Redes',usage:'Bibliografia e abordagens de análise de redes.',license:'Não encontrada no ZIP',note:'Referência externa, sem replicação.'},
-    {name:'DevOps-Roadmap',area:'Percurso DevOps',usage:'Organização futura de tópicos e competências.',license:'Apache-2.0',note:'Usado apenas para inspiração da estrutura.'},
-    {name:'devops-master-class',area:'DevOps / Ansible / Docker',usage:'Referência para um futuro laboratório avançado.',license:'Não identificada no ZIP',note:'Não incorporado na V1.'},
-    {name:'AWS EKS Kubernetes Masterclass',area:'Kubernetes / AWS',usage:'Referência para a fase avançada de contentores.',license:'Não identificada no ZIP',note:'Não incorporado na V1.'},
-    {name:'Azure DevOps MCP',area:'DevOps e agentes',usage:'Referência para integração futura com Azure DevOps.',license:'MIT',note:'Não executa ligações nem agentes nesta V1.'}
+  academicYears: [
+    {year:'1.º ano',groups:[
+      {semester:'1.º semestre',units:['21002 · Álgebra Linear I','21010 · Arquitectura de Computadores','21173 · Introdução à Programação','21174 · Sistemas Computacionais','21175 · Análise Infinitesimal','21176 · Ética e Práticas de Engenharia']},
+      {semester:'2.º semestre',units:['21037 · Elementos de Probabilidades e Estatística','21082 · Matemática Finita','21111 · Sistemas Operativos','21177 · Modelação de Sistemas de Informação','21178 · Laboratório de Programação']}
+    ]},
+    {year:'2.º ano',groups:[
+      {semester:'1.º semestre',units:['21048 · Física Geral','21053 · Fundamentos de Bases de Dados','21078 · Linguagens e Computação','21093 · Programação por Objectos','21106 · Sistemas em Rede']},
+      {semester:'2.º semestre',units:['21046 · Estruturas de Dados e Algoritmos Fundamentais','21071 · Introdução à Inteligência Artificial','21076 · Investigação Operacional','21077 · Linguagens de Programação','21179 · Laboratório de Desenvolvimento de Software']}
+    ]},
+    {year:'3.º ano',groups:[
+      {semester:'1.º semestre',units:['21020 · Computação Gráfica','21062 · Gestão de Projectos Informáticos','21103 · Sistemas de Gestão de Bases de Dados','21110 · Sistemas Multimédia','21180 · Computação Numérica','21181 · Segurança em Rede e Computadores']},
+      {semester:'2.º semestre',units:['21018 · Compilação','21097 · Raciocínio e Representação do Conhecimento','21108 · Sistemas Distribuídos','21182 · Laboratório de Sistemas e Serviços Web','21184 · Projeto de Engenharia Informática']}
+    ]}
+  ],
+  certifications: [
+    {"period":"2024 · concluído","title":"Microcredencial em Fundamentos de Cibersegurança","issuer":"Universidade Aberta","description":"Certificado de formação recebido, datado de 5 de julho de 2024. Curso de 52 horas e 2 ECTS, com classificação final indicada no documento.","tags":["Cibersegurança","Certificado de formação"]},
+    {"period":"2024 · concluído","title":"Cidadão Ciberseguro","issuer":"Centro Nacional de Cibersegurança / NAU","description":"Certificado emitido em 2 de maio de 2024; formação em ciber-higiene e boas práticas de segurança.","tags":["Cibersegurança","Certificado de curso"]},
+    {"period":"2020 · certificado","title":"Microsoft Teams","issuer":"Formação Microsoft Teams","description":"Certificado de curso recebido, com data de 2 de novembro de 2020.","tags":["Colaboração","Certificado de curso"]},
+    {"period":"2023 · frequência","title":"PostgreSQL","issuer":"NBCC Academy","description":"Declaração de frequência de 7 horas de formação em PostgreSQL, realizada em novembro de 2023.","tags":["Bases de dados","Frequência"]},
+    {"period":"2026 · frequência","title":"Portal de Gestão de Serviço — curso para utilizadores","issuer":"Formação profissional","description":"Certificado de frequência datado de 22 de junho de 2026.","tags":["ITSM","Frequência"]},
+    {"period":"2025 · concluído","title":"SGSI — ISO/IEC 27001:2013 e WLA-SCS:2020","issuer":"Formação profissional","description":"Certificado de conclusão com aproveitamento, datado de 11 de junho de 2025.","tags":["Segurança da informação","Formação concluída"]},
+    {"period":"2016 · concluído","title":"Princípios básicos do SGSI — ISO 27001:2013","issuer":"Formação profissional","description":"Certificado de formação profissional, com conclusão em 8 de novembro de 2016.","tags":["ISO 27001","Formação concluída"]},
+    {"period":"2023 · concluído","title":"Proteção de Dados Pessoais","issuer":"Santa Casa da Misericórdia de Lisboa","description":"Certificado de conclusão com aproveitamento, datado de 6 de novembro de 2023.","tags":["Privacidade","Formação concluída"]},
+    {"period":"2024 · concluído","title":"Ética","issuer":"Santa Casa da Misericórdia de Lisboa","description":"Certificado de conclusão com aproveitamento, datado de 20 de agosto de 2024.","tags":["Ética","Formação concluída"]},
+    {"period":"2024 · concluído","title":"Teletrabalho em equipa","issuer":"Santa Casa da Misericórdia de Lisboa","description":"Certificado de conclusão com aproveitamento, datado de 26 de junho de 2024.","tags":["Organização","Formação concluída"]},
+    {"period":"2025 · concluído","title":"Diversidade cultural","issuer":"Formação profissional","description":"Certificado de conclusão com aproveitamento, datado de 6 de janeiro de 2025.","tags":["Inclusão","Formação concluída"]},
+    {"period":"2025 · concluído","title":"Jogo Responsável","issuer":"Formação profissional","description":"Certificado de conclusão com aproveitamento, datado de 6 de outubro de 2025.","tags":["Conformidade","Formação concluída"]},
+    {"period":"2025 · concluído","title":"Prevenção da Corrupção e Proteção de Denunciantes","issuer":"Formação profissional","description":"Certificado de conclusão com aproveitamento, datado de 6 de outubro de 2025.","tags":["Conformidade","Formação concluída"]},
+    {"period":"2025 · concluído","title":"Prevenção do Branqueamento de Capitais e Financiamento do Terrorismo","issuer":"Formação profissional","description":"Certificado de conclusão com aproveitamento, datado de 30 de setembro de 2025.","tags":["Conformidade","Formação concluída"]},
+    {"period":"Documento recebido","title":"Microsoft Certified Professional (MCP)","issuer":"Microsoft","description":"Comprovativo de Microsoft Certified Professional incluído no arquivo. Certificação histórica; não indica validade atual de especializações adicionais.","tags":["Microsoft","Credencial histórica"]},
+    {"period":"Documentos recebidos","title":"Windows Server 2003 e Active Directory","issuer":"Formação técnica Microsoft","description":"Comprovativos de administração Windows Server, desenho e manutenção de Active Directory e infraestruturas de rede.","tags":["Windows Server","Active Directory"]},
+    {"period":"Documentos recebidos","title":"SQL Server 2000 e SQL Server 2014","issuer":"Formação técnica Microsoft","description":"Comprovativos de administração e programação SQL Server 2000 e de Analysis, Integration e Reporting Services do SQL Server 2014.","tags":["SQL Server","Business Intelligence"]},
+    {"period":"Documentos recebidos","title":"SharePoint 2007, 2010, 2013 e 2016","issuer":"Formação técnica Microsoft / entidades formadoras","description":"Comprovativos de administração, implementação, desenho de infraestrutura, planeamento e workshops técnicos SharePoint.","tags":["SharePoint","Administração"]},
+    {"period":"Documentos recebidos","title":"BizTalk Server — Administração e Desenvolvimento","issuer":"Formação técnica","description":"Comprovativos individuais de formação em administração e desenvolvimento BizTalk.","tags":["BizTalk","Integração"]},
+    {"period":"Documentos recebidos","title":"Exchange Server 2003, Hyper-V e Forefront","issuer":"Formação técnica Microsoft","description":"Comprovativos técnicos relativos a Exchange, virtualização Hyper-V e segurança Forefront.","tags":["Exchange","Infraestrutura"]},
+    {"period":"Documentos recebidos","title":"OutSystems — Developer e Semana do Programador","issuer":"OutSystems / Formação técnica","description":"Certificado de formação OutSystems Developer e comprovativo da Semana do Programador 7x.","tags":["OutSystems","Desenvolvimento"]},
+    {"period":"Documento recebido","title":"Operador de Informática","issuer":"IEFP","description":"Documento de formação profissional disponibilizado para arquivo de percurso técnico.","tags":["IEFP","Formação técnica"]},
+  ],
+  career: [
+    {period:'2016 — presente',organization:'Santa Casa da Misericórdia de Lisboa',role:'Senior Platform Engineer',description:'Suporte e evolução de plataformas OutSystems on-premises e cloud e soluções SharePoint. Gestão de ambientes, releases, incidentes de produção e integrações empresariais.',tags:['OutSystems','SharePoint','Plataformas empresariais','Suporte de produção']},
+    {period:'2014 — 2016',organization:'Winprovit · Portugal Telecom',role:'Consultoria SharePoint',description:'Consultoria SharePoint e .NET, desempenho e segurança, administração Windows/IIS/SQL Server, migrações e suporte aplicacional.',tags:['SharePoint','.NET','IIS','SQL Server']},
+    {period:'2013 — 2014',organization:'Accenture · Sonangol / BP Angola',role:'Especialização SharePoint',description:'Implementação e suporte de SharePoint, Windows Server e SQL Server, incluindo automatização de tarefas com PowerShell.',tags:['SharePoint','Windows Server','SQL Server','PowerShell']},
+    {period:'2012 — 2014',organization:'Accenture · ZON / NOS',role:'Suporte técnico aplicacional',description:'Administração e configuração de plataformas SharePoint e OutSystems, monitorização técnica, suporte web e gestão de incidentes.',tags:['ZON','NOS','SharePoint','OutSystems']},
+    {period:'2008 — 2011',organization:'GFI Portugal / Noesis · Portugal Telecom / PTSI',role:'Gestão técnica e aplicacional',description:'Gestão técnica de aplicações web, SharePoint, OutSystems, deployments, incidentes, sistemas e bases de dados SQL Server.',tags:['GFI Portugal','Noesis','PT / PTSI','Aplicações web']},
+    {period:'2006 — 2008',organization:'GFI Portugal (atualmente Inetum) · Clientes públicos e privados',role:'Sistemas e infraestrutura',description:'Administração Windows e Unix, redes, Active Directory, Exchange, SQL Server, virtualização e projetos de migração.',tags:['Windows / Unix','Active Directory','Infraestrutura','Migrações']},
+    {period:'2001 — 2003',organization:'Universidade Atlântica',role:'Técnico de Sistemas de Informação',description:'Administração de Windows 2000/2003, Active Directory e serviços de rede (DNS, WINS, DHCP), Exchange, ISA Server e SQL Server 2000; suporte a alunos e colaboradores.',tags:['Sistemas','Redes','Bases de dados','Suporte técnico']}
   ]
 };

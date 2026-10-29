@@ -12,7 +12,7 @@
     diretorio: 'Active Directory Lab', incidentes: 'IT Troubleshooting',
     monitorizacao: 'Saúde da Infraestrutura', comandos: 'Biblioteca de comandos',
     ferramentas: 'Ferramentas externas', aprender: 'Percursos de estudo',
-    fontes: 'Projetos de referência'
+    fontes: 'Percurso académico e profissional'
   };
   const safeStorage = {
     get(key, fallback) { try { const val = JSON.parse(localStorage.getItem(key)); return val ?? fallback; } catch { return fallback; } },
@@ -192,7 +192,9 @@
     const card = btn.closest('.course-card');card.classList.toggle('open');
     const opened=card.classList.contains('open');btn.textContent=opened?'Ocultar ↑':'Ver exercícios ↓';btn.setAttribute('aria-expanded', String(opened));
   }));
-  $('#source-list').innerHTML = D.sources.map(s=>`<article class="source-card"><div><h3>${html(s.name)}</h3><p>${html(s.usage)}</p><p class="small-muted">${html(s.note)}</p></div><div class="source-side"><span class="tag">${html(s.area)}</span><br><small>Licença: ${html(s.license)}</small></div></article>`).join('');
+  $('#academic-list').innerHTML = D.academicYears.map(y=>`<article class="journey-year"><div class="journey-year-title"><h3>${html(y.year)}</h3><span>UC concluídas</span></div><div class="journey-semesters">${y.groups.map(g=>`<div><h4>${html(g.semester)}</h4><ul>${g.units.map(u=>`<li>${html(u)}</li>`).join('')}</ul></div>`).join('')}</div></article>`).join('');
+  $('#certificates-list').innerHTML = D.certifications.map(c=>`<article class="career-card"><div class="career-period">${html(c.period)}</div><div class="career-content"><h3>${html(c.title)}</h3><strong>${html(c.issuer)}</strong><p>${html(c.description)}</p><div class="career-tags">${c.tags.map(t=>`<span class="tag">${html(t)}</span>`).join('')}</div></div></article>`).join('');
+  $('#career-list').innerHTML = D.career.map(c=>`<article class="career-card"><div class="career-period">${html(c.period)}</div><div class="career-content"><h3>${html(c.organization)}</h3><strong>${html(c.role)}</strong><p>${html(c.description)}</p><div class="career-tags">${c.tags.map(t=>`<span class="tag">${html(t)}</span>`).join('')}</div></div></article>`).join('');
 
   go(location.hash.slice(1));
 })();
