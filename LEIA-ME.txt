@@ -1,51 +1,75 @@
-MRS MONTEIRO — Agentic AI & Governance Lab V1
-===========================================
+MRS AGENT STUDIO V2.0 — ORIGINAL MRS MONTEIRO
+===============================================
 
-PUBLICAÇÃO — repositório: mrs-monteiro/mrs-lab — branch: main
+OBJETIVO
+Aprender a construir 1, 2 ou 3 agentes com prompts, funções, modelos,
+regras, auditoria e simulação animada. O cenário é inteiramente fictício.
 
-1. Cria a pasta agentes/ na raiz do repositório, com:
-   agentes/index.html
-   agentes/css/agents.css
-   agentes/js/agents.js
-2. Substitui APENAS o index.html da RAIZ de mrs-lab pelo index.html deste pacote.
-3. Não alteres os ficheiros antigos de grafica/, preditivo/, ciberseguranca/ ou lab/.
-4. Faz Commit changes e consulta https://lab.mrs-monteiro.com/agentes/
-5. Caso a página antiga apareça, força a atualização com Ctrl+F5.
+PUBLICAÇÃO NO GITHUB PAGES
+Repositório: https://github.com/mrs-monteiro/mrs-lab
+Atualizar apenas:
+  agentes/index.html
+  agentes/js/agents.js
+Criar:
+  agentes/js/studio.js
+  agentes/css/studio.css
+Não alterar o index.html principal do mrs-lab, nem os outros laboratórios.
+O CSS original agentes/css/agents.css fica como está.
 
-TESTE 1 — aprovação humana
-- Seleciona Incidente numa aplicação empresarial, Governação: Governado.
-- Clica Executar até à aprovação.
-- Deve parar no passo 5/6 com uma caixa de decisão.
-- Clica Rejeitar e depois Próximo passo.
-- Deve apresentar 6/6, Concluído, com registo de decisão e sem execução real.
+A V2 substitui expressões referentes a plataformas comerciais por
+cenários originais MRS de ServiceDesk, Acessos e Alterações em APIs fictícias.
+O website público funciona totalmente em modo Simulação sem custos.
 
-TESTE 2 — diferença entre modos
-- Seleciona Assistido: não apresenta autorização para executar ações.
-- Seleciona Sem controlo: assinala claramente a exposição simulada.
-- Alterar cenário ou política reinicia a simulação.
+EXECUÇÃO OPCIONAL COM OPENAI API — APENAS LOCALMENTE
+Nunca colocar OPENAI_API_KEY no GitHub nem no browser.
+O backend incluído NÃO deve ser colocado online no GitHub Pages.
+Na pasta do pacote no Windows 11, abrir PowerShell e executar:
 
-TESTE 3 — treino
-- Conclui as 10 questões, confirma escolhas e verifica a revisão integral.
-- Experimenta Exportar correção HTML; contém apenas respostas da sessão.
+  py -m venv .venv
+  .\.venv\Scripts\Activate.ps1
+  pip install -r backend_local/requirements.txt
+  $env:OPENAI_API_KEY="A_TUA_CHAVE_PRIVADA"
+  $env:MRS_ENABLE_API="1"
+  $env:MRS_MAX_REQUESTS="12"
+  python backend_local/server.py
 
-TESTE 4 — utilidades
-- Executa teste de prompt injection, compara IA local/cloud/híbrida.
-- Marca os seis passos do How To; reinicia o plano.
-- Exporta auditoria JSON, verifica que é um exemplo fictício.
+Abrir APENAS http://127.0.0.1:8787/ ; selecionar OpenAI API no Studio.
+O servidor escuta só em 127.0.0.1 e não expõe qualquer ferramenta de escrita.
+Interromper com Ctrl+C; a chave existe apenas nessa sessão PowerShell.
+Se PowerShell bloquear Activate.ps1, usa .venv\Scripts\python.exe sem ativação.
+A configuração do token de ambiente na sessão não é guardada no repositório.
 
-LIMITES E PRIVACIDADE
-- Esta V1 é 100% determinística, não inclui LLM nem agentes reais.
-- Não faz qualquer pedido à API, OutSystems, bases de dados ou sistemas corporativos.
-- A exportação é local, não existem credenciais nem cookies necessários.
-- Nunca introduzir dados empresariais reais no repositório público.
-- Não confundir demonstração com solução de IA implementada em produção.
+FATURAÇÃO API
+Uma subscrição ChatGPT não equivale a saldo da API. A faturação de API
+é separada. No portal da API, adicionar método de pagamento e créditos.
+Consultar: https://platform.openai.com/settings/organization/billing/overview
+Podem existir créditos promocionais. Confirmar preços e limites antes.
+A compra inicial pré-paga mínima documentada é 5 USD; recarga automática
+pode ficar ativada por omissão: desativar se não a quiseres.
+Estabelecer limites de utilização e alertas também no dashboard da API.
+O limite MRS_MAX_REQUESTS é local à execução do servidor, não é um
+limite financeiro absoluto; reiniciar o servidor reinicia a contagem.
 
-FONTES DE ESTUDO CONSIDERADAS
-- Trabalhos académicos do autor; exemplos com OutSystems.
-- Repositórios de referência enviados: openai-agents-python, ai-agents-for-beginners,
-  outsystems11-mcp, NomadaGUARD e agentics_ia_cibersecurity.
-- O código entregue é independente; não inclui ficheiros nem credenciais desses projetos.
+MODELOS PERMITIDOS
+ - gpt-5.4-mini (primeiro recomendado para testes)
+ - gpt-5.4
+Os custos variam conforme tokens e modelo. O número de tokens no Studio
+é devolvido pela API, não é uma previsão de preço.
 
-PRÓXIMA FASE (APENAS QUANDO AUTORIZADO)
-- SDK com modelos reais e backend protegido, contratos de ferramentas tipados,
-  autenticação, auditoria, testes, limites de acesso e revisão humana.
+SEGURANÇA
+- Usar APENAS dados fictícios em demonstrações públicas.
+- Não fornecer logs de produção, dados pessoais, credenciais nem segredos.
+- Não ligar a sistemas empresariais reais sem autorização e revisão.
+- A demonstração não modifica sistemas, nem fornece ações automáticas.
+- A aprovação humana é ilustrativa. A execução de ações reais exigiria
+  backend autenticado, autorização no servidor, auditoria persistente e testes.
+- Para serviço público real, usar autenticação, rate limit, proxy, HTTPS,
+  observabilidade, controlos de despesas e autorização formal.
+
+REFERÊNCIAS
+ - https://developers.openai.com/api/docs/quickstart
+ - https://developers.openai.com/api/reference/python/resources/responses/methods/create
+ - https://help.openai.com/en/articles/8264644-what-is-prepaid-billi
+ - Material facultado pelo utilizador sobre princípios de orquestração,
+   contextos empresariais e governação. Nenhuma arquitetura ou interface
+   proprietária foi reproduzida neste exemplo.
