@@ -1,0 +1,46 @@
+{
+  "schema": "mrs-predictive-events-v1",
+  "generated_at": "2026-10-29T12:00:00Z",
+  "updated_kind": "amostra verificada em fontes públicas; horários e jogos sujeitos a alteração",
+  "events": [
+    {
+      "id": "fpp-2026-11-08-1",
+      "sport": "roller_hockey",
+      "league": "Campeonato Placard (Portugal)",
+      "date": "2026-11-08",
+      "home": "J. Pacense",
+      "away": "AJ Viana",
+      "source": "FPP",
+      "source_url": "https://fpp.pt/jogos-do-campeonato-placard-definidos-para-a-proxima-epoca/",
+      "status": "Agendado (hora por confirmar)",
+      "odds": null,
+      "model": null
+    },
+    {
+      "id": "fpp-2026-11-08-2",
+      "sport": "roller_hockey",
+      "league": "Campeonato Placard (Portugal)",
+      "date": "2026-11-08",
+      "home": "Sporting CP",
+      "away": "Candelária SC",
+      "source": "FPP",
+      "source_url": "https://fpp.pt/jogos-do-campeonato-placard-definidos-para-a-proxima-epoca/",
+      "status": "Agendado (hora por confirmar)",
+      "odds": null,
+      "model": null
+    },
+    {
+      "id": "wse-2026-11-26-1",
+      "sport": "roller_hockey",
+      "league": "WSE Champions League Men",
+      "date": "2026-11-26",
+      "home": "FC Porto",
+      "away": "SL Benfica",
+      "source": "World Skate Europe",
+      "source_url": "https://europe.worldskate.org/the-complete-schedule-of-the-wse-rink-hockey-european-cups/",
+      "status": "Agendado (hora por confirmar)",
+      "odds": null,
+      "model": null
+    }
+  ]
+}

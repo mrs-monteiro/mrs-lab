@@ -4,10 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#08121e">
-  <meta name="description" content="MRS Predictive Lab — experiência educativa de modelos probabilísticos, validação cronológica e análise de futebol com dados sintéticos.">
+  <meta name="description" content="MRS Predictive Lab — projeto final de Engenharia Informática, modelos preditivos e exploração de jogos de futebol, basquetebol e hóquei.">
   <title>MRS MONTEIRO | Predictive Lab</title>
   <link rel="stylesheet" href="css/predictive.css">
   <script src="js/predictive.js" defer></script>
+  <script src="js/agenda.js" defer></script>
 </head>
 <body>
 <a href="#conteudo" class="skip">Saltar para o conteúdo</a>
@@ -19,14 +20,38 @@
   <section class="hero" aria-labelledby="titulo">
     <div class="eyebrow">05 / DATA SCIENCE · MACHINE LEARNING</div>
     <h1 id="titulo">MRS <span>Predictive Lab.</span></h1>
-    <p class="lead">Explora como se constroem probabilidades para resultados de futebol, compara modelos treinados, analisa erros e compreende a diferença entre <strong>prever</strong> e <strong>acertar</strong>.</p>
-    <div class="pillrow"><span class="pill">Python · scikit-learn</span><span class="pill">1 / X / 2</span><span class="pill">Validação cronológica</span><span class="pill">Sem APIs nem cookies</span></div>
+    <p class="lead">Explora modelos probabilísticos e escolhe jogos de futebol, basquetebol, NBA, hóquei em patins e NHL. Aprende a distinguir dados desportivos, probabilidades calculadas e odds de mercado.</p>
+    <div class="pillrow"><span class="pill">Python · scikit-learn</span><span class="pill">1 / X / 2</span><span class="pill">Validação cronológica</span><span class="pill">Explorador multidesportivo</span><span class="pill">APIs via atualização segura</span></div>
+  </section>
+
+  <section class="notice project-origin" aria-label="Origem académica do projeto"><div class="notice-icon" aria-hidden="true">★</div>
+  <div><strong>Projeto final de curso de Engenharia Informática — UABBet</strong><p>Esta experiência evolui o meu projeto final de curso na Universidade Aberta, conjugando engenharia de software, bases de dados, ciência dos dados e modelos preditivos. Os módulos demonstrativos atuais não representam os resultados originais do projeto nem garantem previsões futuras.</p></div></section>
+
+  <section class="panel multi-panel" aria-labelledby="multi-title">
+    <div class="section-heading"><div><div class="eyebrow">EXPLORAÇÃO MULTIDESPORTIVA · DADOS VERIFICÁVEIS</div><h2 id="multi-title">Escolhe uma modalidade e um jogo</h2></div><span class="subtle" id="feed-updated">A consultar ficheiro de agenda…</span></div>
+    <p class="subtle">As partidas são obtidas de um ficheiro de atualização com origem identificada. <strong>Um jogo listado não significa que exista uma previsão treinada.</strong> O catálogo pode ser atualizado através de APIs, fora do navegador, quando houver acesso e licença adequados.</p>
+    <div class="filters multi-filters">
+      <label>Modalidade<select id="sport"><option value="football">⚽ Futebol</option><option value="basketball">🏀 Basquetebol</option><option value="nba">🏀 NBA</option><option value="roller_hockey">🛼 Hóquei em patins</option><option value="nhl">🏒 NHL — hóquei no gelo</option></select></label>
+      <label>Competição<select id="sport-league"><option value="all">Todas as competições</option></select></label>
+      <label>Pesquisar equipa<input type="search" id="sport-query" placeholder="Nome da equipa" autocomplete="off"></label>
+    </div>
+    <div class="feed-grid">
+      <div>
+        <div class="feed-head"><strong>Jogos disponíveis</strong><span id="sport-count" class="subtle">—</span></div>
+        <div id="sport-games" class="sport-games" aria-live="polite"><p class="subtle">A carregar a agenda…</p></div>
+      </div>
+      <aside id="sport-detail" class="feed-detail" aria-live="polite">
+        <div class="eyebrow">DADOS DO ENCONTRO</div><h3>Seleciona um jogo</h3><p class="subtle">A origem dos dados e a disponibilidade de estatísticas aparecem aqui.</p>
+      </aside>
+    </div>
+    <div class="feed-import"><label for="sport-json" class="file-action">Importar JSON normalizado local</label><input id="sport-json" type="file" accept=".json,application/json" aria-describedby="sport-json-help"><span class="subtle" id="sport-json-help">O ficheiro é lido apenas no teu navegador. Nenhuma chave de API deve ser introduzida nesta página.</span></div>
+    <p id="sport-status" class="status" role="status" aria-live="polite"></p>
   </section>
 
   <section class="notice" aria-label="Origem e limites dos dados"><div class="notice-icon" aria-hidden="true">i</div>
-  <div><strong id="source-title">Demonstração com dados 100% sintéticos</strong><p id="source-note">As equipas, datas e resultados são fictícios. Os modelos foram treinados em dados simulados. Não são previsões de jogos atuais, nem há qualquer recomendação de apostas.</p></div></section>
+  <div><strong id="source-title">Avaliação histórica demonstrativa: dados 100% sintéticos</strong><p id="source-note">As equipas, datas e resultados são fictícios. Os modelos desta secção histórica foram treinados em dados simulados. A agenda multidesportiva acima é um módulo distinto e não apresenta probabilidades fictícias para jogos reais.</p></div></section>
 
-  <section class="panel controls-panel" aria-labelledby="explorar"><div class="section-heading"><div><div class="eyebrow">01 / EXPLORAÇÃO</div><h2 id="explorar">Escolhe o que pretendes analisar</h2></div><span class="subtle" id="dataset-label">A carregar...</span></div>
+  <section class="panel controls-panel" aria-labelledby="explorar"><div class="section-heading"><div><div class="eyebrow">01 / EXPERIÊNCIA HISTÓRICA · FUTEBOL SIMULADO</div><h2 id="explorar">Avalia os modelos treinados na demonstração</h2></div><span class="subtle" id="dataset-label">A carregar...</span></div>
     <div class="filters">
       <label>Modelo de análise<select id="model"><option value="logistic">Regressão logística</option></select></label>
       <label>Temporada de teste<select id="season"><option value="all">Todas</option></select></label>
@@ -60,8 +85,8 @@
       <div id="odds-bars" class="odds-bars"></div><p class="subtle" id="margin"></p><p class="caption">Cálculo: probabilidade bruta = 1 / odd; normalização pela soma das três probabilidades.</p>
     </section>
   </div>
-  <section class="panel methodology"><div class="eyebrow">07 / PROJETO ACADÉMICO</div><h2>Do UABBet à ciência dos dados aplicada</h2><p>O UABBet explorou bases de dados, preparação de informação e classificação em Python. Esta demonstração é uma <strong>implementação educativa independente</strong>: reúne um conjunto sintético reproduzível, treino de modelos em períodos anteriores e avaliação de probabilidades em períodos posteriores.</p><div class="method-grid"><div><strong>Preparação</strong><span>Forma recente e força relativa, calculadas antes de cada encontro.</span></div><div><strong>Modelos</strong><span>Regressão logística, Random Forest e referências simples.</span></div><div><strong>Avaliação</strong><span>Separação por temporadas, matriz de confusão, log loss e Brier.</span></div></div><p class="caption">O UABBet original inclui outras funcionalidades; estes resultados não são os resultados da sua defesa ou de previsões reais. A importação CSV usa um modelo Elo educativo, não treina automaticamente novos modelos de machine learning.</p></section>
+  <section class="panel methodology"><div class="eyebrow">07 / PROJETO FINAL DE ENGENHARIA INFORMÁTICA</div><h2>UABBet — do projeto final de curso ao MRS Predictive Lab</h2><p>O UABBet foi o meu projeto final de curso de Engenharia Informática na Universidade Aberta. O trabalho explorou bases de dados, preparação de informação e classificação em Python. Esta demonstração é uma <strong>implementação educativa independente</strong>: reúne um conjunto sintético reproduzível, treino de modelos em períodos anteriores e avaliação de probabilidades em períodos posteriores.</p><div class="method-grid"><div><strong>Preparação</strong><span>Forma recente e força relativa, calculadas antes de cada encontro.</span></div><div><strong>Modelos</strong><span>Regressão logística, Random Forest e referências simples.</span></div><div><strong>Avaliação</strong><span>Separação por temporadas, matriz de confusão, log loss e Brier.</span></div></div><p class="caption">O UABBet original inclui outras funcionalidades; estes resultados não são os resultados da sua defesa ou de previsões reais. A importação CSV usa um modelo Elo educativo, não treina automaticamente novos modelos de machine learning.</p></section>
 </main>
-<footer class="container"><span>© 2026 MRS MONTEIRO · Projeto de exploração científica e educativa</span><span>Sem contas · Sem chaves de API no navegador · Sem aconselhamento de apostas</span></footer>
+<footer class="container"><span>© 2026 MRS MONTEIRO · Projeto de exploração científica e educativa</span><span>Informação académica · Sem chaves de API no navegador · Sem recomendações de apostas</span></footer>
 </body>
 </html>

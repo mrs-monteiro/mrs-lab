@@ -2,3 +2,26 @@
 /* Previne expansão da grelha nos ecrãs pequenos: a tabela faz scroll interno. */
 .fixture-layout>div:first-child{min-width:0}.tablewrap{width:100%;max-width:100%;overflow-x:auto}
 @media(max-width:950px){.columns,.fixture-layout{grid-template-columns:minmax(0,1fr)}}
+
+
+/* MRS Predictive Lab v2 — exploração multidesportiva, independente da demonstração histórica */
+.project-origin{border-color:#3b7471;background:linear-gradient(120deg,#11373b,#102135)}
+.multi-panel{margin:24px 0}
+.multi-filters{grid-template-columns:repeat(3,minmax(0,1fr))}
+.feed-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:16px;margin-top:18px}
+.feed-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}
+.sport-games{display:grid;gap:9px;max-height:440px;overflow:auto;overscroll-behavior:contain}
+.sport-game{display:grid;grid-template-columns:1fr auto;gap:8px;text-align:left;align-items:center;padding:13px 14px;border:1px solid #34516a;border-radius:12px;background:#102439;color:var(--ink);width:100%}
+.sport-game:hover,.sport-game[aria-pressed="true"]{border-color:var(--accent);background:#153843}
+.sport-game strong{display:block;font-size:14px;line-height:1.4}.sport-game small{display:block;color:var(--muted);font-size:12px}
+.sport-game .tag-mini{color:var(--accent);font-size:11px;font-weight:600}
+.feed-detail{border:1px solid #34516a;background:#0b1c2f;border-radius:14px;padding:19px;min-height:260px;min-width:0}
+.feed-detail h3{font-size:19px;margin:9px 0}.feed-detail p{line-height:1.6}
+.feed-detail .origin-line{border-top:1px solid #30485c;padding-top:11px;margin-top:12px;font-size:12px;color:var(--muted)}
+.feed-detail a{color:var(--accent)}
+.prob-row{display:flex;gap:8px;align-items:baseline;justify-content:space-between;padding:7px 0;border-bottom:1px solid #263f50}
+.prob-row strong{font-size:17px;color:var(--accent)}
+.feed-import{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.feed-import input[type=file]{width:235px;max-width:100%;font-size:12px}
+.feed-import .subtle{font-size:12px}
+@media(max-width:850px){.feed-grid{grid-template-columns:1fr}.multi-filters{grid-template-columns:1fr}}
