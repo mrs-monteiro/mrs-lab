@@ -23,7 +23,7 @@ BASES = {
     "nhl": "https://v1.hockey.api-sports.io/games",
 }
 SPORTS = tuple(BASES)
-MAX_DAYS = 3  # 3 dias * 4 APIs = 12 pedidos no máximo por execução
+MAX_DAYS = 2  # Hoje e amanhã: até 8 pedidos por execução
 LIMIT_SPORT = 250
 
 
