@@ -1,22 +1,9 @@
-MRS Interactive Lab — Clareza Didática v2
+MRS Interactive Lab — fecho didático v3
 
-Objetivo: explicações por passo, separar métricas da execução automática e apresentar resumo final.
+1) Colocar lab/js/fecho.js no repositório mrs-monteiro/mrs-lab, branch main.
+2) No index.html da raiz, SUBSTITUIR <script src="lab/js/clareza.js"></script> por <script src="lab/js/fecho.js"></script>.
+3) Manter os outros ficheiros intocados; não carregar simultaneamente clareza.js e fecho.js.
+4) Testar: Labirinto BFS (Preparar, Próximo, Anterior, Ver resultado); Sem solução; Cidade A*; mudar mapa e confirmar que explicação reinicia.
+5) Não eliminar pasta lab nem o 404/CNAME.
 
-1. No GitHub, repositório mrs-monteiro/mrs-lab, adicionar:
-   lab/js/clareza.js
-2. Editar SOMENTE o ficheiro da raiz mrs-lab/index.html.
-3. Imediatamente antes de </body>, depois da linha existente:
-   <script src="lab/js/passos.js"></script>
-   adicionar:
-   <script src="lab/js/clareza.js"></script>
-4. Commit changes na branch main.
-
-NÃO apagar nem modificar CNAME, lab/index.html, lab.js, passos.js, mapas.js, CSS ou catálogo.
-
-Testes:
-- Labirinto / BFS / Preparar pesquisa / Próximo / Ver resultado.
-- Verificar o resumo e o título «Resultados da execução automática» sobre os indicadores inferiores.
-- Sem solução / Ver resultado: custo «—», resultado «Sem percurso».
-- Alternar PT/EN.
-
-Para desfazer: remover a linha de script do index.html. O novo ficheiro pode ficar guardado.
+Nota: Esta atualização não substitui a implementação dos algoritmos; corrige a interpretação e o resumo do modo passo a passo.
