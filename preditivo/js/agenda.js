@@ -19,16 +19,63 @@ function phase(e){if(phases[e.phase])return e.phase;
  const s=norm(e.status);if(/finished|full time|terminad|final|after extra|match finished/.test(s))return 'finished';
  if(/live|in play|directo|direto|quarter|half.time|em curso/.test(s))return 'live';
  if(/postpon|adiad|cancel|suspend/.test(s))return 'postponed';return 'scheduled';}
-function important(e){const l=norm(e.league),c=norm(e.country);
- if(e.sport==='nhl')return /\bnhl\b/.test(l)?110:30;
- if(e.sport==='basketball')return /\bnba\b/.test(l)?110:/euroleague|euroliga/.test(l)?100:/liga betclic|portugal/.test(l)?80:0;
- if(e.sport==='roller_hockey')return /placard|champions|portugal|world skate/.test(l)?100:30;
+// Prioridades editoriais do MRS LAB: apenas competições identificadas com segurança.
+// Para evitar falsos destaques, o nome da liga é sempre combinado com a região/país.
+const cleanLeague=s=>norm(s).replace(/[^a-z0-9]+/g,' ').trim();
+const mainEuropeanLeagues={
+ portugal:['primeira liga','liga portugal','liga portugal betclic','liga portugal 1'],
+ england:['premier league','women s super league'],
+ spain:['la liga','laliga','primera division','liga f'],
+ italy:['serie a','serie a women','serie a femminile'],
+ germany:['bundesliga','frauen bundesliga'],
+ france:['ligue 1','division 1 feminine','premiere ligue'],
+ netherlands:['eredivisie','vrouwen eredivisie'],
+ belgium:['jupiler pro league','pro league','first division a'],
+ scotland:['premiership','scottish premiership'],
+ turkey:['super lig'],
+ austria:['bundesliga'],
+ switzerland:['super league'],
+ greece:['super league 1','super league'],
+ poland:['ekstraklasa'],
+ denmark:['superliga'],
+ norway:['eliteserien'],
+ sweden:['allsvenskan'],
+ czechia:['czech liga','first league','1 liga'],
+ 'czech republic':['czech liga','first league','1 liga'],
+ ireland:['premier division'],
+ wales:['premier league','cymru premier'],
+ ukraine:['premier league'],
+ croatia:['hnl','1 hnl'],
+ serbia:['super liga'],
+ romania:['liga i','liga 1','superliga']
+};
+function important(e){
+ const league=cleanLeague(e.league),country=cleanLeague(e.country);
+ if(e.sport==='nhl')return league==='nhl'?130:0;
+ if(e.sport==='basketball'){
+   // Todos os encontros NBA (sem confundir com NBA G League ou ligas de formação).
+   if(league==='nba')return 150;
+   if(league==='euroleague'||league==='euroliga')return 120;
+   if(league==='liga betclic'&&country==='portugal')return 105;
+   return 0;
+ }
+ if(e.sport==='roller_hockey')return /placard|champions|portugal|world skate/.test(league)?100:0;
  if(e.sport!=='football')return 0;
- if(/champions league|liga dos campeoes/.test(l))return 120;
- if(/primeira liga|liga portugal|liga betclic/.test(l)&&(/portugal/.test(c)||!c))return 115;
- if(/premier league|bundesliga|serie a|la liga|ligue 1/.test(l)&&/england|germany|italy|spain|france/.test(c))return 105;
- if(/uefa europa league|europa league/.test(l))return 95;
- return 0;}
+ // UEFA Champions e Liga Europa; exclui a AFC, CONCACAF e competições homónimas.
+ if(/^(?:uefa )?champions league(?: women)?(?: qualification)?$/.test(league)&&
+    (league.startsWith('uefa ')||country==='world'||country==='europe'))return 180;
+ if(/^(?:uefa )?europa league(?: qualification)?$/.test(league)&&
+    (league.startsWith('uefa ')||country==='world'||country==='europe'))return 170;
+ if(/^uefa europa cup women$/.test(league))return 165;
+ if(/^(?:uefa )?europa conference league(?: qualification)?$/.test(league)&&
+    (league.startsWith('uefa ')||country==='world'||country==='europe'))return 145;
+ // Europeus de seleções (mas não escalões U17/U19 nem torneios fora da UEFA).
+ if(/^(?:uefa )?(?:euro|european championship)(?: 20\d\d)?(?: qualification| qualifiers| qualifying)?$/.test(league) ||
+    /^uefa women s (?:euro|european championship)(?: qualification| qualifiers)?$/.test(league))return 175;
+ // Campeonatos nacionais europeus de primeira divisão, incluindo os femininos indicados.
+ if((mainEuropeanLeagues[country]||[]).includes(league))return 145;
+ return 0;
+}
 function validate(raw){if(!raw||!Array.isArray(raw.events)||raw.events.length>8000)throw Error('O JSON deve conter um array events com até 8000 jogos.');
  return raw.events.filter(e=>e&&typeof e.id==='string'&&e.id.length<180&&typeof e.home==='string'&&e.home.length<160&&typeof e.away==='string'&&e.away.length<160&&names[e.sport]||e&&e.sport==='nba'&&typeof e.id==='string'&&typeof e.home==='string'&&typeof e.away==='string')
  .map(e=>({...e,sport:e.sport==='nba'?'basketball':e.sport,league:(e.sport==='nba'?'NBA':display(e.league||'Competição não identificada')).slice(0,180)}))
