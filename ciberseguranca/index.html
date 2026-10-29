@@ -7,7 +7,9 @@
   <meta name="description" content="MRS Cybersecurity & Networks Lab — experiências educativas de redes, segurança, criptografia, resposta a incidentes e autoavaliação de controlos.">
   <title>MRS MONTEIRO | Cybersecurity & Networks Lab</title>
   <link rel="stylesheet" href="css/cyber.css">
+  <link rel="stylesheet" href="css/paths.css">
   <script src="js/cyber.js" defer></script>
+  <script src="js/paths.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Saltar para o conteúdo</a>
@@ -20,7 +22,7 @@
       <p class="eyebrow">06 / CIBERSEGURANÇA · SEGURANÇA E REDES</p>
       <h1>Da arquitetura à <span>resiliência.</span></h1>
       <p class="lede">Explora uma rede empresarial fictícia, testa decisões de defesa, compreende a criptografia e transforma controlos técnicos num plano de melhoria. Uma experiência interativa inspirada em trabalhos de Engenharia Informática sobre segurança em redes e computadores.</p>
-      <div class="chips"><span>Redes & firewall</span><span>VPN · DMZ · MFA</span><span>AES-GCM · SHA-256</span><span>Incidentes & SOC</span><span>NIST CSF 2.0</span><span>100% demonstração local</span></div>
+      <div class="chips"><span>Redes & firewall</span><span>VPN · DMZ · MFA</span><span>AES-GCM · SHA-256</span><span>Incidentes & SOC</span><span>NIST CSF 2.0</span><span>100% demonstração local</span><span>Revisão completa · Mapas animados</span></div>
     </section>
     <div class="privacy"><strong>Ambiente de treino isolado.</strong> Os cenários, IPs e registos são fictícios. Este site não analisa a tua rede, não executa varrimentos e não envia os textos ou respostas para um servidor. A demonstração criptográfica usa a Web Crypto API do navegador.</div>
     <nav class="modules" aria-label="Navegação das experiências">
@@ -30,11 +32,44 @@
       <a href="#cripto"><span>04</span> Criptografia</a>
       <a href="#controlos"><span>05</span> Controlos & relatório</a>
       <a href="#estudantes"><span>06</span> Treino académico</a>
+      <a href="#phishing"><span>07</span> Phishing visual</a>
+      <a href="#palavraspasse"><span>08</span> Segurança de acessos</a>
+      <a href="#codigo"><span>09</span> Código seguro</a>
+      <a href="#ferramentas"><span>10</span> Ferramentas & trilhos</a>
     </nav>
 
     <section class="panel" id="rede" aria-labelledby="rede-title">
       <div class="sectiontop"><div><p class="eyebrow">01 / ARQUITETURA E SEGMENTAÇÃO</p><h2 id="rede-title">Simulador de rede e firewall</h2></div><span class="pill">Simulação · sem tráfego real</span></div>
       <p class="muted">Ativa e desativa medidas de defesa, seleciona uma tentativa de comunicação e observa uma decisão baseada em regras didáticas. Não substitui um motor de firewall nem uma revisão técnica de configuração.</p>
+
+      <div class="cp-workbench" aria-label="Mapa animado de percursos numa rede empresarial fictícia">
+        <div class="cp-head"><div><p class="eyebrow">MAPA DINÂMICO · CYBER DEFENSE PATHS</p><h3>Visualiza o caminho do tráfego</h3><p>O percurso destaca-se conforme a decisão de segurança. Os pacotes são animados, não são dados de rede reais.</p></div><div class="cp-head-tools"><span id="cp-state" class="cp-state">A preparar</span><button type="button" class="secondary" id="cp-pause" aria-pressed="false">Pausar animação</button></div></div>
+        <div class="cp-canvas">
+        <svg id="cp-svg" viewBox="0 0 885 354" role="img" aria-labelledby="cp-svg-title cp-svg-desc" preserveAspectRatio="xMidYMid meet">
+          <title id="cp-svg-title">Topologia empresarial interativa</title>
+          <desc id="cp-svg-desc">Os traços representam um cenário simulado de comunicações entre Internet, firewall, servidor web, aplicação, VPN, colaboradores e base de dados.</desc>
+          <defs><pattern id="cp-grid" width="23" height="23" patternUnits="userSpaceOnUse"><path d="M 23 0 L 0 0 0 23" fill="none" stroke="#1e3a4e" stroke-width="0.6" opacity="0.48"/></pattern><filter id="cp-glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+          <rect width="885" height="354" fill="#091726" rx="12"/><rect width="885" height="354" fill="url(#cp-grid)" rx="12"/>
+          <text class="cp-zone-label" x="22" y="30">ZONA EXTERNA</text><text class="cp-zone-label" x="252" y="30">PERÍMETRO</text><text class="cp-zone-label" x="492" y="30">DMZ</text><text class="cp-zone-label" x="722" y="30">SERVIÇOS INTERNOS</text>
+          <g class="cp-wires"><path d="M 184 101 L 238 101 M 404 101 L 458 101 M 624 101 L 678 101 M 761 149 L 761 227 M 184 273 L 238 273 M 404 273 L 654 273 L 654 101 L 678 101"/></g>
+          <path id="cp-glow-path" class="cp-glow-path" d="M184 101 L238 101"/>
+          <path id="cp-route" class="cp-route" d="M184 101 L238 101"/>
+          <g id="cp-blocker" class="cp-blocker" visibility="hidden"><circle r="15"/><text text-anchor="middle" dominant-baseline="central">×</text></g>
+          <circle id="cp-packet" class="cp-packet" r="7" cx="184" cy="101"/>
+          <g class="cp-nodes"><g class="cp-node" id="cp-node-internet" transform="translate(18 55)"><rect width="166" height="94" rx="14"/><text class="cp-node-cat" x="15" y="23">01 · EXTERIOR</text><text class="cp-node-title" x="15" y="51">INTERNET</text><text class="cp-node-detail" x="15" y="73">Entrada pública</text></g>
+          <g class="cp-node" id="cp-node-edge" transform="translate(238 55)"><rect width="166" height="94" rx="14"/><text class="cp-node-cat" x="15" y="23">02 · PERÍMETRO</text><text class="cp-node-title" x="15" y="51">FIREWALL / WAF</text><text class="cp-node-detail" x="15" y="73">Filtragem e registo</text></g>
+          <g class="cp-node" id="cp-node-web" transform="translate(458 55)"><rect width="166" height="94" rx="14"/><text class="cp-node-cat" x="15" y="23">03 · DMZ</text><text class="cp-node-title" x="15" y="51">SERVIÇO WEB</text><text class="cp-node-detail" x="15" y="73">HTTPS · 443</text></g>
+          <g class="cp-node" id="cp-node-app" transform="translate(678 55)"><rect width="166" height="94" rx="14"/><text class="cp-node-cat" x="15" y="23">04 · PRIVADO</text><text class="cp-node-title" x="15" y="51">APLICAÇÃO</text><text class="cp-node-detail" x="15" y="73">Serviço interno</text></g>
+          <g class="cp-node" id="cp-node-staff" transform="translate(18 227)"><rect width="166" height="94" rx="14"/><text class="cp-node-cat" x="15" y="23">IDENTIDADE</text><text class="cp-node-title" x="15" y="51">COLABORADOR</text><text class="cp-node-detail" x="15" y="73">Acesso corporativo</text></g>
+          <g class="cp-node" id="cp-node-admin" transform="translate(238 227)"><rect width="166" height="94" rx="14"/><text class="cp-node-cat" x="15" y="23">ACESSO SEGURO</text><text class="cp-node-title" x="15" y="51">VPN / BASTION</text><text class="cp-node-detail" x="15" y="73">Sessão privilegiada</text></g>
+          <g class="cp-node" id="cp-node-database" transform="translate(678 227)"><rect width="166" height="94" rx="14"/><text class="cp-node-cat" x="15" y="23">ZONA DE DADOS</text><text class="cp-node-title" x="15" y="51">BASE DE DADOS</text><text class="cp-node-detail" x="15" y="73">TCP · 5432</text></g></g>
+          <text class="cp-canvas-foot" x="22" y="338">MRS · REDE LABORATORIAL FICTÍCIA · NENHUMA LIGAÇÃO REAL</text>
+        </svg>
+        </div>
+        <div class="cp-foot"><span id="cp-label">Seleciona um fluxo nas opções ao lado</span><div class="cp-key"><span><i class="cp-k cp-k-allow"></i> Permitido</span><span><i class="cp-k cp-k-deny"></i> Bloqueado</span><span><i class="cp-k cp-k-unsafe"></i> Exposto</span></div></div>
+        <p class="cp-note" id="cp-note" aria-live="polite">O mapa reage aos controlos de proteção do simulador.</p>
+      </div>
+
       <div class="network-layout">
         <div>
           <div class="topology" role="group" aria-label="Topologia empresarial fictícia com Internet, perímetro, DMZ, serviços, dados e administração">
@@ -76,6 +111,16 @@
     <section class="panel" id="soc" aria-labelledby="soc-title">
       <div class="sectiontop"><div><p class="eyebrow">02 / DETEÇÃO E MONITORIZAÇÃO</p><h2 id="soc-title">Centro de operações de segurança</h2></div><span class="pill">Registos sintéticos</span></div>
       <p class="muted">Exercício de triagem: seleciona um evento e identifica evidências, gravidade e resposta inicial. Os endereços usados são reservados para documentação.</p>
+      <div class="soc-dashboard" aria-label="Indicadores dos eventos simulados">
+        <div class="soc-stat"><small>Eventos</small><strong id="soc-total">5</strong></div>
+        <div class="soc-stat"><small>Prioridade alta</small><strong id="soc-high">2</strong></div>
+        <div class="soc-stat"><small>Prioridade média</small><strong id="soc-medium">2</strong></div>
+        <div class="soc-stat"><small>Prioridade baixa</small><strong id="soc-low">1</strong></div>
+      </div>
+      <div class="soc-timeline" id="soc-timeline" aria-label="Linha temporal de eventos fictícios"></div>
+      <label class="field soc-filter">Filtrar eventos por prioridade
+        <select id="soc-filter"><option value="all">Todas as prioridades</option><option value="Alto">Alta</option><option value="Médio">Média</option><option value="Baixo">Baixa</option></select>
+      </label>
       <div class="columns">
         <div class="panel-inner">
           <div id="log-list" class="log-list" aria-label="Eventos sintéticos"></div>
@@ -92,7 +137,8 @@
         <div class="progress-track"><div id="game-bar"></div></div>
         <h3 id="game-name">A carregar…</h3><p id="game-question" class="game-question"></p>
         <div id="game-choices" class="choices"></div><div id="game-feedback" class="feedback" aria-live="polite"></div>
-        <div class="actions"><button id="game-next" class="primary" disabled>Continuar →</button><button id="game-reset" class="secondary">Recomeçar</button></div>
+        <div class="actions"><button id="game-next" class="primary" disabled>Continuar →</button><button id="game-reset" class="secondary">Recomeçar</button><button id="game-export" class="secondary" hidden>Descarregar correção</button></div>
+        <div class="result-review" id="game-review" aria-live="polite" hidden></div>
       </div><div class="panel-inner game-rules"><h3>O que é avaliado?</h3><p>A prioridade não é «ganhar pontos» rapidamente, mas tomar decisões seguras: conter, preservar evidências, comunicar e recuperar de forma controlada.</p><p>Os casos incluem phishing, ransomware e acessos suspeitos. Não é efetuado qualquer ataque.</p></div></div>
     </section>
 
@@ -126,10 +172,83 @@
     <section class="panel" id="estudantes" aria-labelledby="student-title">
       <div class="sectiontop"><div><p class="eyebrow">06 / TREINO PARA ESTUDANTES</p><h2 id="student-title">Questionário de Segurança e Redes</h2></div><span class="pill">12 perguntas · com explicação</span></div>
       <p class="muted">Questões fundamentadas em temas de segurança em redes e computadores, criptografia, VPN/IPSec, DMZ, MFA, honeypots, engenharia social e resposta a incidentes.</p>
-      <div class="quiz-grid"><div class="panel-inner"><div class="game-progress"><span id="quiz-count">Pergunta 1 / 12</span><span id="quiz-score">0 corretas</span></div><h3 id="quiz-question"></h3><div class="choices" id="quiz-choices"></div><div id="quiz-feedback" class="feedback" aria-live="polite"></div><div class="actions"><button id="quiz-next" class="primary" disabled>Próxima pergunta →</button><button id="quiz-reset" class="secondary">Recomeçar</button></div></div><div class="panel-inner"><h3>Linhas de aprendizagem</h3><ul class="explain-list"><li>Confidencialidade, integridade e disponibilidade</li><li>AES, RSA e funções de hash</li><li>Redes empresariais, DMZ e IPSec</li><li>Deteção e resposta a incidentes</li><li>Identidade, MFA e segurança cloud</li></ul><p class="muted tiny">Questões originais, inspiradas nos temas académicos. Não reproduzem enunciados de avaliação.</p></div></div>
+      <div class="quiz-grid"><div class="panel-inner"><div class="game-progress"><span id="quiz-count">Pergunta 1 / 12</span><span id="quiz-score">0 corretas</span></div><h3 id="quiz-question"></h3><div class="choices" id="quiz-choices"></div><div id="quiz-feedback" class="feedback" aria-live="polite"></div><div class="actions"><button id="quiz-next" class="primary" disabled>Próxima pergunta →</button><button id="quiz-reset" class="secondary">Recomeçar</button><button id="quiz-export" class="secondary" hidden>Descarregar correção</button></div><div id="quiz-review" class="result-review" aria-live="polite" hidden></div></div><div class="panel-inner"><h3>Linhas de aprendizagem</h3><ul class="explain-list"><li>Confidencialidade, integridade e disponibilidade</li><li>AES, RSA e funções de hash</li><li>Redes empresariais, DMZ e IPSec</li><li>Deteção e resposta a incidentes</li><li>Identidade, MFA e segurança cloud</li></ul><p class="muted tiny">Questões originais, inspiradas nos temas académicos. Não reproduzem enunciados de avaliação.</p></div></div>
     </section>
 
-    <section class="references"><h2>Referências e limites</h2><p>O simulador não representa uma infraestrutura real. Para implementação profissional, confronta cada decisão com a arquitetura, os riscos e as políticas da organização.</p><p><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener noreferrer">NIST CSF 2.0</a> · <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP Cryptographic Storage</a> · <a href="https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP Logging</a></p></section>
+
+    <section class="panel" id="phishing" aria-labelledby="phish-title">
+      <div class="sectiontop"><div><p class="eyebrow">07 / CONSCIENCIALIZAÇÃO & FRAUDE</p><h2 id="phish-title">Phishing Lab — analisa a mensagem</h2></div><span class="pill">3 emails fictícios · sem links ativos</span></div>
+      <p class="muted">Inspeciona remetente, linguagem, ligações e pedidos. Revela pistas, decide como responder e recebe feedback. Nenhuma mensagem é enviada e nenhum link é aberto.</p>
+      <div class="columns">
+        <div class="panel-inner">
+          <div class="mail-head"><small id="phish-step">Caso 1 / 3</small><span class="mail-status">AMBIENTE DE TREINO</span></div>
+          <h3 id="phish-subject">A carregar…</h3>
+          <div class="mail-meta"><span id="phish-from"></span><span id="phish-to"></span></div>
+          <div class="mail-body" id="phish-body"></div>
+          <div class="clue-toolbar"><strong>Pistas a investigar</strong><div id="phish-clues" class="clue-list"></div></div>
+        </div>
+        <div class="panel-inner">
+          <h3>Qual é a decisão mais defensável?</h3><p id="phish-prompt" class="muted"></p>
+          <div class="choices" id="phish-choices"></div>
+          <div id="phish-feedback" class="feedback" aria-live="polite"></div>
+          <div class="game-progress"><span id="phish-progress">0 analisados</span><strong id="phish-score">0 / 3</strong></div>
+          <div class="progress-track"><div id="phish-bar"></div></div>
+          <div class="actions"><button id="phish-next" class="primary" disabled>Próxima mensagem →</button><button id="phish-reset" class="secondary">Recomeçar</button></div>
+          <div id="phish-review" class="result-review" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="palavraspasse" aria-labelledby="pass-title">
+      <div class="sectiontop"><div><p class="eyebrow">08 / IDENTIDADE & ACESSO</p><h2 id="pass-title">Proteção de credenciais — comparador visual</h2></div><span class="pill">Exemplos inventados · sem recolha</span></div>
+      <p class="muted">Compara três exemplos fictícios e ativa MFA para perceber defesa em profundidade. Não introduzas palavras-passe verdadeiras: este módulo não tem campo para as receber nem consulta bases de dados de fugas.</p>
+      <div class="columns">
+        <div class="panel-inner">
+          <label class="field">Exemplo de treino
+            <select id="pass-example">
+              <option value="weak">Muito previsível — seis dígitos</option>
+              <option value="medium">Padrão comum — palavra + ano + símbolo</option>
+              <option value="strong">Frase longa fictícia de demonstração</option>
+            </select>
+          </label>
+          <div class="password-visual"><div class="password-preview" id="pass-preview"></div><div class="pass-track"><div id="pass-meter"></div></div><strong id="pass-label"></strong></div>
+          <label class="mfa-toggle"><input id="pass-mfa" type="checkbox"> Simular MFA adicional ativo</label>
+        </div>
+        <div class="panel-inner"><h3>O que aprendemos?</h3><ul class="explain-list" id="pass-advice"></ul><p class="muted tiny">A barra é uma escala pedagógica baseada em exemplos conhecidos, não uma estimativa rigorosa de entropia nem garantia de resistência. Para autenticação real, usar um gestor de palavras-passe, MFA, controlo de credenciais comprometidas e hashing apropriado.</p></div>
+      </div>
+    </section>
+
+    <section class="panel" id="codigo" aria-labelledby="code-title">
+      <div class="sectiontop"><div><p class="eyebrow">09 / DESENVOLVIMENTO SEGURO</p><h2 id="code-title">Consultas SQL — dados ou comandos?</h2></div><span class="pill">Simulação de código · sem base de dados</span></div>
+      <p class="muted">Compara uma construção insegura por concatenação com uma consulta parametrizada. O exemplo nunca executa SQL: apenas explica o efeito de tratar uma entrada como dado.</p>
+      <div class="columns">
+        <div class="panel-inner">
+          <label class="field">Entrada de exemplo
+            <select id="code-example"><option value="plain">Nome simples: Ana</option><option value="quote">Apóstrofo no nome: O'Reilly</option><option value="special">Texto com caracteres especiais</option></select>
+          </label>
+          <div class="mode-switch"><button id="code-unsafe" type="button" class="secondary selected">Concatenação (evitar)</button><button id="code-safe" type="button" class="secondary">Parâmetros (recomendado)</button></div>
+          <pre class="code-preview" id="code-output"></pre>
+        </div>
+        <div class="panel-inner"><h3>Resultado da análise</h3><div class="decision" id="code-result" role="status"></div><ul class="explain-list"><li>Dados de entrada nunca devem alterar a estrutura da consulta.</li><li>Usa parâmetros vinculados e privilégios mínimos.</li><li>Validação de entrada complementa, mas não substitui, parametrização.</li></ul></div>
+      </div>
+    </section>
+
+    <section class="references"><h2>Referências e limites</h2><p>O simulador não representa uma infraestrutura real. Para implementação profissional, confronta cada decisão com a arquitetura, os riscos e as políticas da organização.</p><p><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener noreferrer">NIST CSF 2.0</a> · <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP Cryptographic Storage</a> · <a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP Authentication</a> · <a href="https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP Logging</a></p></section>
+  
+    <section class="panel" id="ferramentas" aria-labelledby="tools-title">
+      <div class="sectiontop"><div><p class="eyebrow">10 / PERCURSOS PROFISSIONAIS</p><h2 id="tools-title">Ferramentas e metodologias de segurança</h2></div><span class="pill">Referências externas · sem execução</span></div>
+      <p class="muted">Um guia para evoluir das simulações para laboratórios autorizados. Os links seguintes são referências técnicas; esta página não executa ferramentas, varrimentos, exploração ou recolha de credenciais.</p>
+      <div class="cp-tool-grid">
+        <article class="cp-tool"><span>BLUE TEAM · DETEÇÃO</span><h3>Observabilidade e investigação</h3><p>Organiza eventos, correlaciona alertas e preserva uma linha temporal de resposta.</p><div><a href="https://www.wireshark.org/" target="_blank" rel="noopener noreferrer">Wireshark</a><a href="https://wazuh.com/" target="_blank" rel="noopener noreferrer">Wazuh</a><a href="https://www.elastic.co/security" target="_blank" rel="noopener noreferrer">Elastic Security</a></div></article>
+        <article class="cp-tool"><span>ASSET MANAGEMENT · HARDENING</span><h3>Inventário e redução de exposição</h3><p>Mapeia ativos sob autorização, identifica configurações frágeis e documenta alterações.</p><div><a href="https://nmap.org/" target="_blank" rel="noopener noreferrer">Nmap</a><a href="https://www.open-scap.org/" target="_blank" rel="noopener noreferrer">OpenSCAP</a><a href="https://www.greenbone.net/en/" target="_blank" rel="noopener noreferrer">Greenbone</a></div></article>
+        <article class="cp-tool"><span>APPSEC · DESENVOLVIMENTO</span><h3>Segurança de aplicações</h3><p>Revisão de autenticação, consultas parametrizadas e testes web apenas em ambientes autorizados.</p><div><a href="https://www.zaproxy.org/" target="_blank" rel="noopener noreferrer">OWASP ZAP</a><a href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank" rel="noopener noreferrer">OWASP WSTG</a><a href="https://portswigger.net/burp/communitydownload" target="_blank" rel="noopener noreferrer">Burp Community</a></div></article>
+        <article class="cp-tool"><span>IDENTIDADE · CREDENCIAIS</span><h3>Acessos privilegiados</h3><p>Avalia menor privilégio, MFA, segmentação, auditoria e relações de confiança.</p><div><a href="https://github.com/SpecterOps/BloodHound" target="_blank" rel="noopener noreferrer">BloodHound</a><a href="https://pages.nist.gov/800-63-4/" target="_blank" rel="noopener noreferrer">NIST 800-63</a></div></article>
+        <article class="cp-tool"><span>RESPOSTA · DFIR</span><h3>Reação a incidentes</h3><p>Treina triagem, contenção, recuperação, recolha de evidências e comunicação.</p><div><a href="https://attack.mitre.org/" target="_blank" rel="noopener noreferrer">MITRE ATT&amp;CK</a><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener noreferrer">NIST CSF 2.0</a></div></article>
+        <article class="cp-tool"><span>AUTOMAÇÃO · IA RESPONSÁVEL</span><h3>Python e agentes defensivos</h3><p>Transforma logs fictícios em testes, alertas explicáveis, controlos e relatórios revistos por pessoas.</p><div><a href="https://docs.python.org/3/library/unittest.html" target="_blank" rel="noopener noreferrer">Python unittest</a><a href="https://www.sigmahq.io/" target="_blank" rel="noopener noreferrer">Sigma</a></div></article>
+      </div>
+      <p class="muted tiny">Ferramentas como Metasploit, SQLMap, Hashcat e Aircrack-ng exigem delimitação rigorosa de âmbito, autorização e laboratórios isolados. Não são executadas nem integradas neste website público.</p>
+    </section>
+
   </main>
   <footer class="shell footer"><span>© 2026 MRS MONTEIRO LAB</span><span>Simulações educativas · Sem agentes externos nem recolha de dados pessoais</span></footer>
   <section id="print-report" aria-label="Relatório para impressão"></section>

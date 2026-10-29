@@ -38,10 +38,17 @@ const logs=[
  {id:'L-005',time:'13:11',name:'Alteração autorizada de configuração',severity:'Baixo',src:'192.0.2.40',system:'Gestão de alterações',evidence:['Alteração associada a aprovação registada','Janela de manutenção existente','Sem erros após aplicação'],response:['Verificar evidência da aprovação','Confirmar resultados e plano de reversão','Arquivar registos sem dados secretos'],note:'Um evento pode ser perfeitamente legítimo; monitorização também confirma boas operações.'}
 ];
 let selectedLog=null;
-function renderLogs(){const host=$('log-list');host.replaceChildren();logs.forEach(r=>{const b=el('button',undefined,'log'+(r.id===selectedLog?' active':''));b.type='button';const left=el('span');left.append(el('strong',r.name),el('small',r.id+' · '+r.time+' · '+r.system));const sev=el('em',r.severity,'sev-'+(r.severity==='Alto'?'high':r.severity==='Médio'?'medium':'low'));b.append(left,sev);b.onclick=()=>{selectedLog=r.id;renderLogs();renderLogDetail(r)};host.append(b);});}
+function renderSocTimeline(){const host=$('soc-timeline');host.replaceChildren();
+ logs.forEach(r=>{const b=el('button',undefined,'timeline-event '+(r.severity==='Alto'?'high':r.severity==='Médio'?'medium':'low')+(r.id===selectedLog?' chosen':''));b.type='button';b.setAttribute('aria-label',r.time+' — '+r.name+' — prioridade '+r.severity);b.title=r.time+' · '+r.name;
+ b.append(el('span',r.time),el('i',undefined,'timeline-stick'),el('small',r.id));b.onclick=()=>selectLog(r);host.append(b);});}
+function selectLog(r){selectedLog=r.id;if($('soc-filter').value!=='all'&&$('soc-filter').value!==r.severity)$('soc-filter').value='all';renderLogs();renderLogDetail(r);renderSocTimeline();}
+function renderLogs(){const host=$('log-list');host.replaceChildren();const filter=$('soc-filter').value;const rows=logs.filter(r=>filter==='all'||r.severity===filter);
+ if(!rows.length)host.append(el('p','Sem eventos nesta categoria.','muted'));
+ rows.forEach(r=>{const b=el('button',undefined,'log'+(r.id===selectedLog?' active':''));b.type='button';const left=el('span');left.append(el('strong',r.name),el('small',r.id+' · '+r.time+' · '+r.system));const sev=el('em',r.severity,'sev-'+(r.severity==='Alto'?'high':r.severity==='Médio'?'medium':'low'));b.append(left,sev);b.onclick=()=>selectLog(r);host.append(b);});}
+$('soc-filter').addEventListener('change',()=>{const filtered=logs.filter(r=>$('soc-filter').value==='all'||r.severity===$('soc-filter').value);if(filtered.length&& !filtered.some(r=>r.id===selectedLog))selectLog(filtered[0]);else renderLogs();});
 function renderLogDetail(r){const box=$('log-detail');box.replaceChildren(el('p','CASO '+r.id,'eyebrow'),el('h3',r.name),el('p','Severidade ilustrativa: '+r.severity+' · Origem (reservada): '+r.src,'muted'));
  const headings=[['Evidências',r.evidence],['Primeiros passos',r.response]];headings.forEach(([h,ls])=>{box.append(el('h3',h));const ul=el('ul',undefined,'detail-list');ls.forEach(x=>ul.append(el('li',x)));box.append(ul)});box.append(el('p',r.note,'muted'));}
-selectedLog=logs[0].id;renderLogs();renderLogDetail(logs[0]);
+selectedLog=logs[0].id;renderLogs();renderLogDetail(logs[0]);renderSocTimeline();
 
 // 3. Jogo de resposta a incidentes, todas as escolhas são didáticas.
 const games=[
@@ -58,16 +65,29 @@ const games=[
   {q:'Há forte evidência de acesso não autorizado. O que fazer?',options:['Partilhar as credenciais na equipa para facilitar suporte.','Revogar sessões comprometidas e proteger credenciais, seguindo o plano de resposta.','Aguardar até à próxima manutenção.'],correct:1,why:'Contenção de sessões e proteção de credenciais são medidas proporcionais ao incidente.'},
   {q:'Que melhoria estrutural recomendas?',options:['Utilizar a mesma conta administrativa por toda a equipa.','Desativar a auditoria de operações privilegiadas.','Aplicar menor privilégio, MFA, bastion e revisão periódica de acessos.'],correct:2,why:'Uma gestão disciplinada de acessos privilegiados reduz probabilidade e impacto de abuso.'}]}
 ];
-let gScene=0,gStep=0,gScore=0,gAnswered=false;
+// Resultado acumulado da sessão apenas em memória (não enviado para servidores).
+let gScene=0,gStep=0,gScore=0,gAnswered=false;const gHistory=[];
 function progressGame(){const total=games.reduce((a,x)=>a+x.steps.length,0);const done=games.slice(0,gScene).reduce((a,x)=>a+x.steps.length,0)+gStep+(gAnswered?1:0);$('game-bar').style.width=100*done/total+'%';}
-function renderGame(){const done=gScene>=games.length;const host=$('game-choices');host.replaceChildren();$('game-feedback').textContent='';$('game-feedback').className='feedback';$('game-score').textContent=gScore+' / 9 pontos';
- if(done){$('game-progress').textContent='Missão concluída';$('game-name').textContent='Resultado do Cyber Challenge';$('game-question').textContent='Concluíste as nove decisões. '+(gScore===9?'Excelente consistência de resposta.':'Revê as explicações e repete os exercícios para consolidar decisões.');$('game-next').disabled=true;$('game-bar').style.width='100%';return;}
+function makeReview(host,history,title){host.replaceChildren();host.hidden=false;
+ const hits=history.filter(r=>r.good).length;const summary=el('div',undefined,'review-summary');summary.append(el('strong',title+': '+hits+' / '+history.length+' corretas'),el('span',(history.length-hits)+' a rever · '+Math.round(hits/history.length*100)+'%'));host.append(summary);
+ history.forEach((r,i)=>{const card=el('details',undefined,'review-card '+(r.good?'right':'wrong'));const head=el('summary',(r.good?'✓ Certa':'✗ A rever')+' · '+(i+1)+'. '+r.question);card.append(head);
+ card.append(el('p','Escolheste: '+r.chosen,'review-selected'));
+ if(!r.good)card.append(el('p','Resposta recomendada: '+r.correct,'review-correct'));
+ card.append(el('p',r.why,'muted'));host.append(card);});
+}
+function downloadReview(filename,title,history){const rows=history.map((r,i)=>`<section><h3>${i+1}. ${escapeHtml(r.question)}</h3><p><b>${r.good?'Certa':'A rever'}</b></p><p>A tua resposta: ${escapeHtml(r.chosen)}</p><p>Resposta recomendada: ${escapeHtml(r.correct)}</p><p>${escapeHtml(r.why)}</p></section>`).join('');let ok=history.filter(x=>x.good).length;save(filename,`<!doctype html><html lang="pt"><meta charset="utf-8"><title>${escapeHtml(title)}</title><style>body{font:15px/1.5 system-ui;max-width:850px;margin:auto;padding:24px;color:#172b3b}section{border-bottom:1px solid #ddd;padding:10px 0}h1{color:#235a60}</style><h1>${escapeHtml(title)}</h1><p>Resultado: ${ok}/${history.length} · Gerado localmente em ${escapeHtml(formatDate())}</p>${rows}<small>Exercício educativo fictício. Não representa certificação.</small></html>`,'text/html;charset=utf-8');}
+function renderGame(){const done=gScene>=games.length,host=$('game-choices');host.replaceChildren();$('game-feedback').textContent='';$('game-feedback').className='feedback';$('game-score').textContent=gScore+' / 9 pontos';
+ if(done){$('game-progress').textContent='Missão concluída';$('game-name').textContent='Relatório do Cyber Challenge';$('game-question').textContent='Concluíste as nove decisões. Abaixo tens as respostas certas, as escolhas a rever e as justificações.';$('game-next').disabled=true;$('game-next').textContent='Resultado apresentado';$('game-bar').style.width='100%';makeReview($('game-review'),gHistory,'Cyber Challenge');$('game-export').hidden=false;return;}
+ $('game-review').hidden=true;$('game-export').hidden=true;
  const scene=games[gScene],step=scene.steps[gStep];gAnswered=false;$('game-progress').textContent='Cenário '+(gScene+1)+' / 3 · Decisão '+(gStep+1)+' / 3';$('game-name').textContent=scene.title;$('game-question').textContent=step.q;$('game-next').disabled=true;$('game-next').textContent=(gScene===games.length-1&&gStep===scene.steps.length-1)?'Ver resultado →':'Continuar →';
  step.options.forEach((o,i)=>{const b=el('button',String(i+1)+'. '+o);b.type='button';b.onclick=()=>answerGame(i);host.append(b);});progressGame();}
 function answerGame(i){if(gAnswered)return;gAnswered=true;const st=games[gScene].steps[gStep],good=i===st.correct; if(good)gScore++;
- [...$('game-choices').children].forEach((b,j)=>{b.disabled=true;if(j===st.correct)b.classList.add('correct');else if(j===i)b.classList.add('incorrect');});
+ gHistory.push({question:st.q,chosen:st.options[i],correct:st.options[st.correct],why:st.why,good});
+ [...$('game-choices').children].forEach((b,k)=>{b.disabled=true;if(k===st.correct)b.classList.add('correct');else if(k===i)b.classList.add('incorrect');});
  $('game-feedback').className='feedback '+(good?'positive':'negative');$('game-feedback').textContent=(good?'Decisão adequada. ':'Esta opção aumenta o risco. ')+st.why;$('game-score').textContent=gScore+' / 9 pontos';$('game-next').disabled=false;progressGame();}
-$('game-next').onclick=()=>{gStep++;if(gStep>=games[gScene].steps.length){gScene++;gStep=0;}renderGame();};$('game-reset').onclick=()=>{gScene=0;gStep=0;gScore=0;renderGame();};renderGame();
+$('game-next').onclick=()=>{if(!gAnswered)return;gStep++;if(gStep>=games[gScene].steps.length){gScene++;gStep=0;}renderGame();};
+$('game-reset').onclick=()=>{gScene=0;gStep=0;gScore=0;gHistory.length=0;renderGame();};
+$('game-export').onclick=()=>downloadReview('MRS_CyberChallenge_Correcao.html','Cyber Challenge — Correção',gHistory);renderGame();
 
 // 4. Web Crypto nativo: chave AES-GCM não exportável e guardada apenas em memória.
 let ephemeralKey=null,lastCipher=null;
@@ -127,11 +147,61 @@ const questions=[
  ['Qual é a função de segurança referente à recuperação no NIST CSF 2.0?',['RECOVER — planear e executar recuperação após incidentes','Só PROTECT, sem outras funções','Apenas inspeção de pacotes'],0,'O NIST CSF 2.0 inclui GOVERN, IDENTIFY, PROTECT, DETECT, RESPOND e RECOVER.'],
  ['Qual é a prática recomendada para consultas SQL com dados de entrada?',['Construir a SQL por concatenação','Usar consultas parametrizadas com permissões limitadas','Desativar o controlo de erros'],1,'Consultas parametrizadas separam dados de comandos e reduzem risco de injeção SQL.']
 ];
-let qIndex=0,qScore=0,qAnswered=false;
+let qIndex=0,qScore=0,qAnswered=false;const qHistory=[];
 function renderQuiz(){const host=$('quiz-choices');host.replaceChildren();$('quiz-feedback').textContent='';$('quiz-feedback').className='feedback';$('quiz-score').textContent=qScore+' corretas';$('quiz-next').disabled=true;
- if(qIndex>=questions.length){$('quiz-count').textContent='Questionário concluído';$('quiz-question').textContent='Resultado final: '+qScore+' / '+questions.length+'. Podes rever a matéria e repetir o questionário.';$('quiz-next').disabled=true;return;}
+ if(qIndex>=questions.length){$('quiz-count').textContent='Questionário concluído';$('quiz-question').textContent='Resultado: '+qScore+' / '+questions.length+'. Consulta a correção completa abaixo.';$('quiz-next').textContent='Correção apresentada';makeReview($('quiz-review'),qHistory,'Treino académico');$('quiz-export').hidden=false;return;}
+ $('quiz-review').hidden=true;$('quiz-export').hidden=true;
  const q=questions[qIndex];qAnswered=false;$('quiz-count').textContent='Pergunta '+(qIndex+1)+' / '+questions.length;$('quiz-question').textContent=q[0];q[1].forEach((label,i)=>{const b=el('button',String.fromCharCode(65+i)+'. '+label);b.type='button';b.onclick=()=>answerQuiz(i);host.append(b);});$('quiz-next').textContent=qIndex===questions.length-1?'Ver resultado →':'Próxima pergunta →';}
 function answerQuiz(i){if(qAnswered)return;qAnswered=true;const q=questions[qIndex],good=i===q[2];if(good)qScore++;
- [...$('quiz-choices').children].forEach((b,j)=>{b.disabled=true;if(j===q[2])b.classList.add('correct');else if(j===i)b.classList.add('incorrect')});$('quiz-score').textContent=qScore+' corretas';$('quiz-feedback').className='feedback '+(good?'positive':'negative');$('quiz-feedback').textContent=(good?'Correto. ':'Não é a melhor opção. ')+q[3];$('quiz-next').disabled=false;}
-$('quiz-next').onclick=()=>{qIndex++;renderQuiz()};$('quiz-reset').onclick=()=>{qIndex=0;qScore=0;renderQuiz()};renderQuiz();
+ qHistory.push({question:q[0],chosen:q[1][i],correct:q[1][q[2]],why:q[3],good});
+ [...$('quiz-choices').children].forEach((b,k)=>{b.disabled=true;if(k===q[2])b.classList.add('correct');else if(k===i)b.classList.add('incorrect')});$('quiz-score').textContent=qScore+' corretas';$('quiz-feedback').className='feedback '+(good?'positive':'negative');$('quiz-feedback').textContent=(good?'Correto. ':'Não é a melhor opção. ')+q[3];$('quiz-next').disabled=false;}
+$('quiz-next').onclick=()=>{if(!qAnswered)return;qIndex++;renderQuiz()};
+$('quiz-reset').onclick=()=>{qIndex=0;qScore=0;qHistory.length=0;renderQuiz()};
+$('quiz-export').onclick=()=>downloadReview('MRS_CyberLab_Questoes_Correcao.html','Questionário de Segurança e Redes — Correção',qHistory);renderQuiz();
+
+// 7. Phishing Awareness — cenários e ligações fictícias, sem comunicação externa.
+const mails=[
+ {subject:'Ação imediata: conta bloqueada',from:'Suporte de Acessos <alerta@acessos-empresa.example.test>',to:'Para: colaborador@empresa.example.test',body:'A sua conta será suspensa em 20 minutos. Confirme já a palavra-passe na página indicada na mensagem.\n\nHiperligação apresentada (NÃO ATIVA): acesso-interno.example.test/validar',clues:[['Remetente','O domínio não corresponde necessariamente ao serviço de identidade da organização.'],['Urgência','Ameaças com prazos muito curtos tentam impedir a verificação.'],['Pedido','Nunca confirmes credenciais através de uma ligação inesperada.']],question:'Como respondes a um pedido urgente de credenciais?',options:['Abrir a ligação e inserir os dados para não perder acesso.','Confirmar pelo canal oficial, reportar como suspeito e não abrir a ligação.','Reencaminhar a mensagem a todos os colegas.'],correct:1,why:'O canal independente evita confiar no conteúdo da mensagem e permite acionar o processo interno de reporte.'},
+ {subject:'Fatura em atraso — documento anexo',from:'Contabilidade <faturas@pagamentos-alerta.example.test>',to:'Para: equipa@empresa.example.test',body:'Segue documento para regularização imediata. Abra o anexo “fatura.pdf.exe” para consultar os detalhes.',clues:[['Anexo','A extensão dupla .pdf.exe indica um executável disfarçado de documento.'],['Contexto','Uma fatura inesperada deve ser confirmada no processo normal de compras.'],['Remetente','O endereço apresentado não é prova de identidade.']],question:'Qual a ação mais segura perante o anexo?',options:['Executar o ficheiro num posto de trabalho normal.','Partilhar o anexo num grupo de mensagens.','Não executar, preservar a mensagem e reportar à equipa competente.'],correct:2,why:'Anexos executáveis inesperados exigem contenção e análise controlada pela equipa responsável.'},
+ {subject:'Documento de equipa partilhado',from:'Colaboração <avisos@equipa.example.test>',to:'Para: colaborador@empresa.example.test',body:'Foi partilhado um documento. Se esperavas esta notificação, abre a aplicação institucional diretamente e confirma a partilha na tua área de trabalho.',clues:[['Canal','É possível consultar a aplicação sem depender de uma ligação no email.'],['Pedido','A mensagem não pede credenciais, execução de ficheiros ou pagamentos.'],['Contexto','Mesmo mensagens plausíveis devem ser verificadas no canal oficial.']],question:'Qual é a decisão mais adequada?',options:['Abrir a aplicação oficial por meio conhecido e confirmar a partilha.','Confiar automaticamente porque não há erros de ortografia.','Instalar qualquer extensão recomendada pela mensagem.'],correct:0,why:'Mensagens aparentemente legítimas devem ser verificadas pela aplicação/canal habitual sem automatismos.'}
+];
+let phIdx=0,phScore=0,phAnswered=false;const phHistory=[];
+function renderPhish(){const finished=phIdx>=mails.length;$('phish-clues').replaceChildren();$('phish-choices').replaceChildren();$('phish-feedback').textContent='';$('phish-feedback').className='feedback';$('phish-score').textContent=phScore+' / 3';$('phish-progress').textContent=finished?'Exercício concluído':(phIdx+1)+' / '+mails.length+' mensagens';$('phish-bar').style.width=(100*phIdx/mails.length)+'%';$('phish-next').disabled=true;
+ if(finished){$('phish-bar').style.width='100%';$('phish-step').textContent='Missão concluída';$('phish-subject').textContent='Revisão das mensagens';$('phish-from').textContent='';$('phish-to').textContent='';$('phish-body').textContent='Escolheste como responder a três exemplos fictícios. Revê as justificações do lado direito.';$('phish-prompt').textContent='Resultado final: '+phScore+' / 3';$('phish-next').textContent='Resultado apresentado';makeReview($('phish-review'),phHistory,'Phishing Lab');return;}
+ $('phish-review').hidden=true;phAnswered=false;const m=mails[phIdx];$('phish-step').textContent='Caso '+(phIdx+1)+' / 3';$('phish-subject').textContent=m.subject;$('phish-from').textContent=m.from;$('phish-to').textContent=m.to;$('phish-body').textContent=m.body;$('phish-prompt').textContent=m.question;$('phish-next').textContent=phIdx===mails.length-1?'Ver resultado →':'Próxima mensagem →';
+ m.clues.forEach(([title,desc])=>{const details=el('details',undefined,'clue');details.append(el('summary',title),el('p',desc));$('phish-clues').append(details)});
+ m.options.forEach((op,i)=>{const b=el('button',String.fromCharCode(65+i)+'. '+op);b.type='button';b.onclick=()=>answerPhish(i);$('phish-choices').append(b)});
+}
+function answerPhish(i){if(phAnswered)return;phAnswered=true;const m=mails[phIdx],good=i===m.correct;phScore+=Number(good);phHistory.push({question:m.question,chosen:m.options[i],correct:m.options[m.correct],why:m.why,good});[...$('phish-choices').children].forEach((b,k)=>{b.disabled=true;if(k===m.correct)b.classList.add('correct');else if(k===i)b.classList.add('incorrect')});$('phish-feedback').className='feedback '+(good?'positive':'negative');$('phish-feedback').textContent=(good?'Decisão adequada. ':'Escolha a rever. ')+m.why;$('phish-score').textContent=phScore+' / 3';$('phish-next').disabled=false;$('phish-bar').style.width=(100*(phIdx+1)/mails.length)+'%';}
+$('phish-next').onclick=()=>{if(!phAnswered)return;phIdx++;renderPhish()};$('phish-reset').onclick=()=>{phIdx=0;phScore=0;phHistory.length=0;renderPhish()};renderPhish();
+
+// 8. Comparador de padrões inventados, não captura palavras-passe nem mede segurança real.
+const samples={weak:{mask:'●●●●●●',score:12,label:'Muito previsível',reasons:['Seis caracteres numéricos são curtos e frequentemente adivinháveis.','Comprimento e bloqueio de padrões comuns importam mais que truques de composição.']},medium:{mask:'Trabalho••••!',score:42,label:'Padrão comum e reconhecível',reasons:['Palavra reconhecível + ano + símbolo é um padrão frequente.','Evita reutilização entre serviços; considera uma frase longa gerada por gestor.']},strong:{mask:'•••• ••••• ••••• ••••',score:84,label:'Exemplo de frase longa',reasons:['Uma frase longa e não previsível pode melhorar a resistência a tentativas de adivinhação.','Este exemplo é público: nunca o uses como credencial real. Um gestor de palavras-passe é preferível.']}};
+function renderPassword(){const v=samples[$('pass-example').value],mfa=$('pass-mfa').checked;$('pass-preview').textContent=v.mask;$('pass-label').textContent=v.label;$('pass-meter').style.width=v.score+'%';$('pass-meter').className='meter-'+$('pass-example').value;const host=$('pass-advice');host.replaceChildren();v.reasons.forEach(t=>host.append(el('li',t)));host.append(el('li',mfa?'MFA ativo no cenário: acrescenta uma barreira contra utilização indevida de credenciais.':'MFA desligado: uma credencial comprometida pode ser suficiente para comprometer a conta.'));}
+$('pass-example').addEventListener('change',renderPassword);$('pass-mfa').addEventListener('change',renderPassword);renderPassword();
+
+// 9. Código seguro — ilustração textual, não executa SQL nem processa dados reais.
+let codeMode='unsafe';const inputs={plain:'Ana',quote:"O'Reilly",special:'Rita & Equipa'};
+function renderCode(){
+ const v=inputs[$('code-example').value];
+ $('code-unsafe').classList.toggle('selected',codeMode==='unsafe');
+ $('code-safe').classList.toggle('selected',codeMode==='safe');
+ const out=$('code-output'),res=$('code-result');
+ if(codeMode==='unsafe'){
+  out.textContent="// Exemplo de código a evitar (não executado)\n"+
+    "const sql = \"SELECT * FROM users WHERE name = '\" + input + \"'\";\n"+
+    "// input: "+JSON.stringify(v)+"\n// O valor é misturado na estrutura da consulta.";
+  res.className='decision unsafe';
+  res.replaceChildren(el('strong','Risco de construção insegura'),el('small','A concatenação mistura a estrutura SQL com dados de entrada. Aspas e caracteres inesperados podem quebrar a consulta, e entradas maliciosas podem alterar a sua semântica.'));
+ } else {
+  out.textContent='// Exemplo de consulta parametrizada (não executada)\n'+
+    'const sql = "SELECT * FROM users WHERE name = ?";\n'+
+    'const params = ['+JSON.stringify(v)+'];\n// O driver trata params como dados.';
+  res.className='decision allow';
+  res.replaceChildren(el('strong','Separação entre dados e comandos'),el('small','O parâmetro é transmitido ao driver como valor, sem ser interpretado como parte da instrução SQL. Associar validação e privilégios mínimos.'));
+ }
+}
+$('code-unsafe').onclick=()=>{codeMode='unsafe';renderCode()};
+$('code-safe').onclick=()=>{codeMode='safe';renderCode()};
+$('code-example').onchange=renderCode;renderCode();
 })();

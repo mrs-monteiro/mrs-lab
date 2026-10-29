@@ -1,0 +1,28 @@
+MRS CYBERSECURITY & NETWORKS LAB V2.1 — CYBER DEFENSE PATHS
+
+PUBLICAR EM: github.com/mrs-monteiro/mrs-lab (branch main)
+
+SUBSTITUIR:
+ciberseguranca/index.html
+ciberseguranca/css/cyber.css
+ciberseguranca/js/cyber.js
+
+CRIAR:
+ciberseguranca/css/paths.css
+ciberseguranca/js/paths.js
+
+A versão V2 já corrige os resultados dos 9 desafios e 12 perguntas;
+a V2.1 adiciona um mapa animado responsivo que acompanha os controlos do
+simulador e uma biblioteca de ferramentas para formação e análise profissional.
+
+FICHEIRO OPCIONAL (não é necessário publicar):
+MRS_Cyber_Defense_Paths.gif — GIF animado para slides/apresentações.
+
+O website não varre redes nem executa ferramentas de pentest.
+Alterações limitadas à pasta ciberseguranca/.
+Teste inicial: fluxo Internet -> Base de dados, firewall e DMZ ativos:
+a animação deve parar no bloqueio (cor âmbar). Ao desativar firewall,
+exposição perigosa (trajeto vermelho). Experimentar pause/retomar.
+
+O GIF mostra uma dramatização visual ilustrativa; a visualização interativa
+do browser reflete os controlos reais da simulação didática (sem tráfego real).
