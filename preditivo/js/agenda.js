@@ -1,26 +1,136 @@
+/* MRS Predictive Lab V3 — seleção multidesportiva, calendário e proveniência.
+   Sem credenciais no navegador. Não fabrica probabilidades de resultados reais. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
-const sportNames={football:'Futebol',basketball:'Basquetebol',nba:'NBA',roller_hockey:'Hóquei em patins',nhl:'NHL — hóquei no gelo'};
-let all=[],activeId=null,created='';
-const create=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n};
-function status(t){$('sport-status').textContent=t}
-function fmtDate(s){if(!s)return 'Data por confirmar';const d=new Date(/^\d{4}-\d{2}-\d{2}$/.test(s)?s+'T12:00:00':s);return Number.isNaN(d.getTime())?s:d.toLocaleString('pt-PT',{dateStyle:'medium',...(s.includes('T')?{timeStyle:'short'}:{})});}
-function isURL(u){try{const v=new URL(u);return ['https:','http:'].includes(v.protocol)}catch{return false}}
-function validate(input){if(!input||!Array.isArray(input.events)||input.events.length>3000)throw Error('O JSON deve conter um campo events com até 3000 jogos.');return input.events.filter(e=>e&&sportNames[e.sport]&&typeof e.home==='string'&&typeof e.away==='string'&&e.home.length<160&&e.away.length<160&&typeof e.id==='string'&&e.id.length<180).map(e=>({...e,league:String(e.league||'Competição por identificar').slice(0,180)}))}
-function current(){return all.filter(e=>e.sport===$('sport').value)}
-function rebuildLeagues(){const options=new Set(current().map(e=>e.league));$('sport-league').replaceChildren();const allOpt=create('option','Todas as competições');allOpt.value='all';$('sport-league').append(allOpt);[...options].sort((a,b)=>a.localeCompare(b,'pt')).forEach(l=>{const o=create('option',l);o.value=l;$('sport-league').append(o)});}
-function formatOdds(odd){if(!odd||typeof odd!=='object'||!odd.prices)return null;const entries=Object.entries(odd.prices).filter(([k,v])=>typeof k==='string'&&Number.isFinite(Number(v))&&Number(v)>1&&Number(v)<1001);if(entries.length<2||entries.length>3)return null;const values=entries.map(([k,v])=>[k,Number(v)]);const sum=values.reduce((a,b)=>a+1/b[1],0);if(sum<=0)return null;return {values,sum};}
-function show(e){const box=$('sport-detail');box.replaceChildren();box.append(create('div','DADOS DO ENCONTRO','eyebrow'));box.append(create('h3',e.home+' — '+e.away));box.append(create('p',`${sportNames[e.sport]} · ${e.league}`,'subtle'));box.append(create('p',fmtDate(e.date)+(e.status?' · '+e.status:''),'subtle'));
- const odds=formatOdds(e.odds);
- if(odds){box.append(create('h4','Odds de mercado disponíveis'));for(const [name,price] of odds.values){const r=create('div',undefined,'prob-row');r.append(create('span',name));r.append(create('strong',price.toFixed(2)));box.append(r)}box.append(create('p','Probabilidades implícitas normalizadas (sem margem): '+odds.values.map(([name,price])=>`${name}: ${(100*(1/price)/odds.sum).toFixed(1).replace('.',',')}%`).join(' · '),'subtle'));box.append(create('p','Estas probabilidades provêm das odds fornecidas, não de um modelo preditivo. Confirmar mercado, regras de empate e hora de recolha.','subtle'));}
- else box.append(create('p','Odds: indisponíveis ou não autorizadas para apresentação.','subtle'));
- box.append(create('p','Modelo preditivo: não existe previsão validada para este encontro. Quando existir, serão indicados algoritmo, data de treino, avaliação cronológica e calibração.','subtle'));
- const meta=create('div',undefined,'origin-line');meta.append(create('span','Fonte: '+String(e.source||'Não identificada').slice(0,100)));if(e.source_url&&isURL(e.source_url)){meta.append(document.createTextNode(' · '));const a=create('a','Consultar origem');a.href=e.source_url;a.target='_blank';a.rel='noopener noreferrer';meta.append(a)}if(e.odds&&e.odds.bookmaker){meta.append(create('div','Mercado: '+String(e.odds.bookmaker).slice(0,90)+' · '+String(e.odds.market||'h2h')+' · atualização: '+String(e.odds.updated_at||'não indicada')))}box.append(meta);
+const names={football:'Futebol',basketball:'Basquetebol',nhl:'NHL — hóquei no gelo',roller_hockey:'Hóquei em patins'};
+const phases={scheduled:'Agendado',live:'Em direto',finished:'Terminado',postponed:'Adiado / outro'};
+const rowsPerPage=36;
+let all=[],activeId=null,limit=rowsPerPage,dayMode='today',loadedAt='';
+const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined&&text!==null)n.textContent=String(text);if(cls)n.className=cls;return n;};
+const display=(x)=>String(x||'').trim();
+const dateAt=(d)=>{if(!d)return null;const t=new Date(/^\d{4}-\d{2}-\d{2}$/.test(d)?d+'T12:00:00Z':d);return Number.isNaN(t.valueOf())?null:t;};
+const calendarDate=(date)=>new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Lisbon',year:'numeric',month:'2-digit',day:'2-digit'}).format(date);
+const today=()=>calendarDate(new Date());
+const tomorrow=()=>calendarDate(new Date(Date.now()+86400000));
+const eventDay=e=>{const t=dateAt(e.date);return t?calendarDate(t):String(e.date||'').slice(0,10);};
+const when=date=>{const t=dateAt(date);return t?t.toLocaleString('pt-PT',{timeZone:'Europe/Lisbon',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'Data por confirmar';};
+const norm=str=>String(str||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function phase(e){if(phases[e.phase])return e.phase;
+ const s=norm(e.status);if(/finished|full time|terminad|final|after extra|match finished/.test(s))return 'finished';
+ if(/live|in play|directo|direto|quarter|half.time|em curso/.test(s))return 'live';
+ if(/postpon|adiad|cancel|suspend/.test(s))return 'postponed';return 'scheduled';}
+function important(e){const l=norm(e.league),c=norm(e.country);
+ if(e.sport==='nhl')return /\bnhl\b/.test(l)?110:30;
+ if(e.sport==='basketball')return /\bnba\b/.test(l)?110:/euroleague|euroliga/.test(l)?100:/liga betclic|portugal/.test(l)?80:0;
+ if(e.sport==='roller_hockey')return /placard|champions|portugal|world skate/.test(l)?100:30;
+ if(e.sport!=='football')return 0;
+ if(/champions league|liga dos campeoes/.test(l))return 120;
+ if(/primeira liga|liga portugal|liga betclic/.test(l)&&(/portugal/.test(c)||!c))return 115;
+ if(/premier league|bundesliga|serie a|la liga|ligue 1/.test(l)&&/england|germany|italy|spain|france/.test(c))return 105;
+ if(/uefa europa league|europa league/.test(l))return 95;
+ return 0;}
+function validate(raw){if(!raw||!Array.isArray(raw.events)||raw.events.length>8000)throw Error('O JSON deve conter um array events com até 8000 jogos.');
+ return raw.events.filter(e=>e&&typeof e.id==='string'&&e.id.length<180&&typeof e.home==='string'&&e.home.length<160&&typeof e.away==='string'&&e.away.length<160&&names[e.sport]||e&&e.sport==='nba'&&typeof e.id==='string'&&typeof e.home==='string'&&typeof e.away==='string')
+ .map(e=>({...e,sport:e.sport==='nba'?'basketball':e.sport,league:(e.sport==='nba'?'NBA':display(e.league||'Competição não identificada')).slice(0,180)}))
+ .filter(e=>names[e.sport]).slice(0,8000);}
+function currentSport(){return $('sport').value;}
+function leagues(){const items=all.filter(e=>e.sport===currentSport());const leagues=[...new Set(items.map(e=>e.league))].sort((a,b)=>a.localeCompare(b,'pt'));
+ const sel=$('sport-league');const prev=sel.value;sel.replaceChildren();const o=el('option','Todas as competições');o.value='all';sel.append(o);
+ const featured=leagues.filter(l=>items.some(e=>e.league===l&&important(e)>0));
+ const add=(arr,parent)=>arr.forEach(l=>{const opt=el('option',l);opt.value=l;parent.append(opt);});
+ if(featured.length){const group=el('optgroup');group.label='⭐ Competições em destaque';add(featured,group);sel.append(group);}
+ const others=leagues.filter(l=>!featured.includes(l));if(others.length){const group=el('optgroup');group.label='Outras competições';add(others,group);sel.append(group);}
+ sel.value=leagues.includes(prev)?prev:'all';}
+function matching(){const sport=currentSport(),league=$('sport-league').value,query=norm($('sport-query').value.trim());
+ let rows=all.filter(e=>e.sport===sport&&(league==='all'||e.league===league)&&(!query||norm(e.home+' '+e.away+' '+e.league).includes(query)));
+ if(dayMode==='today')rows=rows.filter(e=>eventDay(e)===today());
+ if(dayMode==='tomorrow')rows=rows.filter(e=>eventDay(e)===tomorrow());
+ if(dayMode==='date')rows=rows.filter(e=>eventDay(e)===$('sport-date').value);
+ if($('sport-feature').value==='featured')rows=rows.filter(e=>important(e)>0);
+ const counts={scheduled:0,live:0,finished:0,postponed:0};rows.forEach(e=>counts[phase(e)]++);
+ const selectedPhase=$('sport-phase').value;
+ if(selectedPhase!=='all')rows=rows.filter(e=>phase(e)===selectedPhase);
+ rows.sort((a,b)=>{
+   const pa=phase(a),pb=phase(b),rank={live:0,scheduled:1,finished:2,postponed:3};
+   if(rank[pa]!==rank[pb])return rank[pa]-rank[pb];
+   const feature=important(b)-important(a);if(feature)return feature;
+   return String(a.date||'').localeCompare(String(b.date||''));
+ });return {rows,counts};}
+function tinyBadge(text,cls){return el('span',text,'v3-tag '+(cls||''));}
+function renderSummary(counts){const host=$('v3-summary');host.replaceChildren();for(const [k,label] of [['scheduled','Agendados'],['live','Em direto'],['finished','Terminados'],['postponed','Outros']]){
+ const n=el('div',undefined,'v3-counter v3-'+k);n.append(el('strong',counts[k]||0),el('span',label));host.append(n);}}
+function validOdds(e){const o=e.odds;if(!o||typeof o!=='object'||!o.prices||typeof o.prices!=='object')return null;
+ const needed=e.sport==='football'?['1','X','2']:['1','2'];if(Object.keys(o.prices).length!==needed.length)return null;
+ const prices=needed.map(k=>Number(o.prices[k]));if(prices.some(v=>!Number.isFinite(v)||v<=1||v>1000))return null;
+ const sum=prices.reduce((a,b)=>a+1/b,0);return {data:o,needed,prices,sum};}
+function validModel(e){const m=e.model;if(!m||m.status!=='validated'||!m.validation||!m.probabilities||!m.training_end||!m.evaluated_at||!m.name)return null;
+ const date=dateAt(e.date),train=dateAt(m.training_end),evalDate=dateAt(m.evaluated_at);
+ if(!date||!train||!evalDate||train>=date||evalDate>=date||Number(m.validation.n)<30)return null;
+ if(!Number.isFinite(Number(m.validation.log_loss))||!Number.isFinite(Number(m.validation.brier)))return null;
+ const keys=e.sport==='football'?['1','X','2']:['1','2'];
+ const ps=keys.map(k=>Number(m.probabilities[k]));if(ps.some(p=>!Number.isFinite(p)||p<0||p>1)||Math.abs(ps.reduce((a,b)=>a+b,0)-1)>.015)return null;
+ return {m,keys,ps};}
+function writeDetail(e){const box=$('sport-detail');box.replaceChildren();
+ box.append(el('div','DADOS DO ENCONTRO','eyebrow'),el('h3',e.home+' — '+e.away));
+ const tags=el('div',undefined,'v3-badges');tags.append(tinyBadge(phases[phase(e)],'v3-'+phase(e)));if(important(e)>0)tags.append(tinyBadge('Em destaque','v3-featured'));box.append(tags);
+ box.append(el('p',(e.league||'Competição')+' · '+names[e.sport],'v3-meta'),el('p',when(e.date)+' · '+display(e.status||phases[phase(e)]),'subtle'));
+ if(e.country)box.append(el('p','País: '+e.country,'subtle'));
+ const model=validModel(e);
+ const section=el('section',undefined,'v3-subpanel');section.append(el('h4','Probabilidades do modelo'));
+ if(model){section.append(el('p',model.m.name+' · validação fora da amostra ('+model.m.validation.n+' jogos)','subtle'));
+ for(let i=0;i<model.keys.length;i++){const line=el('div',undefined,'v3-prob-row');line.append(el('span',model.keys[i]==='1'?'Casa':model.keys[i]==='X'?'Empate':'Fora'));const bar=el('div',undefined,'v3-prob-track');const fill=el('span');fill.style.width=(model.ps[i]*100).toFixed(1)+'%';bar.append(fill);line.append(bar,el('strong',(model.ps[i]*100).toFixed(1).replace('.',',')+'%'));section.append(line);}
+ section.append(el('p','Log loss: '+model.m.validation.log_loss+' · Brier: '+model.m.validation.brier+' · treino até '+model.m.training_end,'subtle'));
+ }else{section.append(el('p','Sem previsão validada para este jogo. Não são apresentadas percentagens estimadas sem treino, avaliação e calibração documentados.','subtle'));}
+ box.append(section);
+ const odds=validOdds(e),od=el('section',undefined,'v3-subpanel');od.append(el('h4','Odds do mercado'));
+ if(odds){od.append(el('p','Fonte: '+display(odds.data.source||'The Odds API')+' · Casa: '+display(odds.data.bookmaker||'não identificada'),'subtle'));
+ for(let i=0;i<odds.needed.length;i++){const line=el('div',undefined,'v3-odds-row');const label=odds.needed[i]==='1'?'Casa':odds.needed[i]==='X'?'Empate':'Fora';line.append(el('span',label),el('strong',odds.prices[i].toFixed(2).replace('.',',')));od.append(line);}
+ od.append(el('p','Probabilidades implícitas normalizadas (margem retirada): '+odds.needed.map((k,i)=>k+' '+((1/odds.prices[i]/odds.sum)*100).toFixed(1).replace('.',',')+'%').join(' · '),'subtle'));
+ od.append(el('p','Mercado: '+display(odds.data.market||'h2h')+' · recolha: '+(odds.data.updated_at?when(odds.data.updated_at):'hora não indicada')+' · Não são previsões do modelo.','subtle'));
+ if(/^https:\/\//.test(String(odds.data.source_url||''))){const a=el('a','Fonte das odds');a.href=odds.data.source_url;a.target='_blank';a.rel='noopener noreferrer';od.append(a);}
+ }else{od.append(el('p','Sem cotação autorizada e associada com segurança a este encontro.','subtle'));}
+ box.append(od);
+ const origin=el('div',undefined,'origin-line');origin.append(el('span','Origem dos jogos: '+display(e.source||'Não identificada')));
+ if(/^https:\/\//.test(String(e.source_url||''))){const a=el('a','Consultar a fonte');a.href=e.source_url;a.target='_blank';a.rel='noopener noreferrer';origin.append(document.createTextNode(' · '),a);}box.append(origin);
 }
-function render(){const sport=$('sport').value,league=$('sport-league').value,q=$('sport-query').value.toLocaleLowerCase('pt').trim();const rows=current().filter(e=>(league==='all'||e.league===league)&&(!q||(e.home+' '+e.away+' '+e.league).toLocaleLowerCase('pt').includes(q))).sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));$('sport-count').textContent=rows.length+' jogo(s)';const list=$('sport-games');list.replaceChildren();if(!rows.length){list.append(create('p','Sem jogos disponíveis neste momento para '+sportNames[sport]+'. O explorador está preparado; para dados atuais é necessário importar um feed autorizado ou configurar a atualização por API.','subtle'));$('sport-detail').replaceChildren(create('h3','Sem jogo selecionado'),create('p','Não apresentamos confrontos fictícios nem probabilidades sem validação.','subtle'));return}
+function resetList(){limit=rowsPerPage;activeId=null;}
+function render(){const {rows,counts}=matching();renderSummary(counts);$('sport-count').textContent=rows.length+' jogo(s)';const list=$('sport-games'),previousScroll=list.scrollTop;list.replaceChildren();
+ if(!rows.length){list.append(el('div',undefined,'v3-empty'));const empty=list.firstChild;
+ empty.append(el('strong','Sem encontros para estes filtros'),el('p','Experimenta «Todas as datas», outra competição ou desativa o filtro de destaques. Os planos gratuitos podem limitar a janela de datas.'));
+ $('sport-detail').replaceChildren(el('h3','Sem jogo selecionado'),el('p','Não fabricamos confrontos, odds ou probabilidades.','subtle'));
+ $('sport-more').hidden=true;$('sport-visible').textContent='';return;}
  if(!rows.some(e=>e.id===activeId))activeId=rows[0].id;
- for(const e of rows){const b=create('button',undefined,'sport-game');b.type='button';b.setAttribute('aria-pressed',String(e.id===activeId));const a=create('span');a.append(create('strong',e.home+' × '+e.away));a.append(create('small',e.league+' · '+fmtDate(e.date)));b.append(a);b.append(create('span',e.odds?'Odds':'Dados','tag-mini'));b.onclick=()=>{activeId=e.id;render()};list.append(b)}show(rows.find(e=>e.id===activeId));}
-$('sport').addEventListener('change',()=>{activeId=null;rebuildLeagues();render()});$('sport-league').addEventListener('change',()=>{activeId=null;render()});$('sport-query').addEventListener('input',()=>{activeId=null;render()});
-$('sport-json').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{if(file.size>2000000)throw Error('O ficheiro ultrapassa 2 MB.');const input=JSON.parse(await file.text());all=validate(input);created=input.generated_at||'';activeId=null;rebuildLeagues();render();$('feed-updated').textContent='Ficheiro local · '+all.length+' jogos';status('Ficheiro importado apenas para este navegador. Não foram enviadas chaves nem dados a servidores.')}catch(err){status('Não foi possível importar: '+err.message)}finally{e.target.value=''}});
-async function load(){try{const r=await fetch('data/agenda.json',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const obj=await r.json();all=validate(obj);created=obj.generated_at||'';$('feed-updated').textContent=(created?'Atualização: '+fmtDate(created):'Ficheiro de agenda')+' · '+all.length+' jogos';rebuildLeagues();$('sport').value=all.some(e=>e.sport==='roller_hockey')?'roller_hockey':'football';rebuildLeagues();render();status('Amostra de agenda com fontes identificadas. A integração automática por API só funciona após configurar e executar o atualizador autorizado.')}catch(err){all=[];$('feed-updated').textContent='Sem feed disponível';rebuildLeagues();render();status('Não foi possível carregar a agenda: '+err.message)}}load();
+ const slice=rows.slice(0,Math.max(limit,rows.findIndex(e=>e.id===activeId)+1));
+ for(const e of slice){const b=el('button',undefined,'sport-game v3-game');b.type='button';b.setAttribute('aria-pressed',String(e.id===activeId));b.dataset.id=e.id;
+ const main=el('span');main.append(el('strong',e.home+' × '+e.away),el('small',e.league+' · '+when(e.date)));
+ const side=el('span',undefined,'v3-game-tags');side.append(tinyBadge(phases[phase(e)],'v3-'+phase(e)));
+ if(important(e)>0)side.append(tinyBadge('★ Destaque','v3-featured'));
+ if(validOdds(e))side.append(tinyBadge('Odds','v3-odds'));
+ main.append(el('span',display(e.status),'v3-statusline'));b.append(main,side);
+ b.addEventListener('click',()=>{activeId=e.id;const prev=list.scrollTop;list.querySelectorAll('[aria-pressed="true"]').forEach(n=>n.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');writeDetail(e);list.scrollTop=prev;});list.append(b);
+ }
+ const selected=rows.find(e=>e.id===activeId);writeDetail(selected);
+ list.scrollTop=Math.min(previousScroll,list.scrollHeight-list.clientHeight);
+ $('sport-more').hidden=slice.length>=rows.length;$('sport-visible').textContent='A mostrar '+slice.length+' de '+rows.length;
+}
+function chooseMode(mode){dayMode=mode;$('sport-date').value=mode==='date'?$('sport-date').value:'';
+ document.querySelectorAll('[data-day]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.day===mode)));
+ resetList();render();}
+$('sport').addEventListener('change',()=>{leagues();resetList();render();});
+$('sport-league').addEventListener('change',()=>{resetList();render();});
+$('sport-query').addEventListener('input',()=>{resetList();render();});
+$('sport-phase').addEventListener('change',()=>{resetList();render();});
+$('sport-feature').addEventListener('change',()=>{resetList();render();});
+$('sport-date').addEventListener('change',()=>{dayMode='date';document.querySelectorAll('[data-day]').forEach(b=>b.setAttribute('aria-pressed','false'));resetList();render();});
+document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>chooseMode(b.dataset.day)));
+$('sport-more').addEventListener('click',()=>{limit+=rowsPerPage;render();});
+$('sport-json').addEventListener('change',async ev=>{const f=ev.target.files&&ev.target.files[0];if(!f)return;
+ try{if(f.size>3500000)throw Error('Ficheiro superior a 3,5 MB');const obj=JSON.parse(await f.text());all=validate(obj);loadedAt=display(obj.generated_at);resetList();leagues();chooseMode('all');$('feed-updated').textContent='JSON local · '+all.length+' jogos';$('sport-status').textContent='Dados carregados apenas no navegador; nenhuma credencial foi enviada.';}
+ catch(err){$('sport-status').textContent='Falha na importação: '+err.message;}finally{ev.target.value='';}});
+async function load(){try{const r=await fetch('data/agenda.json',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);
+ const obj=await r.json();all=validate(obj);loadedAt=display(obj.generated_at);$('feed-updated').textContent=(loadedAt?'Atualização: '+when(loadedAt):'Agenda')+' · '+all.length+' jogos';
+ $('sport').value='football';leagues();chooseMode(all.some(e=>e.sport==='football'&&eventDay(e)===today())?'today':'all');
+ $('sport-status').textContent='Agenda sincronizada a partir do GitHub Actions. Odds e previsões só surgem com fontes e validação adequadas.';
+ }catch(err){all=[];leagues();chooseMode('all');$('feed-updated').textContent='Agenda indisponível';$('sport-status').textContent='Não foi possível carregar a agenda: '+err.message;}}
+load();
 })();

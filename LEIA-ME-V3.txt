@@ -1,0 +1,88 @@
+MRS PREDICTIVE LAB — V3 (29 outubro 2026)
+======================================
+
+Destinatário: repositório GitHub mrs-monteiro/mrs-lab, branch main.
+
+ATUALIZAR ESTES 5 FICHEIROS NA ESTRUTURA EXISTENTE:
+
+1. preditivo/index.html                       SUBSTITUIR
+2. preditivo/js/agenda.js                     SUBSTITUIR
+3. preditivo/css/agenda-v3.css                NOVO FICHEIRO
+4. scripts/atualizar_agenda.py                SUBSTITUIR
+5. .github/workflows/atualizar-agenda.yml    SUBSTITUIR
+
+NÃO ALTERAR:
+- /index.html (página principal)
+- /lab/, /grafica/
+- preditivo/js/predictive.js (demonstração histórica anterior)
+- preditivo/css/predictive.css (estilos base)
+- preditivo/data/demo.json (dados sintéticos de demonstração)
+- preditivo/data/agenda.json (gerado automaticamente pelo workflow)
+- Secret APISPORTS_KEY existente.
+
+COMO TESTAR
+-----------
+A. GitHub -> Actions -> "Atualizar agenda MRS Predictive Lab" -> Run workflow.
+B. Confirmar execução verde e alteração do arquivo preditivo/data/agenda.json.
+C. Abrir https://lab.mrs-monteiro.com/preditivo/ e Ctrl+F5.
+D. Verificar Futebol -> Hoje / Amanhã / Todas as datas e o filtro de estados.
+E. Em Basquetebol, NBA deve aparecer como COMPETIÇÃO, não como modalidade independente.
+F. Experimentar Primeira Liga, Premier League, Champions e NHL quando houver encontros.
+G. Selecionar um jogo: a linha deve ficar destacada e o painel da direita deve corresponder ao jogo.
+
+ODDS (OPCIONAL, DESATIVADO POR PREDEFINIÇÃO)
+-------------------------------------------
+O The Odds API oferece um plano grátis com créditos mensais, sujeito a limites.
+O código já inclui adaptador opcional para odds h2h de 8 competições, região EU.
+NÃO ativa nem publica odds por defeito.
+
+Só depois de obter autorização de uso/redistribuição do feed:
+1. Criar GitHub Actions secret "ODDS_API_KEY" com chave de https://the-odds-api.com/.
+2. Criar GitHub Actions repository variable "ODDS_PUBLISH_ENABLED" com "true".
+3. Executar o workflow e verificar entradas com bookmaker, origem e updated_at.
+
+A associação do feed às partidas é conservadora: exige equipas iguais e horários
+com diferença máxima de seis horas, preferindo NÃO apresentar odds a misturar jogos.
+Ausência de odds não é um defeito da interface: pode não haver partida compatível,
+dados disponíveis para a competição, ou licença para a divulgação.
+
+MODELOS PREDITIVOS REAIS
+-----------------------
+Esta versão não inventa probabilidades. Os jogos com model=null mostram
+"Sem previsão validada".
+Foi preparado um contrato para modelos treinados/validados externamente:
+
+"model": {
+  "status": "validated",
+  "name": "Nome do modelo",
+  "training_end": "2026-09-30T00:00:00Z",
+  "evaluated_at": "2026-10-01T00:00:00Z",
+  "validation": { "n": 100, "log_loss": 0.99, "brier": 0.58 },
+  "probabilities": { "1": 0.45, "X": 0.29, "2": 0.26 }
+}
+
+ATENÇÃO: o exemplo de formato NÃO É uma previsão pronta a usar. Só preencher
+com artefactos reais de modelos e métricas produzidos em validação cronológica.
+Para basquetebol e NHL são usadas duas classes: "1" e "2" (mercado h2h).
+O navegador rejeita previsões sem metadados de avaliação e com treino após o jogo.
+
+SEGURANÇA E LIMITAÇÕES
+----------------------
+- O script faz até 8 pedidos API-Sports/dia (2 dias x 4 APIs) na execução diária.
+- Se um dia falhar, preserva dias válidos e fontes anteriores.
+- Futebol, Basquetebol (NBA incluída), NHL, Hóquei em patins.
+- Hóquei em patins continua alimentado separadamente por fonte oficial.
+- NBA é processada via API-NBA mas apresentada sob sport=basketball e league=NBA.
+- A API NHL é de hóquei no gelo, não de hóquei em patins.
+- Chaves guardadas exclusivamente no GitHub Secrets, nunca num ficheiro público.
+- Não incorporar previsões sintéticas no calendário real.
+- Confirmar previamente termos de utilização e republicação de qualquer feed.
+
+VALIDAÇÃO FEITA NA PREPARAÇÃO
+----------------------------
+- Sintaxe JavaScript e Python.
+- Simulação do workflow com APIs mock.
+- Testes de navegador (desktop e móvel) com jogos de teste sintéticos:
+  datas, modalidade, competição NBA sob basquetebol, situação, destaque,
+  pesquisa e seleção de jogos. Sem erros de JavaScript na execução testada.
+- A recolha real em produção só pode ser confirmada após o teu Run workflow.

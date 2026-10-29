@@ -7,6 +7,7 @@
   <meta name="description" content="MRS Predictive Lab — projeto final de Engenharia Informática, modelos preditivos e exploração de jogos de futebol, basquetebol e hóquei.">
   <title>MRS MONTEIRO | Predictive Lab</title>
   <link rel="stylesheet" href="css/predictive.css">
+  <link rel="stylesheet" href="css/agenda-v3.css">
   <script src="js/predictive.js" defer></script>
   <script src="js/agenda.js" defer></script>
 </head>
@@ -20,7 +21,7 @@
   <section class="hero" aria-labelledby="titulo">
     <div class="eyebrow">05 / DATA SCIENCE · MACHINE LEARNING</div>
     <h1 id="titulo">MRS <span>Predictive Lab.</span></h1>
-    <p class="lead">Explora modelos probabilísticos e escolhe jogos de futebol, basquetebol, NBA, hóquei em patins e NHL. Aprende a distinguir dados desportivos, probabilidades calculadas e odds de mercado.</p>
+    <p class="lead">Explora modelos probabilísticos e escolhe jogos de futebol, basquetebol (incluindo a NBA), hóquei em patins e NHL. Aprende a distinguir dados desportivos, probabilidades calculadas e odds de mercado.</p>
     <div class="pillrow"><span class="pill">Python · scikit-learn</span><span class="pill">1 / X / 2</span><span class="pill">Validação cronológica</span><span class="pill">Explorador multidesportivo</span><span class="pill">APIs via atualização segura</span></div>
   </section>
 
@@ -28,17 +29,34 @@
   <div><strong>Projeto final de curso de Engenharia Informática — UABBet</strong><p>Esta experiência evolui o meu projeto final de curso na Universidade Aberta, conjugando engenharia de software, bases de dados, ciência dos dados e modelos preditivos. Os módulos demonstrativos atuais não representam os resultados originais do projeto nem garantem previsões futuras.</p></div></section>
 
   <section class="panel multi-panel" aria-labelledby="multi-title">
-    <div class="section-heading"><div><div class="eyebrow">EXPLORAÇÃO MULTIDESPORTIVA · DADOS VERIFICÁVEIS</div><h2 id="multi-title">Escolhe uma modalidade e um jogo</h2></div><span class="subtle" id="feed-updated">A consultar ficheiro de agenda…</span></div>
-    <p class="subtle">As partidas são obtidas de um ficheiro de atualização com origem identificada. <strong>Um jogo listado não significa que exista uma previsão treinada.</strong> O catálogo pode ser atualizado através de APIs, fora do navegador, quando houver acesso e licença adequados.</p>
-    <div class="filters multi-filters">
-      <label>Modalidade<select id="sport"><option value="football">⚽ Futebol</option><option value="basketball">🏀 Basquetebol</option><option value="nba">🏀 NBA</option><option value="roller_hockey">🛼 Hóquei em patins</option><option value="nhl">🏒 NHL — hóquei no gelo</option></select></label>
+    <div class="section-heading"><div><div class="eyebrow">EXPLORAÇÃO MULTIDESPORTIVA · V3 · DADOS VERIFICÁVEIS</div><h2 id="multi-title">Escolhe uma modalidade e um jogo</h2></div><span class="subtle" id="feed-updated">A consultar ficheiro de agenda…</span></div>
+    <p class="subtle">As partidas são obtidas de um ficheiro de atualização com origem identificada. <strong>Um jogo listado não significa que exista uma previsão treinada.</strong> O catálogo é atualizado automaticamente através do GitHub Actions. Os estados dos jogos refletem a última recolha, não uma transmissão em tempo real. As odds só aparecem quando existe uma fonte autorizada; probabilidades de modelos requerem avaliação independente.</p>
+    <div class="filters multi-filters v3-filters">
+      <label>Modalidade<select id="sport"><option value="football">⚽ Futebol</option><option value="basketball">🏀 Basquetebol (inclui NBA)</option><option value="roller_hockey">🛼 Hóquei em patins</option><option value="nhl">🏒 NHL — hóquei no gelo</option></select></label>
       <label>Competição<select id="sport-league"><option value="all">Todas as competições</option></select></label>
       <label>Pesquisar equipa<input type="search" id="sport-query" placeholder="Nome da equipa" autocomplete="off"></label>
     </div>
+    <div class="v3-filterbar" aria-label="Filtros de data e situação">
+      <div class="v3-date-controls">
+        <span class="v3-filter-title">Data dos encontros</span>
+        <div class="v3-pills" role="group" aria-label="Escolher data">
+          <button type="button" class="v3-pill" data-day="today">Hoje</button>
+          <button type="button" class="v3-pill" data-day="tomorrow">Amanhã</button>
+          <button type="button" class="v3-pill" data-day="all">Todas as datas</button>
+        </div>
+        <label class="v3-date-label">Data específica <input id="sport-date" type="date" aria-label="Escolher uma data específica"></label>
+      </div>
+      <div class="v3-phase-controls">
+        <label>Situação<select id="sport-phase"><option value="all">Todos os estados</option><option value="scheduled">Agendados</option><option value="live">Em direto</option><option value="finished">Terminados</option><option value="postponed">Adiados / outros</option></select></label>
+        <label>Destaque<select id="sport-feature"><option value="all">Todas as competições</option><option value="featured">Competições em destaque</option></select></label>
+      </div>
+    </div>
+    <div id="v3-summary" class="v3-summary" aria-live="polite"></div>
     <div class="feed-grid">
       <div>
         <div class="feed-head"><strong>Jogos disponíveis</strong><span id="sport-count" class="subtle">—</span></div>
         <div id="sport-games" class="sport-games" aria-live="polite"><p class="subtle">A carregar a agenda…</p></div>
+        <div class="v3-load-row"><button type="button" id="sport-more" class="secondary" hidden>Mostrar mais encontros</button><span id="sport-visible" class="subtle"></span></div>
       </div>
       <aside id="sport-detail" class="feed-detail" aria-live="polite">
         <div class="eyebrow">DADOS DO ENCONTRO</div><h3>Seleciona um jogo</h3><p class="subtle">A origem dos dados e a disponibilidade de estatísticas aparecem aqui.</p>
@@ -47,6 +65,8 @@
     <div class="feed-import"><label for="sport-json" class="file-action">Importar JSON normalizado local</label><input id="sport-json" type="file" accept=".json,application/json" aria-describedby="sport-json-help"><span class="subtle" id="sport-json-help">O ficheiro é lido apenas no teu navegador. Nenhuma chave de API deve ser introduzida nesta página.</span></div>
     <p id="sport-status" class="status" role="status" aria-live="polite"></p>
   </section>
+
+  <p class="v3-method-note"><strong>Interpretação responsável:</strong> a agenda é real; a avaliação histórica mais abaixo utiliza dados sintéticos. Os modelos não produzem previsões de jogos reais enquanto não houver treino e validação por modalidade. Odds de mercado não são probabilidades calculadas pelo modelo.</p>
 
   <section class="notice" aria-label="Origem e limites dos dados"><div class="notice-icon" aria-hidden="true">i</div>
   <div><strong id="source-title">Avaliação histórica demonstrativa: dados 100% sintéticos</strong><p id="source-note">As equipas, datas e resultados são fictícios. Os modelos desta secção histórica foram treinados em dados simulados. A agenda multidesportiva acima é um módulo distinto e não apresenta probabilidades fictícias para jogos reais.</p></div></section>
