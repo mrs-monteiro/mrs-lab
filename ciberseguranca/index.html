@@ -8,8 +8,10 @@
   <title>MRS MONTEIRO | Cybersecurity & Networks Lab</title>
   <link rel="stylesheet" href="css/cyber.css">
   <link rel="stylesheet" href="css/paths.css">
+  <link rel="stylesheet" href="css/intelligence.css">
   <script src="js/cyber.js" defer></script>
   <script src="js/paths.js" defer></script>
+  <script src="js/intelligence.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Saltar para o conteúdo</a>
@@ -36,6 +38,7 @@
       <a href="#palavraspasse"><span>08</span> Segurança de acessos</a>
       <a href="#codigo"><span>09</span> Código seguro</a>
       <a href="#ferramentas"><span>10</span> Ferramentas & trilhos</a>
+      <a href="#inteligencia"><span>11</span> Ameaças & verificação</a>
     </nav>
 
     <section class="panel" id="rede" aria-labelledby="rede-title">
@@ -247,6 +250,84 @@
         <article class="cp-tool"><span>AUTOMAÇÃO · IA RESPONSÁVEL</span><h3>Python e agentes defensivos</h3><p>Transforma logs fictícios em testes, alertas explicáveis, controlos e relatórios revistos por pessoas.</p><div><a href="https://docs.python.org/3/library/unittest.html" target="_blank" rel="noopener noreferrer">Python unittest</a><a href="https://www.sigmahq.io/" target="_blank" rel="noopener noreferrer">Sigma</a></div></article>
       </div>
       <p class="muted tiny">Ferramentas como Metasploit, SQLMap, Hashcat e Aircrack-ng exigem delimitação rigorosa de âmbito, autorização e laboratórios isolados. Não são executadas nem integradas neste website público.</p>
+    </section>
+
+    <!-- MRS CYBER INTELLIGENCE HUB - webinar thematic expansion, local demo only -->
+    <section class="panel" id="inteligencia" aria-labelledby="ci-title">
+      <div class="sectiontop"><div><p class="eyebrow">11 / CYBER INTELLIGENCE · APRENDER E VERIFICAR</p><h2 id="ci-title">Centro de ameaças, ferramentas e segurança da IA</h2></div><span class="pill">Fontes verificadas · exercícios locais</span></div>
+      <p class="muted ci-lead">Uma experiência MRS MONTEIRO baseada em boas práticas: compreender ameaças atuais, identificar sinais de phishing, encontrar ferramentas de confiança e decidir onde a informação é processada por um sistema de IA. Não realiza testes de intrusão nem consultas externas automáticas.</p>
+      <div class="ci-threats" aria-label="Áreas de risco prioritárias">
+        <article><span class="ci-icon" aria-hidden="true">◈</span><h3>Ransomware</h3><p>Prevenção, cópias testadas, contenção e recuperação.</p></article>
+        <article><span class="ci-icon" aria-hidden="true">◇</span><h3>Cadeia de fornecimento</h3><p>Dependências, fornecedores, software e acessos de terceiros.</p></article>
+        <article><span class="ci-icon" aria-hidden="true">◎</span><h3>Identidade e phishing</h3><p>Credenciais comprometidas, MFA e validação fora de banda.</p></article>
+        <article><span class="ci-icon" aria-hidden="true">✧</span><h3>IA generativa</h3><p>Engenharia social mais convincente, fuga de dados e agentes sem controlo.</p></article>
+      </div>
+      <p class="muted tiny">Quadro educativo baseado nas categorias discutidas no webinar e no <a href="https://www.enisa.europa.eu/publications/enisa-threat-landscape-2026" target="_blank" rel="noopener noreferrer">ENISA Threat Landscape 2026 ↗</a>. Não apresenta estatísticas em tempo real.</p>
+
+      <div class="ci-block">
+        <div class="ci-block-title"><div><p class="eyebrow">LAB 01 / VERIFICAR UM LINK</p><h3>Análise preventiva de URL, sem abrir o website</h3></div><span class="ci-pill">Sem envio de dados</span></div>
+        <p class="muted">Escreve apenas um endereço público ou utiliza um exemplo fictício. O LAB procura <strong>sinais visíveis de risco</strong> no texto; não contacta o domínio, não consulta reputação e nunca certifica que o site é seguro.</p>
+        <div class="ci-urlline"><label for="ci-url">Endereço (não introduzir links privados, tokens ou dados pessoais)</label><div class="ci-urlinput"><input id="ci-url" type="text" inputmode="url" spellcheck="false" autocomplete="off" placeholder="https://portal.example/entrar" maxlength="1000"><button type="button" id="ci-check-url" class="primary">Analisar sinais</button></div></div>
+        <div class="ci-examples"><button type="button" data-ci-example="https://portal.example/entrar">Exemplo A · endereço simples</button><button type="button" data-ci-example="http://empresa-verificar-conta.example/atualizar?codigo=DEMO">Exemplo B · sinais de risco</button><button type="button" data-ci-example="https://conta.example@verificacao.example/entrar">Exemplo C · domínio disfarçado</button></div>
+        <div id="ci-url-result" class="ci-result" role="status" aria-live="polite"><strong>Pronto para analisar</strong><p>Seleciona um exemplo para perceberes que pistas deves observar antes de abrir um link.</p></div>
+        <p class="muted tiny">Se precisares de uma análise de reputação, consulta voluntariamente os recursos abaixo. Antes de submeteres ficheiros ou URLs, confirma as regras de privacidade de cada serviço.</p>
+      </div>
+
+      <div class="ci-block">
+        <div class="ci-block-title"><div><p class="eyebrow">LAB 02 / IA LOCAL, CLOUD E HÍBRIDA</p><h3>Para onde vão os prompts e documentos?</h3></div><span class="ci-pill">Simulação de arquitetura</span></div>
+        <p class="muted">Uma intranet privada ou um tenant dedicado <strong>não provam</strong> que a inferência ocorre localmente. Explora o percurso hipotético de dados e os controlos necessários.</p>
+        <div class="ci-mode-pills" role="group" aria-label="Selecionar arquitetura de IA">
+          <button type="button" data-ci-mode="local" aria-pressed="true">IA local</button>
+          <button type="button" data-ci-mode="cloud" aria-pressed="false">IA cloud</button>
+          <button type="button" data-ci-mode="hybrid" aria-pressed="false">IA híbrida</button>
+        </div>
+        <div class="ci-ai-grid">
+          <div class="ci-flow" aria-label="Diagrama do percurso de informação">
+            <div class="ci-flow-node"><span>01 · Utilizador</span><strong>Pedido e prompt</strong></div>
+            <div class="ci-flow-line" aria-hidden="true"><span>↓</span></div>
+            <div class="ci-flow-node"><span>02 · Informação</span><strong>Documentos autorizados / pesquisa</strong></div>
+            <div class="ci-flow-line ci-transfer" aria-hidden="true"><span>↓</span></div>
+            <div id="ci-infer-node" class="ci-flow-node ci-infer"><span>03 · Inferência</span><strong>Modelo executado localmente</strong></div>
+            <div class="ci-flow-line" aria-hidden="true"><span>↓</span></div>
+            <div class="ci-flow-node"><span>04 · Governação</span><strong>Permissões · logs · resposta</strong></div>
+          </div>
+          <div class="ci-ai-explain" aria-live="polite"><h4 id="ci-mode-title">IA totalmente local</h4><p id="ci-mode-desc">Na arquitetura ilustrada, os documentos e o modelo permanecem em infraestrutura controlada pela organização.</p><ul id="ci-mode-questions"><li>Quem administra o servidor, os modelos e os registos?</li><li>Existem telemetria ou serviços externos não previstos?</li><li>Como são controlados os acessos e as atualizações?</li></ul><p class="ci-mode-alert" id="ci-mode-warning">Local não significa automaticamente seguro: continuam a existir riscos de permissões, vulnerabilidades e operação.</p></div>
+        </div>
+        <div class="ci-questions"><h4>Se estiveres a avaliar uma solução empresarial, pergunta:</h4><div class="ci-checkgrid"><label><input type="checkbox" checked> Onde ocorre a inferência?</label><label><input type="checkbox"> Que excertos saem da rede interna?</label><label><input type="checkbox"> Qual é a região e a retenção de dados?</label><label><input type="checkbox"> Os dados são usados no treino?</label><label><input type="checkbox"> Que acessos e logs são auditáveis?</label><label><input type="checkbox"> Existem DLP, SSO, MFA e aprovação humana?</label></div><p class="muted tiny">Checklist de conversa, não avaliação de conformidade de um produto concreto.</p></div>
+      </div>
+
+      <div class="ci-block">
+        <div class="ci-block-title"><div><p class="eyebrow">CENTRO DE RECURSOS / WEB SEGURO</p><h3>Ferramentas e fontes para cada pergunta</h3></div><span class="ci-pill">Abrir apenas quando escolheres</span></div>
+        <div class="ci-filters" role="group" aria-label="Filtrar ferramentas">
+          <button type="button" data-ci-filter="todos" aria-pressed="true">Todos</button>
+          <button type="button" data-ci-filter="url" aria-pressed="false">Links e ficheiros</button>
+          <button type="button" data-ci-filter="identidade" aria-pressed="false">Identidade</button>
+          <button type="button" data-ci-filter="ameacas" aria-pressed="false">Ameaças e SOC</button>
+          <button type="button" data-ci-filter="ai" aria-pressed="false">Segurança da IA</button>
+          <button type="button" data-ci-filter="formacao" aria-pressed="false">Vídeos e formação</button>
+        </div>
+        <div class="ci-resource-grid" id="ci-resource-grid">
+          <article class="ci-resource" data-ci-category="url"><small>REPUTAÇÃO DE DOMÍNIOS</small><h4>Google Safe Browsing</h4><p>Consulta o estado conhecido de segurança de um endereço, sem abrir a página suspeita.</p><a target="_blank" rel="noopener noreferrer" href="https://transparencyreport.google.com/safe-browsing/search">Consultar relatório ↗</a></article>
+          <article class="ci-resource" data-ci-category="url"><small>MÚLTIPLOS MOTORES</small><h4>VirusTotal</h4><p>Pesquisa reputação de URLs, hashes e indicadores. Evita enviar ficheiros internos ou confidenciais.</p><a target="_blank" rel="noopener noreferrer" href="https://www.virustotal.com/gui/home/search">Abrir VirusTotal ↗</a></article>
+          <article class="ci-resource" data-ci-category="url"><small>ANÁLISE DE PÁGINA</small><h4>urlscan.io</h4><p>Observa recursos e comportamento de uma página. Confirma a visibilidade <em>Public / Unlisted / Private</em>.</p><a target="_blank" rel="noopener noreferrer" href="https://urlscan.io/">Abrir urlscan ↗</a></article>
+          <article class="ci-resource" data-ci-category="url"><small>INFRAESTRUTURA WEB</small><h4>Netcraft</h4><p>Ferramentas de pesquisa sobre tecnologias, DNS, fraude e exposição de websites.</p><a target="_blank" rel="noopener noreferrer" href="https://www.netcraft.com/resources/research-tools">Consultar ferramentas ↗</a></article>
+          <article class="ci-resource" data-ci-category="identidade"><small>FUGAS CONHECIDAS</small><h4>Have I Been Pwned</h4><p>Verifica se um endereço teu surgiu em fugas conhecidas. Não introduzas palavras-passe no MRS LAB.</p><a target="_blank" rel="noopener noreferrer" href="https://haveibeenpwned.com/">Verificar a minha conta ↗</a></article>
+          <article class="ci-resource" data-ci-category="ameacas"><small>EUROPA</small><h4>ENISA · Threat Landscape 2026</h4><p>Relatório europeu sobre ransomware, cadeias de fornecimento, credenciais e ameaças com IA.</p><a target="_blank" rel="noopener noreferrer" href="https://www.enisa.europa.eu/publications/enisa-threat-landscape-2026">Consultar relatório ↗</a></article>
+          <article class="ci-resource" data-ci-category="ameacas"><small>PORTUGAL</small><h4>CNCS / CERT.PT</h4><p>Alertas, orientações e vias oficiais de resposta e notificação de incidentes em Portugal.</p><a target="_blank" rel="noopener noreferrer" href="https://www.cncs.gov.pt/">Abrir CNCS ↗</a></article>
+          <article class="ci-resource" data-ci-category="ameacas"><small>MAPA DE DETEÇÕES</small><h4>Kaspersky Cybermap</h4><p>Mapa visual de deteções da própria rede de telemetria do fornecedor. Não representa todos os ataques mundiais.</p><a target="_blank" rel="noopener noreferrer" href="https://cybermap.kaspersky.com/pt">Ver mapa ↗</a></article>
+          <article class="ci-resource" data-ci-category="ameacas"><small>TÁTICAS E DEFESA</small><h4>MITRE ATT&amp;CK</h4><p>Taxonomia de comportamentos adversários, útil para cobertura defensiva, deteção e investigação.</p><a target="_blank" rel="noopener noreferrer" href="https://attack.mitre.org/">Explorar ATT&amp;CK ↗</a></article>
+          <article class="ci-resource" data-ci-category="ai"><small>AMEAÇAS A SISTEMAS IA</small><h4>MITRE ATLAS</h4><p>Base de conhecimento de táticas e técnicas dirigidas a aplicações e modelos de IA.</p><a target="_blank" rel="noopener noreferrer" href="https://atlas.mitre.org/">Explorar ATLAS ↗</a></article>
+          <article class="ci-resource" data-ci-category="ai"><small>RISCO DE AGENTES</small><h4>OWASP GenAI / Agentic</h4><p>Riscos de prompt injection, divulgação de informação e utilização indevida de ferramentas.</p><a target="_blank" rel="noopener noreferrer" href="https://genai.owasp.org/">Abrir OWASP GenAI ↗</a></article>
+          <article class="ci-resource" data-ci-category="ai"><small>GOVERNAÇÃO</small><h4>NIST AI Risk Management Framework</h4><p>Referencial para identificar, avaliar e governar riscos associados à utilização de IA.</p><a target="_blank" rel="noopener noreferrer" href="https://www.nist.gov/itl/ai-risk-management-framework">Consultar NIST ↗</a></article>
+          <article class="ci-resource" data-ci-category="formacao"><small>FORMAÇÃO PRÁTICA</small><h4>Jigsaw · Phishing Quiz</h4><p>Treino externo para reconhecer emails suspeitos, com situações realistas e feedback.</p><a target="_blank" rel="noopener noreferrer" href="https://phishingquiz.withgoogle.com/">Abrir quiz ↗</a></article>
+          <article class="ci-resource" data-ci-category="formacao"><small>VÍDEOS OFICIAIS</small><h4>ENISA · vídeos e materiais</h4><p>Vídeos sobre phishing, ransomware, higiene digital e panorama de ameaças 2026.</p><a target="_blank" rel="noopener noreferrer" href="https://www.enisa.europa.eu/press-office/cybersecurity-material">Ver materiais ↗</a></article>
+        </div>
+        <p class="muted tiny">Abertura de fontes externas é sempre voluntária. Os respetivos serviços têm políticas próprias de privacidade, custos e utilização; um resultado negativo nunca é garantia de ausência de risco.</p>
+      </div>
+      <div class="ci-footer">
+        <div><strong>Antes de partilhares dados com terceiros</strong><p>Confirma a classificação da informação, remove tokens, parâmetros privados, dados pessoais e segredos. Para ficheiros internos, segue os procedimentos da organização. Um tenant dedicado é diferente de inferência inteiramente local.</p></div>
+        <button type="button" id="ci-export" class="secondary">Exportar guia de boas práticas (.txt)</button>
+      </div>
     </section>
 
   </main>
