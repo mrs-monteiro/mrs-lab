@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08121e">
+  <meta name="description" content="MRS Predictive Lab — experiência educativa de modelos probabilísticos, validação cronológica e análise de futebol com dados sintéticos.">
+  <title>MRS MONTEIRO | Predictive Lab</title>
+  <link rel="stylesheet" href="css/predictive.css">
+  <script src="js/predictive.js" defer></script>
+</head>
+<body>
+<a href="#conteudo" class="skip">Saltar para o conteúdo</a>
+<header class="topbar"><div class="container topinner">
+  <a class="brand" href="https://mrs-monteiro.com/">MRS <span>MONTEIRO</span></a>
+  <nav aria-label="Navegação"><a href="https://lab.mrs-monteiro.com/">← Voltar ao LAB</a></nav>
+</div></header>
+<main id="conteudo" class="container">
+  <section class="hero" aria-labelledby="titulo">
+    <div class="eyebrow">05 / DATA SCIENCE · MACHINE LEARNING</div>
+    <h1 id="titulo">MRS <span>Predictive Lab.</span></h1>
+    <p class="lead">Explora como se constroem probabilidades para resultados de futebol, compara modelos treinados, analisa erros e compreende a diferença entre <strong>prever</strong> e <strong>acertar</strong>.</p>
+    <div class="pillrow"><span class="pill">Python · scikit-learn</span><span class="pill">1 / X / 2</span><span class="pill">Validação cronológica</span><span class="pill">Sem APIs nem cookies</span></div>
+  </section>
+
+  <section class="notice" aria-label="Origem e limites dos dados"><div class="notice-icon" aria-hidden="true">i</div>
+  <div><strong id="source-title">Demonstração com dados 100% sintéticos</strong><p id="source-note">As equipas, datas e resultados são fictícios. Os modelos foram treinados em dados simulados. Não são previsões de jogos atuais, nem há qualquer recomendação de apostas.</p></div></section>
+
+  <section class="panel controls-panel" aria-labelledby="explorar"><div class="section-heading"><div><div class="eyebrow">01 / EXPLORAÇÃO</div><h2 id="explorar">Escolhe o que pretendes analisar</h2></div><span class="subtle" id="dataset-label">A carregar...</span></div>
+    <div class="filters">
+      <label>Modelo de análise<select id="model"><option value="logistic">Regressão logística</option></select></label>
+      <label>Temporada de teste<select id="season"><option value="all">Todas</option></select></label>
+      <label>Pesquisar equipa<input id="team" type="search" placeholder="Ex.: Horizonte" autocomplete="off"></label>
+    </div>
+    <div class="data-actions"><label class="file-action" for="csv">Importar CSV local de resultados</label><input id="csv" type="file" accept=".csv,text/csv" aria-describedby="csv-help"><button id="resetdata" type="button" class="secondary">Repor demonstração</button><span id="csv-help" class="subtle">Colunas: Date, HomeTeam, AwayTeam, FTHG, FTAG · processamento só no navegador</span></div>
+    <p role="status" id="status" class="status" aria-live="polite"></p>
+  </section>
+
+  <section class="metrics" aria-label="Indicadores do modelo">
+    <div class="metric"><span>Jogos avaliados</span><strong id="m-count">—</strong><small>Fora do treino / avaliação sequencial</small></div>
+    <div class="metric"><span>Exatidão</span><strong id="m-accuracy">—</strong><small>Percentagem de classes certas</small></div>
+    <div class="metric"><span>Log loss</span><strong id="m-logloss">—</strong><small>Menor é melhor</small></div>
+    <div class="metric"><span>Brier multiclasse</span><strong id="m-brier">—</strong><small>Menor é melhor</small></div>
+  </section>
+
+  <div class="columns main-columns">
+    <section class="panel" aria-labelledby="comparar"><div class="eyebrow">02 / COMPARAÇÃO</div><h2 id="comparar">Qual modelo se comporta melhor?</h2><p class="subtle">Exatidão no conjunto de avaliação. Uma exatidão superior não garante melhores probabilidades.</p><div id="comparison" class="comparison"></div><p class="caption">Os valores de log loss e Brier devem ser analisados juntamente com a exatidão. O objetivo não é escolher apostas vencedoras.</p></section>
+    <section class="panel" aria-labelledby="matriz"><div class="eyebrow">03 / ERROS</div><h2 id="matriz">Matriz de confusão</h2><p class="subtle">Linhas = resultado observado · colunas = resultado previsto.</p><div id="confusion" class="confusion-wrap"></div><p class="caption" id="confusion-note"></p></section>
+  </div>
+
+  <section class="panel fixtures-panel" aria-labelledby="jogos"><div class="section-heading"><div><div class="eyebrow">04 / AMOSTRAS</div><h2 id="jogos">Explora cada jogo e as probabilidades</h2></div><span id="fixture-count" class="subtle"></span></div>
+    <div class="fixture-layout"><div><div class="tablewrap"><table class="fixtures"><thead><tr><th>Data</th><th>Confronto</th><th>Resultado</th><th>Previsão</th><th></th></tr></thead><tbody id="fixtures"></tbody></table></div><div class="pager"><button class="secondary" id="page-prev" type="button">← Anterior</button><span id="page-label" class="subtle"></span><button class="secondary" id="page-next" type="button">Seguinte →</button></div></div>
+    <aside class="match-detail" aria-labelledby="jogo-escolhido"><div class="eyebrow">PROBABILIDADES DO MODELO</div><h3 id="jogo-escolhido">Seleciona um jogo</h3><p id="selected-date" class="subtle"></p><div id="probabilities" class="probabilities"></div><div class="resultline"><span>Resultado observado</span><strong id="observed">—</strong></div><p id="match-note" class="caption">Probabilidades aproximadas, não certezas.</p></aside></div>
+  </section>
+
+  <div class="columns bottom-columns">
+    <section class="panel" aria-labelledby="calibracao"><div class="eyebrow">05 / FIABILIDADE</div><h2 id="calibracao">Confiança versus acertos</h2><p class="subtle">Agrupamos as previsões pela probabilidade da classe mais provável. Em cada grupo, a percentagem de acertos deveria acompanhar a confiança anunciada.</p><div class="calibration" id="calibration"></div><p class="caption">Grupos com poucos jogos são instáveis; barras vazias não significam 0%.</p></section>
+    <section class="panel" aria-labelledby="odds"><div class="eyebrow">06 / INTERPRETAÇÃO</div><h2 id="odds">Probabilidades implícitas nas odds</h2><p class="subtle">Introduz valores decimais hipotéticos para perceber a margem de mercado. Este exemplo não utiliza odds reais e não calcula estratégias de aposta.</p>
+      <div class="odds-inputs"><label>1 — Casa<input type="number" id="odd1" min="1.01" step="0.01" value="2.30"></label><label>X — Empate<input type="number" id="oddx" min="1.01" step="0.01" value="3.40"></label><label>2 — Fora<input type="number" id="odd2" min="1.01" step="0.01" value="3.20"></label></div>
+      <div id="odds-bars" class="odds-bars"></div><p class="subtle" id="margin"></p><p class="caption">Cálculo: probabilidade bruta = 1 / odd; normalização pela soma das três probabilidades.</p>
+    </section>
+  </div>
+  <section class="panel methodology"><div class="eyebrow">07 / PROJETO ACADÉMICO</div><h2>Do UABBet à ciência dos dados aplicada</h2><p>O UABBet explorou bases de dados, preparação de informação e classificação em Python. Esta demonstração é uma <strong>implementação educativa independente</strong>: reúne um conjunto sintético reproduzível, treino de modelos em períodos anteriores e avaliação de probabilidades em períodos posteriores.</p><div class="method-grid"><div><strong>Preparação</strong><span>Forma recente e força relativa, calculadas antes de cada encontro.</span></div><div><strong>Modelos</strong><span>Regressão logística, Random Forest e referências simples.</span></div><div><strong>Avaliação</strong><span>Separação por temporadas, matriz de confusão, log loss e Brier.</span></div></div><p class="caption">O UABBet original inclui outras funcionalidades; estes resultados não são os resultados da sua defesa ou de previsões reais. A importação CSV usa um modelo Elo educativo, não treina automaticamente novos modelos de machine learning.</p></section>
+</main>
+<footer class="container"><span>© 2026 MRS MONTEIRO · Projeto de exploração científica e educativa</span><span>Sem contas · Sem chaves de API no navegador · Sem aconselhamento de apostas</span></footer>
+</body>
+</html>

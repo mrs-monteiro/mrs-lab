@@ -1,19 +1,82 @@
-MRS Interactive Lab — Computação Gráfica v1
+MRS PREDICTIVE LAB v1.0 — DEMONSTRAÇÃO EDUCATIVA
+===============================================
 
-Fonte: dois projetos do autor (e-Fólio A de rasterização e e-Fólio B de terreno procedural) e notas/papers fornecidos.
+A) PUBLICAÇÃO NO GITHUB PAGES
 
-1. No repositório mrs-monteiro/mrs-lab, carregar:
-  grafica/index.html
-  lab/js/questoes-cg.js
+Repositório: mrs-monteiro/mrs-lab (branch main)
 
-2. Em mrs-lab/index.html na RAIZ, inserir ANTES de </body> e DEPOIS do carregamento de lab/js/learning.js:
-  <script src="lab/js/questoes-cg.js"></script>
+Copiar a pasta «preditivo» completa para a RAIZ do repositório:
 
-3. No mesmo index.html, adicionar um link para a experiência gráfica, por exemplo imediatamente após o DIV dos separadores:
-  <p><a class="back" href="grafica/">Abrir laboratório de Computação Gráfica ↗</a></p>
+mrs-lab/
+  index.html               <-- não alterar
+  grafica/                 <-- não alterar
+  lab/                     <-- não alterar
+  preditivo/
+    index.html
+    css/predictive.css
+    js/predictive.js
+    data/demo.json
 
-4. Não substituir nenhum dos ficheiros já existentes. Não alterar CNAME, CSS ou a pasta lab de cópia de segurança.
+O endereço será: https://lab.mrs-monteiro.com/preditivo/
 
-5. Testar: /grafica/ (preparar, próximo, inverter extremos, linhas vertical/horizontal/diagonal) e Treino para estudantes (oito novas questões).
+Não alterar o CNAME, index.html principal, IIA, rasterização ou Treino para estudantes.
+O ficheiro scripts/gerar_demo.py é apenas para desenvolvimento LOCAL e não precisa
+ser carregado para GitHub Pages.
 
-NOTA: a primeira experiência é 2D Canvas para explicar o algoritmo isoladamente. A versão 3D com Three.js e terreno procedural fica para uma atualização dedicada, depois de validarmos este módulo.
+B) O QUE MOSTRA
+- 112 partidas FICTÍCIAS de avaliação (2024-2025); 224 partidas FICTÍCIAS usadas no treino (2020-2023).
+- 4 metodologias: Regressão Logística, Random Forest, Elo, frequência histórica.
+- Filtros de temporada/equipa, probabilidades 1/X/2, comparação de modelos.
+- Matriz de confusão, exatidão, log loss, Brier multiclasse e confiança vs acertos.
+- Calculadora educativa de probabilidades implícitas em odds INVENTADAS, não dicas de apostas.
+- Importação de CSV local de resultados (formato no ponto C), sem enviar dados a servidores.
+
+C) IMPORTAÇÃO DE CSV (APENAS NO NAVEGADOR)
+
+Cabeçalho obrigatório: Date,HomeTeam,AwayTeam,FTHG,FTAG
+
+Exemplo de formato (linhas ilustrativas, não jogos reais):
+Date,HomeTeam,AwayTeam,FTHG,FTAG
+2025-01-02,Equipa A,Equipa B,2,1
+2025-01-03,Equipa B,Equipa A,0,0
+
+Suporta delimitador vírgula ou ponto e vírgula; datas YYYY-MM-DD ou DD/MM/YYYY.
+São necessários pelo menos 35 jogos completos: os primeiros 30 servem de aquecimento.
+O CSV é processado localmente e APENAS o Elo sequencial é calculado.
+Os modelos de ML pré-treinados da demonstração sintética NÃO são aplicados ao CSV real.
+Nunca importar dados pessoais ou dados sem autorização de utilização.
+
+D) RIGOR ESTATÍSTICO
+
+- Dados FICTÍCIOS gerados com semente fixa (20261029) em gerar_demo.py.
+- Features construídas só com resultados anteriores a cada jogo: diferença Elo,
+  forma recente, golos e número de encontros anteriores.
+- Separação temporal: 2020-2023 para treino; 2024-2025 para teste.
+- Classificação em 3 classes: 1, X, 2.
+- Log loss calculada com probabilidades preditas; Brier multiclasse
+  = média da soma dos três erros quadráticos entre previsão e one-hot.
+- Os valores NÃO demonstram eficácia em resultados de futebol verdadeiros.
+- A utilização de resultados recentes de jogos anteriores no Elo é sequencial,
+  sem acesso a jogos futuros; a avaliação dinâmica não é treino de um modelo novo.
+- Não se usam odds reais, cálculos de stake ou estratégias de aposta.
+
+E) GERAR DE NOVO O DATASET
+
+Python >=3.10, numpy e scikit-learn:
+python scripts/gerar_demo.py
+
+O script vai sobrescrever preditivo/data/demo.json de forma reproduzível.
+
+F) SEGURANÇA E LICENÇAS
+
+Esta implementação é nova e independente; não inclui ficheiros de código,
+modelos serializados, bases de dados, credenciais ou datasets de terceiros.
+NÃO publicar o ZIP integral do UABBet: pode conter .env, dump SQL, dados pessoais,
+modelos não revistos e ambiente virtual.
+Antes de acrescentar APIs, verificar direitos de armazenamento/republicação.
+Nunca expor tokens API no GitHub Pages ou no JS.
+
+G) ADICIONAR LIGAÇÃO AO SITE PRINCIPAL (DEPOIS DE TESTAR)
+
+Para já, testar através do URL direto. O index.html principal NÃO foi modificado.
+Depois de validar, pode-se criar uma entrada no LAB principal para /preditivo/.
