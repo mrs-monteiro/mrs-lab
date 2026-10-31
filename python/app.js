@@ -20,4 +20,22 @@ function resetRobot(clear=true){robot={...origin};pc=0;done=false;if(clear)progr
 document.querySelectorAll('[data-command]').forEach(b=>b.addEventListener('click',()=>{if(program.length>=24){$('robot-feedback').textContent='Limite de 24 instruções. Apaga comandos ou reinicia.';return;}if(pc>0){$('robot-feedback').textContent='Reinicia antes de editar o programa.';return;}program.push(b.dataset.command);drawProgram()}));$('robot-step').addEventListener('click',robotStep);$('robot-run').addEventListener('click',()=>{for(let i=0;i<24&&robotStep();i++);});$('robot-undo').addEventListener('click',()=>{if(pc>0){$('robot-feedback').textContent='Reinicia antes de editar o programa.';return;}program.pop();drawProgram()});$('robot-reset').addEventListener('click',()=>resetRobot());resetRobot();
 // 04 — static examples; textContent only, no execution of arbitrary input.
 const topics={print:['Mostrar texto com print()', 'print("Olá, mundo!")'],variables:['Guardar informação em variáveis', 'nome = "Ana"\nidade = 25\nprint(nome, idade)'],if:['Escolher um caminho com if/else', 'idade = 18\nif idade >= 18:\n    print("Maior de idade")\nelse:\n    print("Menor de idade")'],for:['Repetir um bloco um número definido de vezes', 'for numero in range(5):\n    print(numero)'],while:['Repetir enquanto uma condição se verificar', 'contador = 0\nwhile contador < 3:\n    print(contador)\n    contador += 1'],list:['Trabalhar com listas', 'numeros = [3, 7, 9]\nprint(sum(numeros))'],function:['Criar funções reutilizáveis', 'def somar(a, b):\n    return a + b\n\nprint(somar(2, 3))'],dict:['Organizar dados por chave e valor', 'pessoa = {"nome": "Ana", "idade": 25}\nprint(pessoa["nome"])'],error:['Lidar com erros de conversão', 'try:\n    idade = int("abc")\nexcept ValueError:\n    print("Valor inválido")']};function showTopic() {const [description,code]=topics[$('topic').value];$('topic-detail').textContent=description;$('topic-code').textContent=code;}$('topic').addEventListener('change',showTopic);$('copy').addEventListener('click',async()=>{const code=topics[$('topic').value][1];try{await navigator.clipboard.writeText(code);$('copy-feedback').textContent='Exemplo copiado.';}catch{$('copy-feedback').textContent='A cópia automática não está disponível neste contexto. Seleciona o texto e copia manualmente.';}});showTopic();
+// V2 · guided discovery: independent of the three game engines.
+const academyAnswers={numero:{correct:'if',hint:'Dica: é uma palavra-chave que começa uma condição.',explanation:'A instrução if verifica uma condição.'},ordenar:{correct:'>',hint:'Dica: a lista deve ficar em ordem crescente.',explanation:'O operador > deteta valores adjacentes fora de ordem.'},robo:{correct:'for',hint:'Dica: precisamos de percorrer todos os elementos da lista.',explanation:'O ciclo for percorre cada comando pela ordem definida.'}};
+const academyDone=new Set();
+function academyRenderProgress(){const el=document.getElementById('academy-progress');if(el)el.textContent=academyDone.size+' / 3 desafios concluídos';}
+document.querySelectorAll('.code-challenge').forEach(ch=>{
+ const id=ch.dataset.challenge, config=academyAnswers[id],feedback=ch.querySelector('.challenge-feedback'),explanation=ch.querySelector('.challenge-explanation');
+ ch.querySelector('.check-answer').addEventListener('click',()=>{
+  const picked=ch.querySelector('input[type="radio"]:checked');
+  if(!picked){feedback.textContent='Escolhe primeiro uma opção.';return;}
+  if(picked.value===config.correct){academyDone.add(id);feedback.textContent='Correto! Agora consulta a explicação abaixo.';explanation.hidden=false;academyRenderProgress();}
+  else{feedback.textContent='Ainda não. Tenta novamente ou pede uma pista.';}
+ });
+ ch.querySelector('.show-hint').addEventListener('click',()=>{feedback.textContent=config.hint;});
+ ch.querySelector('.show-solution').addEventListener('click',()=>{explanation.hidden=false;feedback.textContent='Solução revelada. Para concluir o desafio, seleciona e verifica a resposta correta.';});
+});
+const academyReset=document.getElementById('academy-reset');
+if(academyReset)academyReset.addEventListener('click',()=>{academyDone.clear();document.querySelectorAll('.code-challenge').forEach(ch=>{ch.querySelectorAll('input[type="radio"]').forEach(r=>r.checked=false);ch.querySelector('.challenge-feedback').textContent='Escolhe uma resposta e verifica.';ch.querySelector('.challenge-explanation').hidden=true;});academyRenderProgress();});
+academyRenderProgress();
 })();
