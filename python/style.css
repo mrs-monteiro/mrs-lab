@@ -10,3 +10,11 @@
 .progress-summary{padding:18px;border:1px solid #3d6971;border-radius:12px;margin:18px 0;background:rgba(30,75,79,.25)}
 .progress-summary p{margin:8px 0 12px}.guided pre{max-width:100%;overflow:auto}.challenge-feedback{margin-top:10px}
 @media(max-width:600px){.guided{padding:12px}.option{display:flex}.learning-steps span{flex:1 1 130px}}
+
+/* V3 — orientações explícitas, estados visuais e contraste móvel */
+.guide-card{background:#102b3b;border:1px solid #4f7887;border-left:4px solid #8ae1ce;border-radius:12px;padding:16px;margin:16px 0 18px;color:#eaf5f7;line-height:1.55}
+.guide-card p{margin:9px 0}.guide-card small{display:block;color:#c6dce4;margin-top:7px}.range-label{font-weight:800;color:#a1ebde}.range-track{height:15px;border:1px solid #657e91;background:#253346;border-radius:10px;overflow:hidden}.range-fill{height:100%;background:#79d6c1;border-radius:9px;transition:width .2s,margin-left .2s}
+.visual-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px}.visual-legend span{display:inline-flex;gap:7px;align-items:center;font-size:.88rem;color:#e2edf5}.legend-dot{width:16px;height:16px;border:1px solid #a6becf;border-radius:4px;display:inline-block}.legend-dot.waiting{background:#467c91}.legend-dot.comparing{background:#e8bd70}.legend-dot.sorted{background:#89dcc4}
+.bar{background:linear-gradient(0deg,#356b84,#6c9fae)}.bar.active{background:#e8bd70}.bar.sorted{background:linear-gradient(0deg,#398c7c,#89dcc4)}
+.cell{background:#173b4e;border-color:#597587}.cell.wall{background:#657080;color:#fff;border:2px solid #a3acb9}.cell.goal{background:#246748;border:2px solid #9beba8}.cell.robot{background:#268c83;border:2px solid #c4fff1}.direction-label,.next-label{color:#cbe5ef;font-weight:600;background:#112d3f;border-radius:8px;padding:9px 11px;margin:10px 0}.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:13px;color:#e3eff2}
+@media(max-width:650px){.guide-card{padding:12px}.maze{max-width:100%}.robot-side .controls{gap:8px}.robot-side button{font-size:.93rem}}
