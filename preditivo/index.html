@@ -8,6 +8,7 @@
   <title>MRS MONTEIRO | Predictive Lab</title>
   <link rel="stylesheet" href="css/predictive.css">
   <link rel="stylesheet" href="css/agenda-v3.css">
+  <link rel="stylesheet" href="css/uabbet-v4.css">
   <script src="js/predictive.js" defer></script>
   <script src="js/agenda.js" defer></script>
 </head>
@@ -106,6 +107,53 @@
     </section>
   </div>
   <section class="panel methodology"><div class="eyebrow">07 / PROJETO FINAL DE ENGENHARIA INFORMÁTICA</div><h2>UABBet — do projeto final de curso ao MRS Predictive Lab</h2><p>O UABBet foi o meu projeto final de curso de Engenharia Informática na Universidade Aberta. O trabalho explorou bases de dados, preparação de informação e classificação em Python. Esta demonstração é uma <strong>implementação educativa independente</strong>: reúne um conjunto sintético reproduzível, treino de modelos em períodos anteriores e avaliação de probabilidades em períodos posteriores.</p><div class="method-grid"><div><strong>Preparação</strong><span>Forma recente e força relativa, calculadas antes de cada encontro.</span></div><div><strong>Modelos</strong><span>Regressão logística, Random Forest e referências simples.</span></div><div><strong>Avaliação</strong><span>Separação por temporadas, matriz de confusão, log loss e Brier.</span></div></div><p class="caption">O UABBet original inclui outras funcionalidades; estes resultados não são os resultados da sua defesa ou de previsões reais. A importação CSV usa um modelo Elo educativo, não treina automaticamente novos modelos de machine learning.</p></section>
+
+<section class="panel uabvet" id="uabbet-v4" aria-labelledby="uabbet-v4-title">
+  <div class="eyebrow">08 / UABBET · METODOLOGIA E PROVENIÊNCIA</div>
+  <h2 id="uabbet-v4-title">O projeto académico por detrás do laboratório</h2>
+  <p>O <strong>UABBet</strong> é o projeto final de curso que inspira este espaço. A demonstração pública usa dados gerados para aprendizagem e <strong>não reproduz integralmente</strong> o motor, os datasets ou os resultados académicos originais.</p>
+  <div class="uab-grid">
+    <article class="uab-card"><h3>Dados e preparação</h3><p>Organização de eventos desportivos, equipas, competições, resultados e mercados. A qualidade e a cronologia dos dados condicionam qualquer análise.</p></article>
+    <article class="uab-card"><h3>Classificação</h3><p>A exploração académica inclui regressão logística e Random Forest. Nesta página são usados classificadores e referências demonstrativas em dados sintéticos.</p></article>
+    <article class="uab-card"><h3>Probabilidade e avaliação</h3><p>Interpretação probabilística, análise bayesiana no âmbito original e medidas de erro na demonstração. Uma previsão não equivale a um resultado garantido.</p></article>
+    <article class="uab-card"><h3>Separação responsável</h3><p>Treino e previsão requerem conjuntos distintos no tempo. O laboratório não mistura agenda real com probabilidades sintéticas para sugerir apostas.</p></article>
+  </div>
+  <details><summary>O que é original e o que é demonstrativo?</summary><p><strong>UABBet original:</strong> projeto académico de software, bases de dados, análise e modelação, preservado fora da publicação. <strong>LAB público:</strong> interface de aprendizagem independente, com dataset fictício, visualizações e agenda externa. Nenhuma previsão real é atribuída aos modelos sem validação.</p></details>
+</section>
+<section class="panel uabvet" id="tecnologias-uabbet" aria-labelledby="tecnologias-uabbet-titulo">
+  <div class="eyebrow">09 / PROJETO FINAL DE CURSO · TECNOLOGIAS E FORMATOS</div>
+  <h2 id="tecnologias-uabbet-titulo">Como foi desenvolvido o UABBet?</h2>
+  <p>O projeto académico integrou programação, bases de dados, tratamento de informação, visualização e aprendizagem automática. As tecnologias abaixo foram identificadas nos ficheiros do <strong>UABBet original</strong>; a interface deste LAB é uma implementação pública independente.</p>
+  <div class="uab-grid">
+    <article class="uab-card"><h3>Python · linguagem principal</h3><p>Scripts de aquisição/preparação, análise de futebol e basquetebol, construção de datasets, treino e utilização dos modelos e geração de gráficos.</p></article>
+    <article class="uab-card"><h3>Streamlit · interface do projeto</h3><p>Aplicação de exploração e apresentação de tabelas, visualizações e resultados, apoiada por <strong>pandas</strong> e <strong>matplotlib</strong>.</p></article>
+    <article class="uab-card"><h3>PostgreSQL e SQL · dados</h3><p>Estruturas relacionais para eventos, equipas, competições e outros dados do domínio; ligação em Python com <strong>SQLAlchemy</strong> e <strong>psycopg2</strong>.</p></article>
+    <article class="uab-card"><h3>Ciência dos dados e ML</h3><p><strong>NumPy, pandas, scikit-learn, matplotlib e seaborn</strong> para preparação, modelação e visualização. Inclui regressão logística, Random Forest e análise bayesiana.</p></article>
+  </div>
+  <h3>Formatos e artefactos utilizados</h3>
+  <div class="tech-format-grid" role="list">
+    <div role="listitem"><strong>.py</strong><span>Scripts e módulos Python</span></div>
+    <div role="listitem"><strong>.csv</strong><span>Datasets e resultados tabulares</span></div>
+    <div role="listitem"><strong>.sql</strong><span>Estrutura e exportação de base de dados</span></div>
+    <div role="listitem"><strong>.pkl</strong><span>Modelos serializados para uso privado</span></div>
+    <div role="listitem"><strong>.png</strong><span>Gráficos e visualizações</span></div>
+    <div role="listitem"><strong>.txt / .md / .pdf</strong><span>Relatórios, documentação e apoio</span></div>
+  </div>
+  <details><summary>O que utiliza o MRS Predictive Lab público?</summary><p>O laboratório publicado usa <strong>HTML, CSS e JavaScript</strong> para a interface e interação, e <strong>JSON</strong> para a agenda e dados sintéticos. Não executa o código Python original do UABBet no navegador nem disponibiliza os modelos treinados ou as bases de dados privadas.</p></details>
+  <p class="caption">Esta descrição baseia-se no arquivo do projeto académico. Não implica que todas as bibliotecas tenham sido utilizadas em todas as funcionalidades nem apresenta métricas do trabalho final como sendo previsões reais atuais.</p>
+</section>
+<section class="panel uabvet" id="fontes-complementares" aria-labelledby="fontes-v4-title">
+  <div class="eyebrow">10 / AGENDA COMPLEMENTAR · FONTES OFICIAIS</div>
+  <h2 id="fontes-v4-title">Mais modalidades, sem inventar previsões</h2>
+  <p>Além da agenda atual da API-Sports, podes consultar calendários oficiais. <strong>Estas ligações não executam recolha automática</strong>, não consomem a quota da API e não implicam autorização para republicar os dados.</p>
+  <div class="uab-grid">
+    <article class="uab-card"><h3>🛼 Hóquei em patins</h3><p>Jogos e competições da Federação de Patinagem de Portugal.</p><a href="https://hp.fpp.pt/" target="_blank" rel="noopener noreferrer">Consultar calendário oficial ↗</a></article>
+    <article class="uab-card"><h3>🤾 Andebol</h3><p>Competições e calendários da Federação de Andebol de Portugal.</p><a href="https://portal.fpa.pt/competicoes/" target="_blank" rel="noopener noreferrer">Consultar competições ↗</a></article>
+    <article class="uab-card"><h3>🏎️ Fórmula 1</h3><p>Calendário oficial de Grandes Prémios. A classificação de corridas não é equivalente a um mercado 1/X/2.</p><a href="https://www.formula1.com/en/racing/2026" target="_blank" rel="noopener noreferrer">Consultar calendário oficial ↗</a></article>
+    <article class="uab-card"><h3>🛡️ Controlo de qualidade</h3><p>Um evento externo sem data confirmada ou sem resultado verificado é apresentado apenas como referência, nunca como evidência de previsão.</p></article>
+  </div>
+  <p class="subtle"><strong>Nota de licenciamento:</strong> qualquer importador automático futuro dependerá das condições de acesso e reutilização de cada fonte.</p>
+</section>
 </main>
 <footer class="container"><span>© 2026 MRS MONTEIRO · Projeto de exploração científica e educativa</span><span>Informação académica · Sem chaves de API no navegador · Sem recomendações de apostas</span></footer>
 </body>
