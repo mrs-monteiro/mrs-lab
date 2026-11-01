@@ -8,9 +8,11 @@
   <title>MRS MONTEIRO | Predictive Lab</title>
   <link rel="stylesheet" href="css/predictive.css">
   <link rel="stylesheet" href="css/agenda-v3.css">
+  <link rel="stylesheet" href="css/simulador.css">
   <link rel="stylesheet" href="css/uabbet-v4.css">
   <script src="js/predictive.js" defer></script>
   <script src="js/agenda.js" defer></script>
+  <script src="js/simulador.js" defer></script>
 </head>
 <body>
 <a href="#conteudo" class="skip">Saltar para o conteúdo</a>
@@ -31,7 +33,7 @@
 
   <section class="panel multi-panel" aria-labelledby="multi-title">
     <div class="section-heading"><div><div class="eyebrow">EXPLORAÇÃO MULTIDESPORTIVA · V3 · DADOS VERIFICÁVEIS</div><h2 id="multi-title">Escolhe uma modalidade e um jogo</h2></div><span class="subtle" id="feed-updated">A consultar ficheiro de agenda…</span></div>
-    <p class="subtle">As partidas são obtidas de um ficheiro de atualização com origem identificada. <strong>Um jogo listado não significa que exista uma previsão treinada.</strong> O catálogo é atualizado automaticamente através do GitHub Actions. Os estados dos jogos refletem a última recolha, não uma transmissão em tempo real. As odds só aparecem quando existe uma fonte autorizada; probabilidades de modelos requerem avaliação independente.</p>
+    <p class="subtle">As partidas são obtidas de um ficheiro de atualização com origem identificada. <strong>Um jogo listado não significa que exista uma previsão treinada.</strong> O catálogo é atualizado automaticamente através do atualização automática. Os estados dos jogos refletem a última recolha, não uma transmissão em tempo real. As odds só aparecem quando existe uma fonte autorizada; probabilidades de modelos requerem avaliação independente.</p>
     <div class="filters multi-filters v3-filters">
       <label>Modalidade<select id="sport"><option value="football">⚽ Futebol</option><option value="basketball">🏀 Basquetebol (inclui NBA)</option><option value="roller_hockey">🛼 Hóquei em patins</option><option value="nhl">🏒 NHL — hóquei no gelo</option></select></label>
       <label>Competição<select id="sport-league"><option value="all">Todas as competições</option></select></label>
@@ -153,6 +155,27 @@
     <article class="uab-card"><h3>🛡️ Controlo de qualidade</h3><p>Um evento externo sem data confirmada ou sem resultado verificado é apresentado apenas como referência, nunca como evidência de previsão.</p></article>
   </div>
   <p class="subtle"><strong>Nota de licenciamento:</strong> qualquer importador automático futuro dependerá das condições de acesso e reutilização de cada fonte.</p>
+</section>
+<section class="panel" id="simulador-jornada" aria-labelledby="simulador-titulo">
+ <div class="eyebrow">11 / SIMULADOR EDUCATIVO · JOGO FICTÍCIO</div>
+ <h2 id="simulador-titulo">🎮 Desafio da Jornada</h2>
+ <p>Consegues interpretar probabilidades? Escolhe o resultado que consideras mais provável num encontro <strong>totalmente fictício</strong>. O simulador sorteia o resultado segundo as probabilidades apresentadas e explica o que aconteceu. Não utiliza eventos, equipas ou odds reais.</p>
+ <div class="sim-grid">
+  <div class="sim-card">
+   <div class="sim-head"><strong id="sim-round">Ronda 1 de 10</strong><span id="sim-state" class="sim-pill">Por jogar</span></div>
+   <p class="sim-match" id="sim-match">Equipa Azul × Equipa Verde</p>
+   <p class="sim-label">Probabilidades fictícias de cada resultado</p>
+   <div id="sim-bars" class="sim-bars" aria-label="Probabilidades 1 X 2"></div>
+   <fieldset class="sim-choice" id="sim-choice"><legend>Qual é a tua previsão?</legend>
+    <label><input type="radio" name="sim-pick" value="1"> <strong>1</strong> · Casa</label>
+    <label><input type="radio" name="sim-pick" value="X"> <strong>X</strong> · Empate</label>
+    <label><input type="radio" name="sim-pick" value="2"> <strong>2</strong> · Fora</label>
+   </fieldset>
+   <div class="sim-actions"><button type="button" id="sim-play">Revelar resultado</button><button type="button" id="sim-next" disabled>Próxima ronda →</button><button type="button" id="sim-reset" class="secondary">Reiniciar</button></div>
+   <div id="sim-feedback" class="sim-feedback" role="status" aria-live="polite">Escolhe um resultado e tenta a tua sorte.</div>
+  </div>
+  <aside class="sim-card sim-aside"><h3>📊 O teu desempenho</h3><div class="sim-stats"><div><strong id="sim-total">0</strong><small>Rondas jogadas</small></div><div><strong id="sim-correct">0</strong><small>Acertos</small></div><div><strong id="sim-score">—</strong><small>Taxa de acerto</small></div></div><h3>🧠 O que estás a aprender?</h3><p>Uma previsão com 60% de probabilidade <strong>não significa certeza</strong>. Em muitas repetições semelhantes, resultados menos prováveis também acontecem.</p><p>As percentagens são geradas para este exercício, não são estimativas do UABBet. Acertar em poucas rondas não demonstra que exista uma estratégia rentável.</p><p class="sim-disclaimer">Sem dinheiro, sem apostas reais, sem armazenamento de dados e sem pedidos à API.</p></aside>
+ </div>
 </section>
 </main>
 <footer class="container"><span>© 2026 MRS MONTEIRO · Projeto de exploração científica e educativa</span><span>Informação académica · Sem chaves de API no navegador · Sem recomendações de apostas</span></footer>

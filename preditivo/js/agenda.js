@@ -177,7 +177,7 @@ $('sport-json').addEventListener('change',async ev=>{const f=ev.target.files&&ev
 async function load(){try{const r=await fetch('data/agenda.json',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);
  const obj=await r.json();all=validate(obj);loadedAt=display(obj.generated_at);$('feed-updated').textContent=(loadedAt?'Atualização: '+when(loadedAt):'Agenda')+' · '+all.length+' jogos';
  $('sport').value='football';leagues();chooseMode(all.some(e=>e.sport==='football'&&eventDay(e)===today())?'today':'all');
- $('sport-status').textContent='Agenda sincronizada a partir do GitHub Actions. Odds e previsões só surgem com fontes e validação adequadas.';
+ $('sport-status').textContent='Agenda atualizada periodicamente a partir de fontes identificadas. Odds e previsões só surgem com fontes e validação adequadas.';
  }catch(err){all=[];leagues();chooseMode('all');$('feed-updated').textContent='Agenda indisponível';$('sport-status').textContent='Não foi possível carregar a agenda: '+err.message;}}
 load();
 })();
