@@ -9,3 +9,21 @@ $('#language').addEventListener('click',()=>{lang=lang==='pt'?'en':'pt';translat
 const W=19,H=12,N=W*H;let start=H*W+1-W,goal=H*W-2,wall=new Set(),running=false,visited=new Set(),route=new Set(),tick=null;const coord=id=>[id%W,Math.floor(id/W)];function neighbors(id){let [x,y]=coord(id);return [[x+1,y],[x-1,y],[x,y+1],[x,y-1]].filter(([a,b])=>a>=0&&a<W&&b>=0&&b<H).map(([a,b])=>b*W+a).filter(n=>!wall.has(n));}function draw(){const g=$('#grid');g.innerHTML=Array.from({length:N},(_,id)=>'<button type="button" class="cell '+(id===start?'start':id===goal?'goal':wall.has(id)?'wall':route.has(id)?'route':visited.has(id)?'checked':'')+'" data-cell="'+id+'" role="gridcell" aria-label="Cell '+(id+1)+'" title="'+(id+1)+'"></button>').join('');}$('#grid').addEventListener('click',e=>{const b=e.target.closest('[data-cell]');if(!b||running)return;const id=+b.dataset.cell,mode=$('#mode').value;visited.clear();route.clear();if(mode==='start'&&id!==goal){wall.delete(id);start=id}else if(mode==='goal'&&id!==start){wall.delete(id);goal=id}else if(id!==start&&id!==goal){wall.has(id)?wall.delete(id):wall.add(id)}resetMetrics();draw();});function resetMetrics(){$('#visited').textContent='—';$('#cost').textContent='—';$('#status').textContent=t('Pronto','Ready')};function cancel(){if(tick)clearInterval(tick);tick=null;running=false;$('#run').disabled=false;}
 function calculate(algo){const queue=[start],parent=new Map([[start,null]]),distance=new Map([[start,0]]),expanded=[],closed=new Set();const h=id=>{const [x,y]=coord(id),[gx,gy]=coord(goal);return Math.abs(x-gx)+Math.abs(y-gy)};let found=false;while(queue.length){if(algo==='astar')queue.sort((a,b)=>(distance.get(a)+h(a))-(distance.get(b)+h(b)) || h(a)-h(b));const current=queue.shift();if(closed.has(current))continue;closed.add(current);expanded.push(current);if(current===goal){found=true;break}for(const next of neighbors(current)){const nd=distance.get(current)+1;if(!distance.has(next)||nd<distance.get(next)){distance.set(next,nd);parent.set(next,current);queue.push(next)}}}let path=[];if(found){for(let p=goal;p!==null;p=parent.get(p))path.push(p);path.reverse()}return{expanded,path,found}};
 $('#run').onclick=()=>{cancel();visited.clear();route.clear();draw();const result=calculate($('#algorithm').value);let i=0;running=true;$('#run').disabled=true;$('#status').textContent=t('A pesquisar…','Searching…');const chunk=()=>{for(let k=0;k<3&&i<result.expanded.length;k++,i++)visited.add(result.expanded[i]);$('#visited').textContent=i;draw();if(i>=result.expanded.length){cancel();route=new Set(result.path);draw();$('#cost').textContent=result.found?result.path.length-1:'—';$('#status').textContent=result.found?t('Encontrado','Found'):t('Sem percurso','No path')}};tick=setInterval(chunk,22);chunk()};$('#reset').onclick=()=>{cancel();wall.clear();visited.clear();route.clear();start=W*(H-2)+1;goal=W*1+W-2;resetMetrics();draw()};$('#sample').onclick=()=>{cancel();wall.clear();visited.clear();route.clear();start=W*(H-2)+1;goal=W*1+W-2;for(let x=3;x<16;x++){if(x!==10)wall.add(4*W+x)}for(let y=5;y<11;y++){if(y!==8)wall.add(y*W+9)}resetMetrics();draw()};$('#sample').click();translate();})();
+// Accessible tab navigation: keep only the selected tab in the tab order.
+(()=>{
+ const tabs=[...document.querySelectorAll('[role="tab"][data-tab]')];
+ function sync(){tabs.forEach(tab=>tab.tabIndex=tab.getAttribute('aria-selected')==='true'?0:-1);}
+ tabs.forEach((tab,index)=>{
+  tab.addEventListener('click',sync);
+  tab.addEventListener('keydown',event=>{
+   let target;
+   if(event.key==='ArrowRight')target=(index+1)%tabs.length;
+   else if(event.key==='ArrowLeft')target=(index+tabs.length-1)%tabs.length;
+   else if(event.key==='Home')target=0;
+   else if(event.key==='End')target=tabs.length-1;
+   else return;
+   event.preventDefault();tabs[target].click();tabs[target].focus();
+  });
+ });
+ sync();
+})();
