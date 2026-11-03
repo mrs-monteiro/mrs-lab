@@ -172,12 +172,21 @@ $('sport-date').addEventListener('change',()=>{dayMode='date';document.querySele
 document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>chooseMode(b.dataset.day)));
 $('sport-more').addEventListener('click',()=>{limit+=rowsPerPage;render();});
 $('sport-json').addEventListener('change',async ev=>{const f=ev.target.files&&ev.target.files[0];if(!f)return;
- try{if(f.size>3500000)throw Error('Ficheiro superior a 3,5 MB');const obj=JSON.parse(await f.text());all=validate(obj);loadedAt=display(obj.generated_at);resetList();leagues();chooseMode('all');$('feed-updated').textContent='JSON local · '+all.length+' jogos';$('sport-status').textContent='Dados carregados apenas no navegador; nenhuma credencial foi enviada.';}
+ try{if(f.size>3500000)throw Error('Ficheiro superior a 3,5 MB');const obj=JSON.parse(await f.text());all=validate(obj);loadedAt=display(obj.generated_at);resetList();leagues();chooseMode('all');$('feed-updated').textContent='JSON local · '+all.length+' jogos';$('sport-status').classList.remove('agenda-stale');$('sport-status').textContent='Dados carregados apenas no navegador; nenhuma credencial foi enviada.';}
  catch(err){$('sport-status').textContent='Falha na importação: '+err.message;}finally{ev.target.value='';}});
 async function load(){try{const r=await fetch('data/agenda.json',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);
  const obj=await r.json();all=validate(obj);loadedAt=display(obj.generated_at);$('feed-updated').textContent=(loadedAt?'Atualização: '+when(loadedAt):'Agenda')+' · '+all.length+' jogos';
  $('sport').value='football';leagues();chooseMode(all.some(e=>e.sport==='football'&&eventDay(e)===today())?'today':'all');
- $('sport-status').textContent='Agenda atualizada periodicamente a partir de fontes identificadas. Odds e previsões só surgem com fontes e validação adequadas.';
+ const generated=dateAt(obj.generated_at);
+ const age=generated?Date.now()-generated.valueOf():null;
+ // Daily feed: allow a full extra day for delayed scheduled runs.
+ const warning=!generated||age < -3600000
+  ? 'Não foi possível confirmar a data de atualização da agenda. Os eventos podem estar desatualizados. '
+  :age>48*3600000
+   ? 'Agenda desatualizada: a última atualização tem mais de 48 horas. Os horários e estados dos jogos podem ter mudado. '
+   :'';
+ $('sport-status').textContent=warning+'Dados provenientes de fontes identificadas. Odds e previsões só surgem com fontes e validação adequadas.';
+ $('sport-status').classList.toggle('agenda-stale',Boolean(warning));
  }catch(err){all=[];leagues();chooseMode('all');$('feed-updated').textContent='Agenda indisponível';$('sport-status').textContent='Não foi possível carregar a agenda: '+err.message;}}
 load();
 })();
